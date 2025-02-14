@@ -1,0 +1,83 @@
+name: "Frontend Build and Security Scan"
+
+on:
+  push:
+    branches:
+      - "development"
+      - "main"
+    paths:
+      - "**"  # Ensures all repo files trigger the workflow
+
+  pull_request:
+    branches:
+      - "development"
+      - "main"
+    paths:
+      - "**"  # Ensures all repo files trigger the workflow
+
+  schedule:
+    - cron: "0 0 * * 0"  # Runs every Sunday at midnight
+
+permissions:
+  contents: write
+  actions: read
+  security-events: write  # Required for CodeQL
+
+jobs:
+  frontend:
+    name: Build and Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Debug - List Repository Contents
+        run: ls -R  # ✅ Lists all files in the repo to verify structure
+
+      - name: Install pnpm
+        run: npm install -g pnpm  # ✅ Ensures pnpm is available
+
+      - name: Set up Node.js 22 LTS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml  # ✅ No 'frontend/' prefix
+
+      - name: Install dependencies with pnpm
+        run: pnpm install  # ✅ Uses pnpm for installation
+
+      - name: Run ESLint and Prettier
+        run: |
+          echo "Checking code formatting and linting..."
+          pnpm run lint
+          pnpm run format
+        continue-on-error: true  # Allows workflow to continue even if warnings exist
+
+      - name: TypeScript Type Check
+        run: pnpm run type-check
+        continue-on-error: true  # Allows workflow to continue even if type errors exist
+
+      - name: Run Jest Tests
+        run: pnpm test
+
+      - name: Run OWASP Dependency-Check
+        run: |
+          echo "Running OWASP Dependency-Check..."
+          pnpm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Run Trivy Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+          exit-code: 0
+        continue-on-error: true
+
+      - name: Build the React App with Vite
+        run: pnpm run build  # ✅ Uses pnpm for build
