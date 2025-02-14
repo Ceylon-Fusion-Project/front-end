@@ -39,7 +39,7 @@ jobs:
 
       # Step 2: Debug - List Repository Contents
       - name: Debug - List Repository Contents
-        run: ls -R frontend
+        run: ls -R
 
       # Step 3: Set up Node.js 22 LTS
       - name: Set up Node.js 22
