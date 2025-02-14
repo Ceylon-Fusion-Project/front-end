@@ -1,0 +1,102 @@
+name: "Frontend Build and Security Scan"
+
+on:
+  push:
+    branches:
+      - "development"
+      - "main"
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-vite.yml"
+
+  pull_request:
+    branches:
+      - "development"
+      - "main"
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-vite.yml"
+
+  schedule:
+    - cron: "0 0 * * 0"  # Runs every Sunday at midnight
+
+permissions:
+  contents: write
+  actions: read
+  security-events: write  # Required for CodeQL
+
+jobs:
+  frontend:
+    name: Build and Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Step 2: Debug - List Repository Contents
+      - name: Debug - List Repository Contents
+        run: ls -R frontend
+
+      # Step 3: Set up Node.js 22 LTS
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      # Step 4: Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # Step 5: Install dependencies using pnpm
+      - name: Install dependencies with pnpm
+        run: pnpm install
+        working-directory: frontend
+
+      # Step 6: Lint and Format Check
+      - name: Run ESLint and Prettier
+        run: |
+          echo "Checking code formatting and linting..."
+          pnpm run lint
+          pnpm run format
+        working-directory: frontend
+        continue-on-error: true  # Allows workflow to continue even if warnings exist
+
+      # Step 7: Run Type Checking
+      - name: TypeScript Type Check
+        run: pnpm run type-check
+        working-directory: frontend
+        continue-on-error: true  # Allows workflow to continue even if type errors exist
+
+      # Step 8: Run Jest Tests
+      - name: Run Jest Tests
+        run: pnpm test
+        working-directory: frontend
+
+      # Step 9: OWASP Dependency-Check
+      - name: Run OWASP Dependency-Check
+        run: |
+          echo "Running OWASP Dependency-Check..."
+          pnpm audit --audit-level=high
+        working-directory: frontend
+        continue-on-error: true  # Allow workflow to continue even if vulnerabilities are found
+
+      # Step 10: Run Trivy Security Scan (Filesystem)
+      - name: Run Trivy Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+          exit-code: 0
+        continue-on-error: true  # Allow workflow to continue even if vulnerabilities are found
+
+      # Step 11: Build React App with Vite using pnpm
+      - name: Build the React App with Vite
+        run: pnpm run build
+        working-directory: frontend
