@@ -8,6 +8,11 @@ module.exports = {
     extend: {
       colors: {
         ...brandColors,
+        secondary: brandColors.secondary,
+        background: brandColors.background,
+        textPrimary: brandColors.textPrimary,
+        accent: brandColors.accent,
+        highlight: brandColors.highlight,
       },
       fontFamily: {
         ...brandFonts,

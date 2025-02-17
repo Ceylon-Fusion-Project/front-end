@@ -2,7 +2,7 @@
 import "./App.css";
 import Marketplace from "./components/MarketPlace";
 import Example from "./components/Example";
-import IntroSection from './components/IntroSection';
+import LandingPage from './pages/LandingPage';
 
 function App() {
 
@@ -15,7 +15,11 @@ function App() {
       </div>
       <Marketplace />
       <Example/>
-      <IntroSection />
+      <div>
+      <LandingPage />
+    </div>
+      
+
     </>
   );
 }
