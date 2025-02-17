@@ -1,25 +1,21 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import Marketplace from "./components/MarketPlace";
+import Example from "./components/Example";
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      {/* Just a quick test to confirm classes work */}
+      <div className="bg-blue-400 text-white text-center p-8">
+        <h1 className="text-4xl font-bold">Hello Tailwind!</h1>
+        <p className="mt-2">This is working fine.</p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Marketplace />
+      <Example/>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
