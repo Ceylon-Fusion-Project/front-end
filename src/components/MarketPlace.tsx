@@ -25,29 +25,8 @@ const fetchProductDetails = async (query: string) => {
 
 const Marketplace: React.FC = () => {
   return (
-    <div className="p-8 md:p-12 bg-primary min-h-screen flex flex-col items-center">
-      <h1 className="text-4xl font-bold text-white mb-6">
-        🔥 Explore the Latest Products
-      </h1>
-
+    <div className="flex flex-col items-center min-h-screen p-8 md:p-12">
       <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
-
-      {/* Product Cards */}
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
-        {products.map((product, index) => (
-          <div
-            key={index}
-            className="p-6 bg-background text-textPrimary shadow-lg rounded-xl transition hover:scale-105"
-          >
-            <h2 className="text-lg font-semibold">{product}</h2>
-            <button
-              className="mt-3 w-full bg-secondary text-white py-2 px-4 rounded-full hover:bg-highlight transition"
-            >
-              View Details
-            </button>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
