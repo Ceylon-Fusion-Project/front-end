@@ -1,23 +1,26 @@
 // src/components/FeaturedPackages.tsx
 import React from 'react';
 import Card from './Card';
+import NatureRetreat from '../assets/images/nature-retreat.jpg';
+import EcoFriendlyLodge from '../assets/images/eco-friendly-lodge.jpg';
+import CinnamonTour from '../assets/images/cinnamon-tour.jpg';
 
 const FeaturedPackages = () => {
   const packages = [
     {
-      image: 'https://via.placeholder.com/300',
+      image: NatureRetreat,
       title: 'Nature Retreat',
       description: 'Experience the beauty of cinnamon plantations.',
       price: '$200',
     },
     {
-      image: 'https://via.placeholder.com/300',
+      image: EcoFriendlyLodge,
       title: 'Eco-Friendly Lodge',
       description: 'Stay in our sustainable lodges.',
       price: '$150',
     },
     {
-      image: 'https://via.placeholder.com/300',
+      image: CinnamonTour,
       title: 'Cinnamon Tour',
       description: 'Explore the cinnamon production process.',
       price: '$100',
