@@ -11,17 +11,17 @@ const LandingPage = () => {
      
 
       {/* Intro Section */}
-      <section className="min-h-screen flex items-center">
+      <section className="min-h-screen flex items-center justify-center snap-start">
         <IntroSection />
       </section>
 
       {/* Featured Products Section */}
-      <section className="min-h-screen flex items-center">
+      <section className="min-h-screen flex items-center justify-center snap-start">
         <FeaturedProducts />
       </section>
 
       {/* Featured Packages Section */}
-      <section className="min-h-screen flex items-center">
+      <section className="min-h-screen flex items-center justify-center snap-start">
         <FeaturedPackages />
       </section>
 
