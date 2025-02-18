@@ -25,7 +25,9 @@ const FeaturedProducts = () => {
       description: 'Pure cinnamon oil for aromatherapy and cooking.',
       price: '$20',
     },
+    
   ];
+  
 
   return (
     <div className="bg-background py-12">
@@ -44,6 +46,16 @@ const FeaturedProducts = () => {
               onClick={() => alert(`Selected: ${product.title}`)}
             />
           ))}
+          
+
+        <button
+        
+         // onClick={onClick}
+          className="bg-accent text-white px-4 py-2 rounded hover:bg-primary transition-colors duration-300"
+        >
+        Shop Now
+        </button>
+
         </div>
       </div>
     </div>
