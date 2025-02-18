@@ -1,5 +1,7 @@
 import React from "react";
-import AutoCompleteSearchBar from "./AutocompletedSearchBar";
+import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
+import FilterSideBar from "./FilterSideBar";
+import { Sidebar } from "lucide-react";
 
 const products = [
   "iPhone 15 Pro",
@@ -25,28 +27,26 @@ const fetchProductDetails = async (query: string) => {
 
 const Marketplace: React.FC = () => {
   return (
-    <div className="p-8 md:p-12 bg-primary min-h-screen flex flex-col items-center">
-      <h1 className="text-4xl font-bold text-white mb-6">
-        🔥 Explore the Latest Products
-      </h1>
+    <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
+      {/* Sidebar (Left) */}
+      {/* <div className="w-1/4 min-w-[250px] bg-white shadow-lg rounded-lg p-4">
+        <FilterSidebar />
+      </div> */}
 
-      <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+      <FilterSideBar />
 
-      {/* Product Cards */}
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
-        {products.map((product, index) => (
-          <div
-            key={index}
-            className="p-6 bg-background text-textPrimary shadow-lg rounded-xl transition hover:scale-105"
-          >
-            <h2 className="text-lg font-semibold">{product}</h2>
-            <button
-              className="mt-3 w-full bg-secondary text-white py-2 px-4 rounded-full hover:bg-highlight transition"
-            >
-              View Details
-            </button>
-          </div>
-        ))}
+      {/* Main Content (Right) */}
+      <div className="flex flex-col flex-grow ml-6">
+        {/* Search Bar */}
+        <div className="mb-6">
+          <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+        </div>
+
+        {/* Product Listings (Placeholder) */}
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold">Product Listings</h2>
+          <p className="text-gray-600">Products will be displayed here...</p>
+        </div>
       </div>
     </div>
   );
