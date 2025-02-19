@@ -1,6 +1,6 @@
 // tailwind.config.js
 const { brandColors, brandFonts } = require("./src/styles/theme.ts"); 
- //or "./src/theme.cjs"
+// or "./src/theme.cjs"
 
 module.exports = {
     darkMode: ["class"],
