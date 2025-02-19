@@ -25,10 +25,11 @@ const FeaturedProducts = () => {
       description: "Pure cinnamon oil for aromatherapy and cooking.",
       price: "$20",
     },
+    
   ];
 
   return (
-    <div className="w-full bg-[#FAF3E0] py-16 shadow-sm"> {/* Differentiating Background */}
+    <div className=" bg-secondary-100 py-16 shadow-sm"> {/* Differentiating Background */}
       <div className="container mx-auto px-6">
         {/* Section Title */}
         <h2 className="text-primary font-serif text-4xl font-bold text-center mb-10">
