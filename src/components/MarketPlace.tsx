@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
+//import React, { useState } from "react";
+//import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
 import FilterButton from "./FilterButton";
 
 import SlideshowBanner from "./SlideshowBanner";
@@ -45,7 +45,7 @@ const Marketplace: React.FC = () => {
         <div className="flex flex-col flex-grow ml-6">
           {/* Search Bar */}
           <div className="mb-6">
-            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+{/*            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} /> */}
           </div>
 
 
