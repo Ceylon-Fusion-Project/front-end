@@ -5,11 +5,11 @@ import communityImpact from "../assets/images/community-impact.jpg";
 
 const IntroSection = () => {
   return (
-    <div className="bg-green-300 py-16">
+    <div className="bg-[#FAF3E0] py-10">  {/* Updated Background */}
       <div className="container mx-auto px-4">
         {/* Section Title */}
-        <div className="text-center mb-12">
-          <h1 className="text-black font-serif text-4xl font-bold mb-4">
+        <div className="text-center mb-10">
+          <h1 className="text-black font-serif text-4xl font-bold">
             Sustainability at Our Core
           </h1>
         </div>
@@ -17,41 +17,21 @@ const IntroSection = () => {
         {/* 3-Column Image Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           <div className="flex flex-col items-center">
-            <img
-              src={ecoFarming}
-              alt="Eco-friendly Farming"
-              className="w-24 h-24 object-contain mb-4"
-            />
-            <h3 className="text-black font-bold text-lg mt-2">
-              Eco-friendly Farming
-            </h3>
-            <p className="text-black text-sm mb-6">
-              Our cinnamon is grown using sustainable techniques that protect nature.
-            </p>
+            <img src={ecoFarming} alt="Eco-friendly Farming" className="w-24 h-24 object-contain mb-4"/>
+            <h3 className="text-black font-bold text-lg">Eco-friendly Farming</h3>
+            <p className="text-black text-sm">Our cinnamon is grown using sustainable techniques that protect nature.</p>
           </div>
 
           <div className="flex flex-col items-center">
-            <img
-              src={ethicalSourcing}
-              alt="Ethical Sourcing"
-              className="w-24 h-24 object-contain mb-4"
-            />
-            <h3 className="text-black font-bold text-lg mt-2">Ethical Sourcing</h3>
-            <p className="text-black text-sm mb-6">
-              We ensure fair practices and responsible sourcing throughout our supply chain.
-            </p>
+            <img src={ethicalSourcing} alt="Ethical Sourcing" className="w-24 h-24 object-contain mb-4"/>
+            <h3 className="text-black font-bold text-lg">Ethical Sourcing</h3>
+            <p className="text-black text-sm">We ensure fair practices and responsible sourcing throughout our supply chain.</p>
           </div>
 
           <div className="flex flex-col items-center">
-            <img
-              src={communityImpact}
-              alt="Community Impact"
-              className="w-24 h-24 object-contain mb-4"
-            />
-            <h3 className="text-black font-bold text-lg mt-2">Community Impact</h3>
-            <p className="text-black text-sm mb-6">
-              We support local communities and promote sustainable development.
-            </p>
+            <img src={communityImpact} alt="Community Impact" className="w-24 h-24 object-contain mb-4"/>
+            <h3 className="text-black font-bold text-lg">Community Impact</h3>
+            <p className="text-black text-sm">We support local communities and promote sustainable development.</p>
           </div>
         </div>
 
@@ -65,5 +45,6 @@ const IntroSection = () => {
     </div>
   );
 };
+
 
 export default IntroSection;
