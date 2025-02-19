@@ -1,6 +1,7 @@
 // src/components/FeaturedProducts.tsx
 import React from "react";
 import Card from "./Card";
+
 import cinnamonPowder from "../assets/images/cinnamon-powder.jpg";
 import cinnamonSticks from "../assets/images/cinnamon-sticks.jpg";
 import cinnamonOil from "../assets/images/cinnamon-oil.jpg";
@@ -32,7 +33,7 @@ const FeaturedProducts = () => {
     <div className=" bg-secondary-100 py-16 shadow-sm"> {/* Differentiating Background */}
       <div className="container mx-auto px-6">
         {/* Section Title */}
-        <h2 className="text-primary font-serif text-4xl font-bold text-center mb-10">
+        <h2 className="text-4xl font-bold text-center mb-10" style={{ color: "#3E2723" }}>
           Featured Products
         </h2>
 
