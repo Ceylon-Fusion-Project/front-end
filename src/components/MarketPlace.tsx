@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
-import { useState } from "react";
 import FilterButton from "./FilterButton";
+import SortBar from "./SortBar"; // Import the SortButtons component
 
 const products = [
   "iPhone 15 Pro",
@@ -25,33 +25,25 @@ const fetchProductDetails = async (query: string) => {
   }
 };
 
-const categories = [
-  { value: "all", label: "All Categories" },
-  { value: "food", label: "Food & Beverage" },
-  { value: "health", label: "Health & Wellness" },
-  { value: "personal", label: "Personal Care" },
-  { value: "ayurvedic", label: "Ayurvedic" },
-];
-
 const Marketplace: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory([category]); // Single selection
-  };
-
   return (
     <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
       {/* Sidebar (Left) */}
-      {/* <FilterSideBar /> */}
-
       <FilterButton />
 
       {/* Main Content (Right) */}
       <div className="flex flex-col flex-grow ml-6">
-        {/* Search Bar */}
-        <div className="mb-6">
-          <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+        {/* Search Bar + Sort Buttons in one row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          {/* Search Bar */}
+          <div className="flex-grow">
+            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+          </div>
+
+          {/* Sort Buttons */}
+          <div className="flex flex-wrap gap-2">
+            <SortBar />
+          </div>
         </div>
 
         {/* Product Listings (Placeholder) */}
@@ -65,5 +57,3 @@ const Marketplace: React.FC = () => {
 };
 
 export default Marketplace;
-
-
