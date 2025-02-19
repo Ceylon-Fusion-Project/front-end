@@ -1,5 +1,5 @@
 // src/pages/LandingPage.tsx
-import React from 'react';
+//import React from 'react';
 import IntroSection from '../components/IntroSection';
 import FeaturedProducts from '../components/FeaturedProducts';
 import FeaturedPackages from '../components/FeaturedPackages';
