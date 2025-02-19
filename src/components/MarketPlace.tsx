@@ -17,17 +17,17 @@ import SortBar from "./SortBar"; // Import the SortButtons component
 //   "Google Pixel 7",
 // ];
 
-const fetchProductDetails = async (query: string) => {
-  try {
-    const response = await fetch(
-      `/api/products?name=${encodeURIComponent(query)}`
-    );
-    const data = await response.json();
-    console.log("Product Details:", data);
-  } catch (error) {
-    console.error("Error fetching product details:", error);
-  }
-};
+// const fetchProductDetails = async (query: string) => {
+//   try {
+//     const response = await fetch(
+//       `/api/products?name=${encodeURIComponent(query)}`
+//     );
+//     const data = await response.json();
+//     console.log("Product Details:", data);
+//   } catch (error) {
+//     console.error("Error fetching product details:", error);
+//   }
+// };
 
 const Marketplace: React.FC = () => {
   return (
