@@ -7,15 +7,15 @@ import SlideshowBanner from "./SlideshowBanner";
 import SortBar from "./SortBar"; // Import the SortButtons component
 
 
-const products = [
-  "iPhone 15 Pro",
-  "Samsung Galaxy S23",
-  "MacBook Pro M2",
-  "Dell XPS 13",
-  "Sony WH-1000XM5",
-  "Apple Watch Ultra",
-  "Google Pixel 7",
-];
+// const products = [
+//   "iPhone 15 Pro",
+//   "Samsung Galaxy S23",
+//   "MacBook Pro M2",
+//   "Dell XPS 13",
+//   "Sony WH-1000XM5",
+//   "Apple Watch Ultra",
+//   "Google Pixel 7",
+// ];
 
 const fetchProductDetails = async (query: string) => {
   try {
