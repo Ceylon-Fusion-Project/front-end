@@ -18,8 +18,8 @@ function App() {
       <div>
 
       <LandingPage />
-      
-    </div>
+
+      </div>
       
 
     </>
