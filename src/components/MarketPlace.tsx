@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
-import { useState } from "react";
 import FilterButton from "./FilterButton";
+<<<<<<< HEAD
 import SlideshowBanner from "./SlideshowBanner";
+=======
+import SortBar from "./SortBar"; // Import the SortButtons component
+>>>>>>> 17975987a8ecee4ef0dab78eb132eaf5341481cf
 
 const products = [
   "iPhone 15 Pro",
@@ -26,22 +29,9 @@ const fetchProductDetails = async (query: string) => {
   }
 };
 
-const categories = [
-  { value: "all", label: "All Categories" },
-  { value: "food", label: "Food & Beverage" },
-  { value: "health", label: "Health & Wellness" },
-  { value: "personal", label: "Personal Care" },
-  { value: "ayurvedic", label: "Ayurvedic" },
-];
-
 const Marketplace: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory([category]); // Single selection
-  };
-
   return (
+<<<<<<< HEAD
     <div>
       <div><SlideshowBanner/></div>
       <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
@@ -57,6 +47,26 @@ const Marketplace: React.FC = () => {
           <div className="mb-6">
             <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
           </div>
+=======
+    <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
+      {/* Sidebar (Left) */}
+      <FilterButton />
+
+      {/* Main Content (Right) */}
+      <div className="flex flex-col flex-grow ml-6">
+        {/* Search Bar + Sort Buttons in one row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+          {/* Search Bar */}
+          <div className="flex-grow">
+            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+          </div>
+
+          {/* Sort Buttons */}
+          <div className="flex flex-wrap gap-2">
+            <SortBar />
+          </div>
+        </div>
+>>>>>>> 17975987a8ecee4ef0dab78eb132eaf5341481cf
 
           {/* Product Listings (Placeholder) */}
           <div className="p-6 bg-white rounded-lg shadow-md">
@@ -70,5 +80,3 @@ const Marketplace: React.FC = () => {
 };
 
 export default Marketplace;
-
-
