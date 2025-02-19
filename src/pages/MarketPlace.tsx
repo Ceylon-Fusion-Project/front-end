@@ -1,10 +1,10 @@
 //import React, { useState } from "react";
 //import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
-import FilterButton from "./FilterButton";
+import FilterButton from "./../components/FilterButton";
 
-import SlideshowBanner from "./SlideshowBanner";
+import SlideshowBanner from "./../components/SlideshowBanner";
 
-import SortBar from "./SortBar"; // Import the SortButtons component
+import SortBar from "./../components/SortBar"; // Import the SortButtons component
 
 
 // const products = [
@@ -54,16 +54,13 @@ const Marketplace: React.FC = () => {
             <SortBar />
           </div>
         </div>
-
-
-          {/* Product Listings (Placeholder) */}
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold">Product Listings</h2>
-            <p className="text-gray-600">Products will be displayed here...</p>
-          </div>
+        {/* Product Listings (Placeholder) */}
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold">Product Listings</h2>
+          <p className="text-gray-600">Products will be displayed here...</p>
         </div>
       </div>
-    
+    </div>
   );
 };
 
