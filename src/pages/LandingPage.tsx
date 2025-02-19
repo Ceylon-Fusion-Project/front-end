@@ -27,7 +27,7 @@ const LandingPage = () => {
       </section>
 
         {/* Featured TestimonialCard */}
-        <section className="min-h-screen flex items-center">
+        <section className="bg-background min-h-screen flex items-center justify-center snap-start">
         <TestimonialsSection/>
         </section>
 
