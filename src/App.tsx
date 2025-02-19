@@ -1,21 +1,13 @@
 //import { useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import Marketplace from "./pages/MarketPlace";
-import LandingPage from './pages/LandingPage';
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-
   return (
-    <>
-      <Marketplace />
-      <div>
-
-      <LandingPage />
-
-      </div>
-      
-      
-    </>
+    <Router>
+      <AppRoutes />
+    </Router>
   );
 }
 

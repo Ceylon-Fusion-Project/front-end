@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import AutoCompleteSearchBar from "../components/AutoCompleteSearchBar"; 
 import FilterButton from "../components/FilterButton";
 import SortBar from "../components/SortBar";
+import SlideshowBanner from "../components/SlideshowBanner";
+
 
 const products = [
   "iPhone 15 Pro",
@@ -27,26 +29,35 @@ const fetchProductDetails = async (query: string) => {
 
 const Marketplace: React.FC = () => {
   return (
-    <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
-      {/* Sidebar (Left) */}
-      <FilterButton />
 
-      {/* Main Content (Right) */}
-      <div className="flex flex-col flex-grow ml-6">
-        {/* Search Bar + Sort Buttons in one row */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <div>
+      <div><SlideshowBanner/></div>
+      <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
+        
+        {/* Sidebar (Left) */}
+        {/* <FilterSideBar /> */}
+
+        <FilterButton />
+
+        {/* Main Content (Right) */}
+        <div className="flex flex-col flex-grow ml-6">
           {/* Search Bar */}
-          <div className="flex-grow">
+          <div className="mb-6">
             <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
           </div>
+
 
           {/* Sort Buttons */}
           <div className="flex flex-wrap gap-2">
             <SortBar />
           </div>
         </div>
+        {/* Product Listings (Placeholder) */}
+        <div className="p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold">Product Listings</h2>
+          <p className="text-gray-600">Products will be displayed here...</p>
+        </div>
       </div>
-      
     </div>
   );
 };
