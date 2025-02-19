@@ -28,7 +28,7 @@ const FeaturedProducts = () => {
   ];
 
   return (
-    <div className="bg-gray-100 py-16 shadow-sm"> {/* Differentiating Background */}
+    <div className="w-full bg-[#FAF3E0] py-16 shadow-sm"> {/* Differentiating Background */}
       <div className="container mx-auto px-6">
         {/* Section Title */}
         <h2 className="text-primary font-serif text-4xl font-bold text-center mb-10">
