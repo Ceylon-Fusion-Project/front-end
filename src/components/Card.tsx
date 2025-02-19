@@ -70,6 +70,13 @@ const Card: React.FC<CardProps> = ({ image, title, description, price, onClick, 
         >
           Quick Preview
         </button>
+
+        <button
+                onClick={onClick}
+                className="w-full bg-gray-200 text-black py-3 rounded-lg mt-2 hover:bg-primary transition-all duration-300"
+              >
+                 Buy
+              </button>
       </div>
 
       {/* Quick Preview Modal */}
@@ -88,11 +95,11 @@ const Card: React.FC<CardProps> = ({ image, title, description, price, onClick, 
 
             <div className="mt-4 flex justify-between">
               <button className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 transition">
-                quick buy
+               BUY
               </button>
               <button
                 onClick={onClick}
-                className="bg-accent text-white px-6 py-2 rounded-lg hover:bg-primary transition-all duration-300"
+                className="bg-accent text- px-6 py-2 rounded-lg hover:bg-primary transition-all duration-300"
               >
                 Quick Buy
               </button>
@@ -100,6 +107,7 @@ const Card: React.FC<CardProps> = ({ image, title, description, price, onClick, 
           </div>
         </div>
       )}
+      
     </div>
   );
 };
