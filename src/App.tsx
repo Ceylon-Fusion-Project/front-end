@@ -16,8 +16,10 @@ function App() {
       <Marketplace />
       <Example/>
       <div>
+
       <LandingPage />
-    </div>
+
+      </div>
       
       
     </>

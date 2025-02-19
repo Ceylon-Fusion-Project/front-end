@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import Close from "../assets/Close.svg";
 
 interface CheckboxProps {
   label: string;
@@ -106,14 +107,30 @@ const Slider: React.FC<SliderProps> = ({ min = 0, max = 100, step = 1, value = 0
   );
 };
 
-const FilteringSidebar = () => {
+interface FilteringSidebarProps {
+  onClose: () => void;
+}
+
+const FilterSideBar: React.FC<FilteringSidebarProps> = ({ onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isOnSale, setIsOnSale] = useState(false);
   const [priceRange, setPriceRange] = useState(500);
   const [selectedRating, setSelectedRating] = useState("4");
 
+  // UseEffect to log state changes
+  React.useEffect(() => {
+    console.log("State has changed:", { selectedCategory, isOnSale, priceRange, selectedRating });
+  }, [selectedCategory, isOnSale, priceRange, selectedRating]);
+
   return (
     <div className="p-4 space-y-4 bg-white border-2 border-gray-300 rounded-lg shadow-md w-80">
+      <button onClick={onClose} className="mb-4 text-sm text-gray-500">
+        <img 
+          src={Close}
+          alt="Close"
+          className="inline-block w-5 h-5"
+        />
+      </button>
 
       {/* On Sale */}
       <div>
@@ -193,4 +210,4 @@ const FilteringSidebar = () => {
   );
 };
 
-export default FilteringSidebar;
+export default FilterSideBar;

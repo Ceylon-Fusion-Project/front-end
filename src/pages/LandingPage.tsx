@@ -7,22 +7,22 @@ import TestimonialsSection from '../components/TestimonialsSection';
 
 const LandingPage = () => {
   return (
-    <div className="bg-background text-textPrimary">
+    <div className=" text-textPrimary">
       {/* Hero Section */}
      
 
       {/* Intro Section */}
-      <section className="min-h-screen flex items-center">
+      <section className="  min-h-screen flex items-center justify-center snap-start">
         <IntroSection />
       </section>
 
       {/* Featured Products Section */}
-      <section className="min-h-screen flex items-center">
+      <section className="bg-background min-h-screen flex items-center justify-center snap-start">
         <FeaturedProducts />
       </section>
 
       {/* Featured Packages Section */}
-      <section className="min-h-screen flex items-center">
+      <section className=" bg-background min-h-screen flex items-center justify-center snap-start">
         <FeaturedPackages />
       </section>
 
