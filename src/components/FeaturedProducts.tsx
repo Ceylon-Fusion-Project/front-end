@@ -1,5 +1,5 @@
 // src/components/FeaturedProducts.tsx
-import React from "react";
+//import React from "react";
 import Card from "./Card";
 import cinnamonPowder from "../assets/images/cinnamon-powder.jpg";
 import cinnamonSticks from "../assets/images/cinnamon-sticks.jpg";
