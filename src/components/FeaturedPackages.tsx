@@ -1,5 +1,5 @@
 // src/components/FeaturedPackages.tsx
-import React from 'react';
+//import React from 'react';
 import Card from './Card';
 import NatureRetreat from '../assets/images/nature-retreat.jpg';
 import EcoFriendlyLodge from '../assets/images/eco-friendly-lodge.jpg';
