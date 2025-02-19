@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
-import FilterButton from "./FilterButton";
-import SortBar from "./SortBar"; // Import the SortButtons component
+import AutoCompleteSearchBar from "../components/AutoCompleteSearchBar"; 
+import FilterButton from "../components/FilterButton";
+import SortBar from "../components/SortBar";
 
 const products = [
   "iPhone 15 Pro",
@@ -45,13 +45,8 @@ const Marketplace: React.FC = () => {
             <SortBar />
           </div>
         </div>
-
-        {/* Product Listings (Placeholder) */}
-        <div className="p-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold">Product Listings</h2>
-          <p className="text-gray-600">Products will be displayed here...</p>
-        </div>
       </div>
+      
     </div>
   );
 };
