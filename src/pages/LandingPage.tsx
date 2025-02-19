@@ -3,6 +3,7 @@ import React from 'react';
 import IntroSection from '../components/IntroSection';
 import FeaturedProducts from '../components/FeaturedProducts';
 import FeaturedPackages from '../components/FeaturedPackages';
+import TestimonialsSection from '../components/TestimonialsSection';
 
 const LandingPage = () => {
   return (
@@ -24,6 +25,11 @@ const LandingPage = () => {
       <section className=" bg-background min-h-screen flex items-center justify-center snap-start">
         <FeaturedPackages />
       </section>
+
+        {/* Featured TestimonialCard */}
+        <section className="bg-background min-h-screen flex items-center justify-center snap-start">
+        <TestimonialsSection/>
+        </section>
 
       {/* Footer */}
       
