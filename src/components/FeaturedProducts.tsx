@@ -27,26 +27,30 @@ const FeaturedProducts = () => {
     },
     
   ];
+  
 
   return (
+    
+
     <div className=" bg-secondary-100 py-16 shadow-sm"> {/* Differentiating Background */}
       <div className="container mx-auto px-6">
         {/* Section Title */}
-        <h2 className="text-primary font-serif text-4xl font-bold text-center mb-10">
+        <h2 className="text-4xl font-bold text-center mb-10" style={{ color: "#3E2723" }}>
           Featured Products
         </h2>
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {products.map((product, index) => (
-            <Card
-              key={index}
-              image={product.image}
-              title={product.title}
-              description={product.description}
-              price={product.price}
-              onClick={() => alert(`Selected: ${product.title}`)}
-            />
+             <Card
+             key={index}
+             image={product.image}
+             title={product.title}
+             description={product.description}
+             price={product.price}
+             onClick={() => alert(`Quick Buy: ${product.title}`)}
+             isFeatured={true} // Enables the "Quick Buy" button
+           />
           ))}
         </div>
 
