@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
 import FilterButton from "./FilterButton";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import SlideshowBanner from "./SlideshowBanner";
+=======
+import SortBar from "./SortBar"; // Import the SortButtons component
+>>>>>>> 17975987a8ecee4ef0dab78eb132eaf5341481cf
 =======
 import SortBar from "./SortBar"; // Import the SortButtons component
 >>>>>>> 17975987a8ecee4ef0dab78eb132eaf5341481cf
@@ -60,6 +64,15 @@ const Marketplace: React.FC = () => {
           <div className="flex-grow">
             <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
           </div>
+<<<<<<< HEAD
+=======
+
+          {/* Sort Buttons */}
+          <div className="flex flex-wrap gap-2">
+            <SortBar />
+          </div>
+        </div>
+>>>>>>> 17975987a8ecee4ef0dab78eb132eaf5341481cf
 
           {/* Sort Buttons */}
           <div className="flex flex-wrap gap-2">
