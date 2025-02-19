@@ -25,6 +25,8 @@ export const brandColors = {
   textPrimary: "#3E2723",   // Used for all text content
   accent: "#4A2F1B",        // Used for hover effects on the button
   highlight: "#FF3B3B",     // Additional color if needed
+  link: "#2563EB",
+  textSecondary: "#B91C1C",
 };
 
 
