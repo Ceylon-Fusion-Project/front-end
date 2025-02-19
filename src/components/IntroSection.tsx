@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import ecoFarming from "../assets/images/eco-farming.jpg";
 import ethicalSourcing from "../assets/images/ethical-sourcing.jpg";
 import communityImpact from "../assets/images/community-impact.jpg";
