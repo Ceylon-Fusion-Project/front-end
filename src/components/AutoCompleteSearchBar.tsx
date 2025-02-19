@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import SearchIcon from "../assets/SearchIcon.svg";
 
 interface AutoCompleteSearchBarProps {
   data: string[];
@@ -33,32 +34,31 @@ const AutoCompleteSearchBar: React.FC<AutoCompleteSearchBarProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-lg">
-      {/* Search Input */}
-      <div className="relative">
+    <div className="relative flex items-center w-[200px] h-[35px] rounded-full border-2 border-gray-300 shadow-md focus-within:border-gray-500">
+        {/* Search input */}
         <input
-          type="text"
+          type="search"
+          placeholder="Search ..."
           value={query}
           onChange={handleInputChange}
-          placeholder="Search for a product..."
-          className="w-full px-4 py-3 border border-gray-300 rounded-full bg-background text-textPrimary font-sans focus:outline-none"
+          className="flex-grow w-full px-3 text-sm text-gray-600 placeholder-gray-400 bg-transparent border-none rounded-full outline-none"
         />
-        <button
-          onClick={handleSearchClick}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-accent text-white p-2 rounded-full hover:bg-primary transition"
-        >
-          🔍
-        </button>
-      </div>
-
-      {/* Suggestions List */}
+        <img
+          src={SearchIcon} 
+          alt="Search" 
+          // onClick={handleSearchClick}
+          onClick={() => alert("Search icon clicked!")}
+          className="w-8 h-8 rounded-r-full"
+        />
+      
+      {/* Suggestion list */}
       {suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full mt-1 bg-background dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg overflow-hidden">
+        <ul className="absolute left-0 w-full mt-1 bg-transparent border border-gray-300 rounded-md shadow-lg top-full">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="px-4 py-3 cursor-pointer hover:bg-secondary dark:hover:bg-gray-700 transition-all text-textPrimary dark:text-white"
+              className="px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               {suggestion}
             </li>
