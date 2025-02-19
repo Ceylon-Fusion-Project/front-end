@@ -1,7 +1,7 @@
 import React from "react";
 import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
-import FilterSideBar from "./FilterSideBar";
-import { Sidebar } from "lucide-react";
+import { useState } from "react";
+import FilterButton from "./FilterButton";
 
 const products = [
   "iPhone 15 Pro",
@@ -25,15 +25,27 @@ const fetchProductDetails = async (query: string) => {
   }
 };
 
+const categories = [
+  { value: "all", label: "All Categories" },
+  { value: "food", label: "Food & Beverage" },
+  { value: "health", label: "Health & Wellness" },
+  { value: "personal", label: "Personal Care" },
+  { value: "ayurvedic", label: "Ayurvedic" },
+];
+
 const Marketplace: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory([category]); // Single selection
+  };
+
   return (
     <div className="flex min-h-screen p-6 bg-gray-100 md:p-12">
       {/* Sidebar (Left) */}
-      {/* <div className="w-1/4 min-w-[250px] bg-white shadow-lg rounded-lg p-4">
-        <FilterSidebar />
-      </div> */}
+      {/* <FilterSideBar /> */}
 
-      <FilterSideBar />
+      <FilterButton />
 
       {/* Main Content (Right) */}
       <div className="flex flex-col flex-grow ml-6">
@@ -53,3 +65,5 @@ const Marketplace: React.FC = () => {
 };
 
 export default Marketplace;
+
+

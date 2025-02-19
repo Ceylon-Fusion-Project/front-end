@@ -17,7 +17,7 @@ function App() {
       <Example/>
       <div>
       <LandingPage />
-    </div>
+      </div>
       
 
     </>
