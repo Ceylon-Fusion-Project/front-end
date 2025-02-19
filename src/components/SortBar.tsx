@@ -3,8 +3,8 @@ import SortButton from "./SortButton";
 
 const sortOptions = [
   { value: "newest", label: "New" },
-  { value: "priceAsc", label: "Price ascending" },
-  { value: "priceDesc", label: "Price descending" },
+  { value: "priceAsc", label: "Price Ascending" },
+  { value: "priceDesc", label: "Price Descending" },
   { value: "rating", label: "Rating" },
 ];
 
@@ -13,6 +13,7 @@ const SortBar: React.FC = () => {
 
   const handleSortSelection = (sortValue: string) => {
     setSelectedSort(sortValue);
+    alert(`Sorting by: ${sortValue}`);
     console.log("Sorting by:", sortValue);
   };
 
