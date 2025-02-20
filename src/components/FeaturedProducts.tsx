@@ -4,6 +4,7 @@ import Card from "./Card";
 import cinnamonPowder from "../assets/images/cinnamon-powder.jpg";
 import cinnamonSticks from "../assets/images/cinnamon-sticks.jpg";
 import cinnamonOil from "../assets/images/cinnamon-oil.jpg";
+import ShopNowButton from "@/components/ShopNowButton";
 
 const FeaturedProducts = () => {
   const products = [
@@ -55,11 +56,14 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Shop Now Button - Positioned Outside the Grid */}
-        <div className="w-full flex justify-center mt-12"> 
+        {/* <div className="w-full flex justify-center mt-12"> 
           <button className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-primary transition-all duration-300">
             Shop Now
           </button>
-        </div>
+        </div> */}
+        <div className="text-center">
+      <ShopNowButton text="Shop Now" />
+    </div>
       </div>
     </div>
   );
