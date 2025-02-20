@@ -6,6 +6,7 @@
 import { tokens } from "./tokens"
 
 // 2) Define brand-specific colors, fonts, and other styles
+/*
 const brandColors = {
   primary: "#FFD700", // Gold color for better contrast
   secondary: "#991B1B",
@@ -16,6 +17,18 @@ const brandColors = {
   highlight: "#FF3B3B",
   link: "#2563EB", // Blue for links
 }
+*/
+export const brandColors = {
+  primary: "#8B5E3B",       // Used for headings and icons
+  secondary: "#D2B48C",     // Used for descriptions
+  background: "#FAF3E0",    // Used as the section background
+  textPrimary: "#3E2723",   // Used for all text content
+  accent: "#4A2F1B",        // Used for hover effects on the button
+  highlight: "#FF3B3B",     // Additional color if needed
+  link: "#2563EB",
+  textSecondary: "#B91C1C",
+};
+
 
 const brandFonts = {
   sans: ["Inter", "sans-serif"],
