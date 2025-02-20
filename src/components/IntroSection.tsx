@@ -2,10 +2,15 @@
 import ecoFarming from "../assets/images/eco-farming.jpg";
 import ethicalSourcing from "../assets/images/ethical-sourcing.jpg";
 import communityImpact from "../assets/images/community-impact.jpg";
+//import backgroundImage from "../assets/images/cinnamon.jpg";
 
 const IntroSection = () => {
   return (
     <div className="bg-[#FAF3E0] min-h-screen flex items-center py-20">  {/* Updated Background */}
+    {/* <div 
+  className="absolute inset-0 bg-cover bg-center opacity-20"
+  style={{ backgroundImage: `url(${backgroundImage})` }}
+></div> */}
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <div className="text-center mb-10">
