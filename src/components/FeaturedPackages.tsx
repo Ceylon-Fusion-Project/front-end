@@ -1,6 +1,7 @@
 // src/components/FeaturedPackages.tsx
 //import React from 'react';
 import Card from './Card';
+import { theme } from "@/styles/theme";
 import NatureRetreat from '../assets/images/nature-retreat.jpg';
 import EcoFriendlyLodge from '../assets/images/eco-friendly-lodge.jpg';
 import CinnamonTour from '../assets/images/cinnamon-tour.jpg';
@@ -45,6 +46,24 @@ const FeaturedPackages = () => {
             />
           ))}
         </div>
+
+          
+                  {/* Shop Now Button - Positioned Outside the Grid */}
+                  <div className="w-full flex justify-center mt-12"> 
+                    <button
+                      className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
+                       hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                          style={{
+                      backgroundColor: "#a68f83",
+                      color: theme.colors.textPrimary,
+                      fontFamily: theme.fonts.sans[0],
+                    }}
+                      >
+                        Book Now
+                      </button>
+          
+                  </div>
+
       </div>
     </div>
   );
