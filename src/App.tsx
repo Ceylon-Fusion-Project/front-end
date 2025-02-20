@@ -1,4 +1,3 @@
-//import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
 import AppRoutes from "./routes/AppRoutes";
@@ -6,7 +5,9 @@ import AppRoutes from "./routes/AppRoutes";
 function App() {
   return (
     <Router>
-      <AppRoutes />
+        <main className="flex-grow">
+          <AppRoutes />
+        </main>
     </Router>
   );
 }
