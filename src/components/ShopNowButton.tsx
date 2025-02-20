@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { theme } from "@/styles/theme";
 
 interface ShopNowButtonProps {
   scrollToId?: string;
@@ -15,14 +16,13 @@ const ShopNowButton: React.FC<ShopNowButtonProps> = ({
   const navigate = useNavigate();
   const handleClick = () => {
     if (navigateTo) {
-      navigate(navigateTo); // Navigate to product marketplace
+      navigate(navigateTo);
     } else if (scrollToId) {
       const element = document.getElementById(scrollToId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      // Scroll down one viewport height if no target ID is provided
       window.scrollBy({ top: window.innerHeight, behavior: "smooth" });
     }
   };
@@ -30,7 +30,12 @@ const ShopNowButton: React.FC<ShopNowButtonProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="px-6 py-3 mt-4 font-semibold text-white transition duration-300 bg-green-500 rounded-full hover:bg-green-600"
+      className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                style={{
+            backgroundColor: "#a68f83",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.sans[0],
+                    }}
     >
       {text}
     </button>

@@ -11,7 +11,7 @@ const FilterButton: React.FC = () => {
       {!isSidebarOpen ? (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="flex items-center h-[35px] gap-2 px-2 py-2 transition border-2 border-gray-300 rounded-lg shadow-sm hover:bg-gray-300 hover:border-gray-500"
+          className="flex items-center w-[100px] h-[45px] gap-2 px-2 py-2 transition bg-gray-300 rounded-lg shadow-sm"
         >
           <img src={FilterIcon} alt="Filter Icon" className="w-5 h-5" />
           Filters

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Close from "../assets/Close.svg";
+import { theme } from "@/styles/theme";
 
 interface CheckboxProps {
   label: string;
@@ -142,7 +143,11 @@ const FilterSideBar: React.FC<FilteringSidebarProps> = ({ onClose }) => {
 
       {/* Clear Filters Button */}
       <button
-        className="w-full px-4 py-2 text-black border-2 border-gray-300 rounded-full bg-white hover:bg-gradient-to-r hover:from-[#1CD8D2] hover:to-[#93EDC7] hover:text-blue-700 transition-all duration-300 focus-within:border-gray-500 hover:border-gray-500"
+        className="w-full px-4 py-2 text-black text-lg rounded-md bg-[#a68f83] hover:text-gray-700 transition-all duration-300"
+        style={{
+          color: theme.colors.textPrimary,
+          fontFamily: theme.fonts.sans[0]
+        }}
         onClick={clearFilters}
       >
         Clear All Filters

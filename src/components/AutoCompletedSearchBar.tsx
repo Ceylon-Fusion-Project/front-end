@@ -27,7 +27,7 @@ const AutoCompleteSearchBar: React.FC<AutoCompleteSearchBarProps> = ({
     onSearch(query);
   };
   return (
-    <div className="relative flex items-center w-[200px] h-[35px] rounded-full border-2 border-gray-300 shadow-md focus-within:border-gray-500">
+    <div className="relative flex items-center w-[250px] h-[45px] rounded-full border-2 shadow-md focus-within:border-gray-500">
         {/* Search input */}
         <input
           type="search"
@@ -41,7 +41,7 @@ const AutoCompleteSearchBar: React.FC<AutoCompleteSearchBarProps> = ({
           alt="Search" 
           // onClick={handleSearchClick}
           onClick={() => alert("Search icon clicked!")}
-          className="w-8 h-8 rounded-r-full"
+          className="w-[45px] h-[45px] rounded-r-full"
         />
       
       {/* Suggestion list */}
