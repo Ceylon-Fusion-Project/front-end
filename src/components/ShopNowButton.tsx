@@ -1,16 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ShopNowButtonProps {
   scrollToId?: string;
   text?: string;
+  navigateTo?: string;
 }
 
 const ShopNowButton: React.FC<ShopNowButtonProps> = ({
   scrollToId,
   text = "Shop Now",
+  navigateTo = "/products/product-marketplace",
 }) => {
+  const navigate = useNavigate();
   const handleClick = () => {
-    if (scrollToId) {
+    if (navigateTo) {
+      navigate(navigateTo); // Navigate to product marketplace
+    } else if (scrollToId) {
       const element = document.getElementById(scrollToId);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
