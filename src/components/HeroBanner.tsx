@@ -1,10 +1,11 @@
 import React from "react";
 import img from "../assets/images/hero-banner.png";
 import Button from "./HeroBannerButton";
+
 const HeroBanner: React.FC = () => {
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center bg-cover bg-center text-white text-center px-4"
+      className="relative h-screen flex items-center justify-center bg-cover bg-center text-white text-center px-4"
       style={{ backgroundImage: `url(${img})` }}
     >
       {/* Overlay for better readability */}
@@ -16,7 +17,7 @@ const HeroBanner: React.FC = () => {
         <p className="mt-2 text-lg md:text-xl">Discover amazing products and deals</p>
 
         {/* Buttons using the reusable Button component */}
-        <div className="mt-6 flex flex-wrap justify-center gap-20">
+        <div className="mt-6 flex flex-wrap justify-center gap-10">
           <Button text="Shop Now" ariaLabel="Shop Now" />
           <Button text="Booking" ariaLabel="Booking" />
         </div>
