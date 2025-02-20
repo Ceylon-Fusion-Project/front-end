@@ -1,6 +1,7 @@
 // src/components/FeaturedProducts.tsx
 //import React from "react";
 import Card from "./Card";
+import { theme } from "@/styles/theme";
 import cinnamonPowder from "../assets/images/cinnamon-powder.jpg";
 import cinnamonSticks from "../assets/images/cinnamon-sticks.jpg";
 import cinnamonOil from "../assets/images/cinnamon-oil.jpg";
@@ -56,9 +57,18 @@ const FeaturedProducts = () => {
 
         {/* Shop Now Button - Positioned Outside the Grid */}
         <div className="w-full flex justify-center mt-12"> 
-          <button className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-primary transition-all duration-300">
-            Shop Now
-          </button>
+        <button
+            className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
+             hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                style={{
+            backgroundColor: "#a68f83",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.sans[0],
+          }}
+            >
+              Shop Now
+            </button>
+
         </div>
       </div>
     </div>
