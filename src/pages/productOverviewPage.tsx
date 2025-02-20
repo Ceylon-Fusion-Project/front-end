@@ -3,7 +3,38 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 //import DiscoverMoreDetails from "../components/DiscoverMoreDetails";
 import ProductAccordion from "../components/ProductAccordion";
+import { CustomerReviews } from "@/components/CustomerReviews";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/footer";
+import { ProductGallery } from "@/components/ProductGallery";
+import { ProductInfo } from "@/components/ProductInfo";
 
+// interface ProductOrigin {
+//   originID: number;
+//   stateLocation: string;
+//   stateMapLink: string;
+//   partOfPlant: string;
+//   originDescription: string;
+//   factoryName: string;
+//   factoryAddress: string;
+//   factoryMapLink: string;
+//   demoVideoLink: string;
+//   originCode: string;
+// }
+// interface Certification {
+//   certificationName: string;
+//   issuer: string;
+//   certURL: string;
+// }
+
+// interface ProductRating {
+//   productRatingID: number;
+//   customer: number;
+//   productRating: number;
+//   productReview: string;
+//   createdDate: string;
+//   updatedDate: string;
+// }
 interface ProductDetails {
   productID: number;
   productCode: string;
@@ -73,19 +104,52 @@ export function ProductOverviewPage() {
 
   console.log("✅ Rendering Product:", product);
 
+  const averageRating =
+    product.productRatingValue === 0 && product.productRatingList.length > 0
+      ? product.productRatingList.reduce((acc, review) => acc + review.productRating, 0) /
+        product.productRatingList.length
+      : product.productRatingValue;
+
   return (
-    <section className="mt-12 space-y-6">
+    <section className="mt-5 space-y-2 px-1 lg:px-4 container mx-auto pt-16">
+      {/* Navigation Bar */}
+      <section className="snap-start">
+        <Navbar />
+      </section>
+      <section className="mt-2 space-y-2">
+      <section className="grid grid-cols-1 lg:flex lg:space-x-8">
+      {/* Pass Product Image Gallery */}
+    <div className="lg:w-1/2 flex flex-col">
+      <ProductGallery images={product.productImageURLs} />
+    </div>
+
+      {/* Product Information */}
+    <div className="lg:w-1/2 flex flex-col justify-between">
+      <ProductInfo
+        name={product.productName}
+        brand={product.productOrigin?.factoryName || product.productOrigin?.stateLocation || "Unknown Brand"}
+        rating={averageRating}
+        reviewCount={product.productRatingList.length}
+        price={product.sellingPrice}
+        originalPrice={product.sellingPrice * 1.2}
+        description={product.productDescription}
+      />
+    </div>
+      </section>
       
       {/* ✅ Pass Product Description to Component
       <DiscoverMoreDetails
         nutrition={product.productDescription || "No description available"}
       /> */}
 
-      {/* ✅ Pass Product Details to Component */}
+      {/* Pass Product Details to Component */}
       <ProductAccordion
         certificationList={product.certificationList}
         productOrigin={product.productOrigin}
       />
+      
+      {/* Pass Customer Reviews */}
+      <CustomerReviews productRatingList={product.productRatingList} />
 
       <button
         onClick={() => navigate(-1)}
@@ -93,6 +157,11 @@ export function ProductOverviewPage() {
       >
         ← Back
       </button>
+      </section>
+      {/* Footer */}
+      <section className="snap-start">
+        <Footer />
+      </section>
     </section>
   );
 }

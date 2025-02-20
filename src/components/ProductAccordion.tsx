@@ -1,18 +1,10 @@
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-  } from "@/components/ui/accordion";
-  import { theme } from "@/styles/theme";
-  
-  interface Certification {
-    certificationName: string;
-    issuer: string;
-    certURL: string;
-  }
-  
-  interface ProductOrigin {
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { theme } from "@/styles/theme";
+
+interface ProductAccordionProps {
+  certificationList: Array<{ certificationName: string; issuer: string; certURL: string }>;
+  productOrigin: {
     stateLocation: string;
     stateMapLink: string;
     partOfPlant: string;
@@ -21,109 +13,80 @@ import {
     factoryAddress: string;
     factoryMapLink: string;
     demoVideoLink: string;
-  }
-  
-  interface ProductAccordionProps {
-    certificationList: Certification[];
-    productOrigin: ProductOrigin;
-  }
-  
-  export default function ProductAccordion({
-    certificationList,
-    productOrigin,
-  }: ProductAccordionProps) {
-    return (
-      <Accordion
-        type="single"
-        collapsible
-        className={`w-full ${theme.fonts.body} ${theme.colors.background} ${theme.borders.thin} ${theme.shadows.medium} ${theme.transitions.normal} p-4`}
-      >
-        
-        {/* ✅ Certifications Section */}
-        <AccordionItem value="Certifications">
-          <AccordionTrigger
-            className={`${theme.fontSizes.base} md:${theme.fontSizes.lg} font-medium text-${theme.colors.textPrimary}`}
-          >
-            Certifications
-          </AccordionTrigger>
-          <AccordionContent>
-            {certificationList.length > 0 ? (
-              <ul className="list-disc pl-4 md:pl-6 space-y-2">
-                {certificationList.map((cert, index) => (
-                  <li key={index} className={`text-${theme.colors.textSecondary}`}>
-                    <strong>{cert.certificationName}</strong> by {cert.issuer}  
-                    {cert.certURL && (
-                      <a
-                        href={cert.certURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`text-${theme.colors.link} underline`}
-                      >
-                        View Certificate
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-500">No certifications available.</p>
-            )}
-          </AccordionContent>
-        </AccordionItem>
-  
-        {/* ✅ Product Origin Section */}
-        <AccordionItem value="Product Origin">
-          <AccordionTrigger
-            className={`${theme.fontSizes.base} md:${theme.fontSizes.lg} font-medium text-${theme.colors.textPrimary}`}
-          >
-            Product Origin
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="space-y-2">
-              <p><strong>State Location:</strong> {productOrigin.stateLocation}</p>
-              {productOrigin.stateMapLink && (
-                <p>
+  };
+}
+
+export default function ProductAccordion({
+  certificationList,
+  productOrigin,
+}: ProductAccordionProps) {
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Certifications Accordion */}
+      <div className={`border ${theme.borders.thin} rounded-lg shadow-md`}>
+        <button
+          onClick={() => toggleSection("certifications")}
+          className={`w-full flex justify-between items-center p-4 bg-white hover:bg-gray-100 ${theme.transitions.fast} rounded-t-lg font-semibold text-lg text-[${theme.colors.textPrimary}]`}
+        >
+          Certifications
+          {openSection === "certifications" ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </button>
+        {openSection === "certifications" && (
+          <div className="p-4 space-y-3 bg-white text-[${theme.colors.textPrimary}]">
+            <ul className="list-disc pl-5 space-y-2">
+              {certificationList.map((cert, index) => (
+                <li key={index}>
+                  <span className="font-semibold text-[${theme.colors.primary}]">{cert.certificationName}</span> by {cert.issuer}{" "}
                   <a
-                    href={productOrigin.stateMapLink}
+                    href={cert.certURL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-${theme.colors.link} underline`}
+                    className={`text-[${theme.colors.link}] hover:underline font-medium`}
                   >
-                    View on Map
+                    View Certificate
                   </a>
-                </p>
-              )}
-              <p><strong>Part of Plant:</strong> {productOrigin.partOfPlant}</p>
-              <p><strong>Description:</strong> {productOrigin.originDescription}</p>
-              <p><strong>Factory:</strong> {productOrigin.factoryName}</p>
-              <p><strong>Address:</strong> {productOrigin.factoryAddress}</p>
-              {productOrigin.factoryMapLink && (
-                <p>
-                  <a
-                    href={productOrigin.factoryMapLink}
-                    target="_blank"
-                    className={`text-${theme.colors.link} underline`}
-                  >
-                    View Factory on Map
-                  </a>
-                </p>
-              )}
-              {productOrigin.demoVideoLink && (
-                <p>
-                  <a
-                    href={productOrigin.demoVideoLink}
-                    target="_blank"
-                    className={`text-${theme.colors.link} underline`}
-                  >
-                    Watch Demo Video
-                  </a>
-                </p>
-              )}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-  
-      </Accordion>
-    );
-  }
-  
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Product Origin Accordion */}
+      <div className={`border ${theme.borders.thin} rounded-lg shadow-md`}>
+        <button
+          onClick={() => toggleSection("productOrigin")}
+          className={`w-full flex justify-between items-center p-4 bg-white hover:bg-gray-100 ${theme.transitions.fast} rounded-t-lg font-semibold text-lg text-[${theme.colors.textPrimary}]`}
+        >
+          Product Origin
+          {openSection === "productOrigin" ? (
+            <ChevronUp className="h-5 w-5 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-gray-500" />
+          )}
+        </button>
+        {openSection === "productOrigin" && (
+          <div className="p-4 bg-white space-y-3 text-[${theme.colors.textPrimary}]">
+            <p><strong className="text-[${theme.colors.primary}]">State Location:</strong> {productOrigin.stateLocation} <a href={productOrigin.stateMapLink} target="_blank" rel="noopener noreferrer" className={`text-[${theme.colors.link}] hover:underline`}>View on Map</a></p>
+            <p><strong className="text-[${theme.colors.primary}]">Part of Plant:</strong> {productOrigin.partOfPlant}</p>
+            <p><strong className="text-[${theme.colors.primary}]">Description:</strong> {productOrigin.originDescription}</p>
+            <p><strong className="text-[${theme.colors.primary}]">Factory:</strong> {productOrigin.factoryName}</p>
+            <p><strong className="text-[${theme.colors.primary}]">Address:</strong> {productOrigin.factoryAddress}</p>
+            <a href={productOrigin.factoryMapLink} target="_blank" rel="noopener noreferrer" className={`text-[${theme.colors.link}] hover:underline`}>View Factory on Map</a><br />
+            <a href={productOrigin.demoVideoLink} target="_blank" rel="noopener noreferrer" className={`text-[${theme.colors.link}] hover:underline`}>Watch Demo Video</a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
