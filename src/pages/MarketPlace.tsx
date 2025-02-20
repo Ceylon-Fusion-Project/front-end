@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import SlideshowBanner from "@/components/SlideshowBanner";
 import MiddleArea from "@/components/MiddleArea";
+import Footer from "@/components/footer";
 
 const Marketplace: React.FC = () => {
   return (
@@ -21,6 +22,11 @@ const Marketplace: React.FC = () => {
         <section className="snap-start">
           <MiddleArea />
         </section> 
+
+        {/* Footer */}
+        <section className="snap-start">
+          <Footer />
+        </section>
 
       </div>
       

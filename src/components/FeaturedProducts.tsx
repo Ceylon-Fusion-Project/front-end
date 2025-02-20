@@ -33,15 +33,15 @@ const FeaturedProducts = () => {
   return (
     
 
-    <div className=" bg-secondary-100 py-16 shadow-sm"> {/* Differentiating Background */}
-      <div className="container mx-auto px-6">
+    <div className="py-16 shadow-sm  bg-secondary-100"> {/* Differentiating Background */}
+      <div className="container px-6 mx-auto">
         {/* Section Title */}
-        <h2 className="text-4xl font-bold text-center mb-10" style={{ color: "#3E2723" }}>
+        <h2 className="mb-10 text-4xl font-bold text-center" style={{ color: "#3E2723" }}>
           Featured Products
         </h2>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product, index) => (
              <Card
              key={index}
@@ -56,8 +56,8 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Shop Now Button - Positioned Outside the Grid */}
-        {/* <div className="w-full flex justify-center mt-12"> 
-          <button className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-primary transition-all duration-300">
+        {/* <div className="flex justify-center w-full mt-12"> 
+          <button className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary">
             Shop Now
           </button>
         </div> */}
