@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import ShopNowButton from "./ShopNowButton"; // adjust the import path as needed
 
 // Replace these paths with the actual paths or URLs to your images
 const bannerImages = [
-  "C:/Users/User/Downloads/coffee-2534919_1920.jpg",
-  "C:/Users/User/Downloads/pexels-katja-b-713703402-30705538.jpg",
-  "C:/Users/User/Downloads/tea-6791234_1920.jpg",
+  "assets/coffee-2534919_1920.jpg",
+  "assets/pexels-katja-b-713703402-30705538.jpg",
+  "assets/tea-6791234_1920.jpg",
 ];
 
 const SlideshowBanner: React.FC = () => {
@@ -37,6 +38,8 @@ const SlideshowBanner: React.FC = () => {
         <p className="text-sm md:text-xl font-medium">
           100% pure &amp; Sustainable.
         </p>
+        {/* Shop Now Button */}
+        <ShopNowButton scrollToId="target-section" />
       </div>
     </div>
   );
