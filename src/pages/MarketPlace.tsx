@@ -1,31 +1,33 @@
-import React, { useState } from "react";
-import AutoCompleteSearchBar from "../components/AutoCompleteSearchBar"; 
-import FilterButton from "../components/FilterButton";
-import SortBar from "../components/SortBar";
-import SlideshowBanner from "../components/SlideshowBanner";
+//import React, { useState } from "react";
+//import AutoCompleteSearchBar from "./AutoCompleteSearchBar"; 
+import FilterButton from "./../components/FilterButton";
+
+import SlideshowBanner from "./../components/SlideshowBanner";
+
+import SortBar from "./../components/SortBar"; // Import the SortButtons component
 
 
-const products = [
-  "iPhone 15 Pro",
-  "Samsung Galaxy S23",
-  "MacBook Pro M2",
-  "Dell XPS 13",
-  "Sony WH-1000XM5",
-  "Apple Watch Ultra",
-  "Google Pixel 7",
-];
+// const products = [
+//   "iPhone 15 Pro",
+//   "Samsung Galaxy S23",
+//   "MacBook Pro M2",
+//   "Dell XPS 13",
+//   "Sony WH-1000XM5",
+//   "Apple Watch Ultra",
+//   "Google Pixel 7",
+// ];
 
-const fetchProductDetails = async (query: string) => {
-  try {
-    const response = await fetch(
-      `/api/products?name=${encodeURIComponent(query)}`
-    );
-    const data = await response.json();
-    console.log("Product Details:", data);
-  } catch (error) {
-    console.error("Error fetching product details:", error);
-  }
-};
+// const fetchProductDetails = async (query: string) => {
+//   try {
+//     const response = await fetch(
+//       `/api/products?name=${encodeURIComponent(query)}`
+//     );
+//     const data = await response.json();
+//     console.log("Product Details:", data);
+//   } catch (error) {
+//     console.error("Error fetching product details:", error);
+//   }
+// };
 
 const Marketplace: React.FC = () => {
   return (
@@ -43,7 +45,7 @@ const Marketplace: React.FC = () => {
         <div className="flex flex-col flex-grow ml-6">
           {/* Search Bar */}
           <div className="mb-6">
-            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} />
+{/*            <AutoCompleteSearchBar data={products} onSearch={fetchProductDetails} /> */}
           </div>
 
 
