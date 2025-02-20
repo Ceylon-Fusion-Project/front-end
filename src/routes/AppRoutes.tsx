@@ -1,5 +1,5 @@
 import {Routes, Route} from 'react-router-dom';
-//import LandingPage from '../LandingPage';
+///import LandingPage from '../LandingPage';
 import ProductRoutes from './ProductRoutes';
 // import FeatureXRoutes from "./FeatureXRoutes"; // Example: Other feature routes
 // import NotFoundPage from "../pages/NotFoundPage"; // Optional 404 Page
@@ -7,7 +7,7 @@ import ProductRoutes from './ProductRoutes';
 export default function AppRoutes() {
     return (
         <Routes>
-            {/* <Route path="/" element={<LandingPage />} /> */}
+            {/* <Route path="/landingpage" element={<LandingPage />} /> */}
             {/* <Route path="/feature-x" element={<FeatureXRoutes />} /> */}
             {/* <Route path="*" element={<NotFoundPage />} /> */}
             
