@@ -38,7 +38,7 @@ const Navbar = () => {
           {/* Login and Signup - Desktop */}
           <div className="hidden md:flex space-x-6">
             <Link to="/login" className="text-gray-800 hover:text-gray-600 px-3 py-2">Login</Link>
-            <Link to="/signup" className="text-gray-800 hover:text-gray-600 px-6 py-2">Sign Up</Link>
+            <Link to="/signup" className="text-gray-800 hover:text-gray-600 px-6 py-2">SignUp</Link>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@ const Navbar = () => {
           <Link to="/about" className="block text-gray-800 hover:text-gray-600 px-3 py-2">About</Link>
           <Link to="/contact" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Contact</Link>
           <Link to="/login" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Login</Link>
-          <Link to="/signup" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Sign Up</Link>
+          <Link to="/signup" className="block text-gray-800 hover:text-gray-600 px-3 py-2">SignUp</Link>
         </div>
       )}
     </nav>
