@@ -72,7 +72,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance"; // Importing axios instance
 import Card from "./Card";
-import ShopNowButton from "@/components/ShopNowButton";
+import { theme } from "../../src/styles/theme";
 
 interface Product {
   productID: number;
@@ -170,9 +170,20 @@ const FeaturedProducts: React.FC = () => {
           ))}
         </div>
 
-        {/* Shop Now Button */}
-        <div className="text-center mt-12">
-          <ShopNowButton text="Shop Now" />
+        {/* Shop Now Button - Positioned Outside the Grid */}
+        <div className="w-full flex justify-center mt-12"> 
+        <button
+            className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
+             hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                style={{
+            backgroundColor: "#a68f83",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.sans[0],
+          }}
+            >
+              Shop Now
+            </button>
+
         </div>
       </div>
     </div>
