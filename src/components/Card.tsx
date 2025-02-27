@@ -429,7 +429,6 @@ const Card: React.FC<CardProps> = ({
   description,
   longDescription,
   price,
-  onClick,
   isFeatured,
   productID,
 }) => {

@@ -71,8 +71,10 @@
 
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance"; // Importing axios instance
+
 import Card from "./Card";
 import { theme } from "../../src/styles/theme";
+import axios from "axios";
 
 interface Product {
   productID: number;
@@ -114,15 +116,15 @@ const FeaturedProducts: React.FC = () => {
           console.error("Unexpected data structure:", response.data);
           setError("Invalid data format from API.");
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching products:", err);
-        if (err.response) {
-          console.error("Server Response Data:", err.response.data);
-          console.error("Status Code:", err.response.status);
-        } else if (err.request) {
-          console.error("No response received:", err.request);
-        } else {
+        if (axios.isAxiosError(err)) {
+          console.error("Server Response Data:", err.response?.data);
+          console.error("Status Code:", err.response?.status);
+        } else if (err instanceof Error) {
           console.error("Error Message:", err.message);
+        } else {
+          console.error("Unexpected error:", err);
         }
         setError("Failed to load products.");
       } finally {
