@@ -6,7 +6,7 @@ import CinnamonPowder from "../assets/images/cinnamon-powder.jpg";
 import CinnamonHoney from "../assets/images/CinnomanHoney01.jpg";
 import CinnamonCapsule from "../assets/images/Cinnoman-Capsule.jpg";
 import CinnomanTea from "../assets/images/CinnomanTea01.jpeg";
-import CinnamonSoap from "../assets/images/CinnomanSoap02.jpg";
+import CinnamonSoap from "../assets/images/CinnomanSoap.jpg";
 import CinnamonCandle from "../assets/images/CinnomanCandle02.jpg";
 import CinnamonRoll from "../assets/images/CinnomanRoll03.jpg";
 import CinnamonCandy from "../assets/images/CinnomanCandy03.jpg";

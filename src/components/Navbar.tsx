@@ -28,17 +28,54 @@ const Navbar = () => {
 
           {/* Navigation links - Desktop */}
           <div className="hidden md:flex flex-grow justify-center items-center space-x-6">
-            <Link to="/" className="text-gray-800 hover:text-gray-600 px-3 py-2">Home</Link>
-            <Link to="/categories" className="text-gray-800 hover:text-gray-600 px-3 py-2">Categories</Link>
-            <Link to="/booking" className="text-gray-800 hover:text-gray-600 px-3 py-2">Booking</Link>
-            <Link to="/about" className="text-gray-800 hover:text-gray-600 px-3 py-2">About</Link>
-            <Link to="/contact" className="text-gray-800 hover:text-gray-600 px-3 py-2">Contact</Link>
+            <Link
+              to="/"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+            >
+              Home
+            </Link>
+            <Link
+              to="/categories"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+            >
+              Categories
+            </Link>
+            <Link
+              to="/booking"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+            >
+              Booking
+            </Link>
+            <Link
+              to="/about"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+            >
+              Contact
+            </Link>
           </div>
 
           {/* Login and Signup - Desktop */}
           <div className="hidden md:flex space-x-6">
-            <Link to="/login" className="text-gray-800 hover:text-gray-600 px-3 py-2">Login</Link>
-            <Link to="/signup" className="text-gray-800 hover:text-gray-600 px-6 py-2">Sign Up</Link>
+            <a
+              href="http://localhost:3001/api/v1/auth/login"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+              target="_blank" // Opens in a new tab (optional)
+              rel="noopener noreferrer" // Security best practice when using target="_blank"
+            >
+              Login
+            </a>
+            <Link
+              to="/signup"
+              className="text-gray-800 hover:text-gray-600 px-6 py-2"
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
@@ -46,13 +83,50 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md absolute top-16 left-0 w-full px-4 py-2">
-          <Link to="/" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Home</Link>
-          <Link to="/categories" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Categories</Link>
-          <Link to="/booking" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Booking</Link>
-          <Link to="/about" className="block text-gray-800 hover:text-gray-600 px-3 py-2">About</Link>
-          <Link to="/contact" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Contact</Link>
-          <Link to="/login" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Login</Link>
-          <Link to="/signup" className="block text-gray-800 hover:text-gray-600 px-3 py-2">Sign Up</Link>
+          <Link
+            to="/"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Home
+          </Link>
+          <Link
+            to="/categories"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Categories
+          </Link>
+          <Link
+            to="/booking"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Booking
+          </Link>
+          <Link
+            to="/about"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Contact
+          </Link>
+          <a
+            href="http://localhost:3001/api/v1/auth/login"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Login
+          </a>
+          <Link
+            to="/signup"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>
