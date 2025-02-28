@@ -1,0 +1,132 @@
+import { useState } from "react";
+import { Star, Heart, Minus, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { tokens } from "@/styles/tokens";
+import { theme } from "@/styles/theme";
+
+interface ProductInfoProps {
+  name: string;
+  brand: string;
+  rating: number;
+  reviewCount: number;
+  price: number;
+  originalPrice: number;
+  description: string;
+}
+
+export function ProductInfo({
+  name,
+  brand,
+  rating,
+  reviewCount,
+  price,
+  originalPrice,
+  description,
+}: ProductInfoProps) {
+  const [quantity, setQuantity] = useState(1);
+
+  return (
+    <div className={`space-y-4 md:space-y-6 ${tokens.fonts.body}`}>
+      {/* Product Name and Brand */}
+      <div className="space-y-2">
+        <h1
+          className={`${tokens.fontSizes["2xl"]} md:${tokens.fontSizes["3xl"]} lg:${tokens.fontSizes["4xl"]} font-bold ${tokens.fonts.heading} text-[${theme.colors.textPrimary}]`}
+        >
+          {name}
+        </h1>
+        <p className={`text-[${theme.colors.textSecondary}]`}>{brand}</p>
+      </div>
+
+      {/* Ratings and Reviews */}
+      <div className="flex flex-wrap items-center gap-2 md:gap-4">
+        <div className="flex">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star
+              key={i}
+              className={`h-5 w-5 ${
+                i <= rating
+                  ? `text-yellow-500 fill-current`
+                  : `text-[${tokens.colors.border}]`
+              }`}
+            />
+          ))}
+        </div>
+        <span className={`text-sm md:text-base text-[${tokens.colors.textLight}]`}>
+          {rating}/5 - {reviewCount} Reviews
+        </span>
+      </div>
+
+      {/* Pricing Section */}
+      <div className="space-y-1 md:space-y-2">
+        <p className={`text-2xl md:text-3xl font-bold text-green-600`}>
+          ${price.toFixed(2)}
+        </p>
+        <p className={`text-[${tokens.colors.textLight}] line-through`}>
+          ${originalPrice.toFixed(2)}
+        </p>
+        <p className={`text-red-500 font-semibold`}>
+          -{((1 - price / originalPrice) * 100).toFixed(0)}% Off
+        </p>
+      </div>
+
+      {/* Stock Info */}
+      <p className={`text-green-600 font-semibold`}>In Stock</p>
+
+      {/* Product Description */}
+      <p className={`text-sm md:text-base text-[${tokens.colors.text}]`}>{description}</p>
+
+      {/* Quantity Selector */}
+      <div className="space-y-4 pt-4">
+        <div className="flex items-center space-x-4">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className={`h-8 w-8 md:h-10 md:w-10 transition duration-200 ease-in-out`}
+          >
+            <Minus className={`h-4 w-4 text-gray-700`} />
+          </Button>
+          <span className="text-lg md:text-xl font-semibold w-8 text-center text-gray-800">
+            {quantity}
+          </span>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setQuantity(quantity + 1)}
+            className={`h-8 w-8 md:h-10 md:w-10 transition duration-200 ease-in-out`}
+          >
+            <Plus className={`h-4 w-4 text-gray-700`} />
+          </Button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Add to Cart Button */}
+          <Button
+            size="lg"
+            className={`w-full bg-green-600 text-white hover:bg-green-700 transition duration-200 ease-in-out`}
+          >
+            Add to Cart
+          </Button>
+
+          {/* Buy Now Button */}
+          <Button
+            size="lg"
+            className={`w-full bg-orange-500 text-white hover:bg-orange-600 transition duration-200 ease-in-out`}
+          >
+            Buy Now
+          </Button>
+        </div>
+
+        {/* Wishlist Button */}
+        <Button
+          variant="outline"
+          className={`w-full border-gray-400 text-gray-800 hover:bg-gray-100 transition duration-200 ease-in-out`}
+        >
+          <Heart className={`h-5 w-5 mr-2 text-red-500`} />
+          Add to Wishlist
+        </Button>
+      </div>
+    </div>
+  );
+}
