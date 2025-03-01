@@ -429,7 +429,6 @@ const Card: React.FC<CardProps> = ({
   description,
   longDescription,
   price,
-  onClick,
   isFeatured,
   productID,
 }) => {
@@ -480,6 +479,7 @@ const Card: React.FC<CardProps> = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Product Image */}
       <div className="relative">
         <img src={image} alt={title} className="w-full h-48 object-cover" />
 
@@ -510,6 +510,7 @@ const Card: React.FC<CardProps> = ({
         )}
       </div>
 
+      {/* Product Details */}
       <div className="p-6 flex flex-col items-center">
         <h3
           className="font-bold mb-2"
@@ -541,6 +542,7 @@ const Card: React.FC<CardProps> = ({
           </p>
         )}
 
+        {/* Quick Buy Button */}
         {isFeatured && (
           <button
             onClick={handleQuickBuy}
@@ -553,24 +555,30 @@ const Card: React.FC<CardProps> = ({
               fontFamily: theme.fonts.sans[0],
             }}
             disabled={isBuying}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.primary)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.colors.accent)}
           >
             {isBuying ? "Placing Order..." : "Quick Buy"}
           </button>
         )}
 
+        {/* Quick Preview Button */}
         <button
           onClick={() => setShowPreview(true)}
           className="w-full py-3 rounded-lg mt-2 transition-all duration-300"
           style={{
-            backgroundColor: "#E5E5E5",
+            backgroundColor: "#c4c0c0",
             color: theme.colors.textPrimary,
             fontFamily: theme.fonts.sans[0],
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.secondary)}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#c4c0c0")}
         >
           Quick Preview
         </button>
       </div>
 
+      {/* Quick Preview Modal */}
       {showPreview && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50 p-4"

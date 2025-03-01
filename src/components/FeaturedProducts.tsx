@@ -31,7 +31,7 @@
 
 //   return (
 
-//     <div className="py-16 shadow-sm  bg-secondary-100"> {/* Differentiating Background */}
+//     <div className="py-16 shadow-sm bg-secondary-100"> {/* Differentiating Background */}
 //       <div className="container px-6 mx-auto">
 //         {/* Section Title */}
 //         <h2 className="mb-10 text-4xl font-bold text-center" style={{ color: "#3E2723" }}>
@@ -71,8 +71,10 @@
 
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance"; // Importing axios instance
+
 import Card from "./Card";
-import ShopNowButton from "@/components/ShopNowButton";
+import { theme } from "../../src/styles/theme";
+import axios from "axios";
 
 interface Product {
   productID: number;
@@ -114,15 +116,15 @@ const FeaturedProducts: React.FC = () => {
           console.error("Unexpected data structure:", response.data);
           setError("Invalid data format from API.");
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching products:", err);
-        if (err.response) {
-          console.error("Server Response Data:", err.response.data);
-          console.error("Status Code:", err.response.status);
-        } else if (err.request) {
-          console.error("No response received:", err.request);
-        } else {
+        if (axios.isAxiosError(err)) {
+          console.error("Server Response Data:", err.response?.data);
+          console.error("Status Code:", err.response?.status);
+        } else if (err instanceof Error) {
           console.error("Error Message:", err.message);
+        } else {
+          console.error("Unexpected error:", err);
         }
         setError("Failed to load products.");
       } finally {
@@ -170,9 +172,19 @@ const FeaturedProducts: React.FC = () => {
           ))}
         </div>
 
-        {/* Shop Now Button */}
-        <div className="mt-12 text-center">
-          <ShopNowButton text="Shop Now" />
+        {/* Shop Now Button - Positioned Outside the Grid */}
+        <div className="flex justify-center w-full mt-12"> 
+        <button
+            className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                style={{
+            backgroundColor: "#a68f83",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.sans[0],
+          }}
+            >
+              Shop Now
+            </button>
+
         </div>
       </div>
     </div>
