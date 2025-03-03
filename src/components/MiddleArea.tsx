@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FilterButton from "./FilterButton";
 import AutoCompletedSearchBar from "./AutoCompletedSearchBar";
-import SortBar from "./SortBar";
+import SortBar from "../components/SortBar";
 import ProductList from "./ProductList";
 import ProductsData from "./ProductsData"; // Import products
 
