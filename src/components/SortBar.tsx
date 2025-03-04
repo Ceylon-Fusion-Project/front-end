@@ -43,7 +43,12 @@ const sortOptions = [
   { value: "ratingDesc", label: "Top Rated" },
 ];
 
-const SortBar: React.FC<{ setSortOption: (sort: string) => void }> = ({ setSortOption }) => {
+interface SortBarProps {
+  setSortOption: (sort: string) => void;
+  className?: string;
+}
+
+const SortBar: React.FC<SortBarProps> = ({ setSortOption, className }) => {
   const [selectedSort, setSelectedSort] = useState("newest");
 
   const handleSortSelection = (sortValue: string) => {

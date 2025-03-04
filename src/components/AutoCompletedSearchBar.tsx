@@ -93,6 +93,7 @@ import SearchIcon from "../assets/SearchIcon.svg";
 interface AutoCompleteSearchBarProps {
   data: string[]; // Now `data` is correctly accepted
   onSearch: (query: string) => void;
+  className?: string;
 }
 
 const AutoCompleteSearchBar: React.FC<AutoCompleteSearchBarProps> = ({ data, onSearch }) => {

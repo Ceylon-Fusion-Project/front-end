@@ -206,7 +206,7 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
       </select>
 
       {/* Price Range */}
-      <h3 className="font-bold text-black mt-4">Price Range</h3>
+      <h3 className="mt-4 font-bold text-black">Price Range</h3>
       <div className="flex space-x-2">
         <input
           type="number"
@@ -225,7 +225,7 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
       </div>
 
       {/* Average Rating */}
-      <h3 className="font-bold text-black mt-4">Minimum Rating</h3>
+      <h3 className="mt-4 font-bold text-black">Minimum Rating</h3>
       <input
         type="number"
         min="0"
