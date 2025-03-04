@@ -31,7 +31,7 @@
 
 //   return (
 
-//     <div className="py-16 shadow-sm  bg-secondary-100"> {/* Differentiating Background */}
+//     <div className="py-16 shadow-sm bg-secondary-100"> {/* Differentiating Background */}
 //       <div className="container px-6 mx-auto">
 //         {/* Section Title */}
 //         <h2 className="mb-10 text-4xl font-bold text-center" style={{ color: "#3E2723" }}>
@@ -173,10 +173,9 @@ const FeaturedProducts: React.FC = () => {
         </div>
 
         {/* Shop Now Button - Positioned Outside the Grid */}
-        <div className="w-full flex justify-center mt-12"> 
+        <div className="flex justify-center w-full mt-12"> 
         <button
-            className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
-             hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+            className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
                 style={{
             backgroundColor: "#a68f83",
             color: theme.colors.textPrimary,
