@@ -1,7 +1,7 @@
 //import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
-// import Dashboard from '../pages/AdminPages/Dashboard';
+ import Dashboard from '../pages/AdminPages/Dashboard';
 // import Origins from '../pages/AdminPages/Origins';
 // import Certifications from '../pages/AdminPages/Certifications';
 // import Bookings from '../pages/AdminPages/Bookings';
@@ -14,7 +14,7 @@ export default function AdminRoutes() {
         path="/"
         element={
           <AdminLayout>
-            <div>{/* <Dashboard /> */}</div>
+            <Dashboard />
           </AdminLayout>
         }
       />
