@@ -30,7 +30,7 @@ export const brandColors = {
 };
 
 
-const brandFonts = {
+export const brandFonts = {
   sans: ["Inter", "sans-serif"],
   serif: ["Merriweather", "serif"],
 }
