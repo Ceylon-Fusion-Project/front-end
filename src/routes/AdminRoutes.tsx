@@ -2,6 +2,7 @@
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
  import Dashboard from '../pages/AdminPages/Dashboard';
+// import ProductManagement from '../pages/AdminPages/ProductManagement';
 // import Origins from '../pages/AdminPages/Origins';
 // import Certifications from '../pages/AdminPages/Certifications';
 // import Bookings from '../pages/AdminPages/Bookings';
@@ -15,6 +16,15 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <Dashboard />
+          </AdminLayout>
+        }
+      />
+      {/* Product Management */}
+      <Route
+        path="products"
+        element={
+          <AdminLayout>
+            <div>{/* <ProductManagement /> */}</div>
           </AdminLayout>
         }
       />
