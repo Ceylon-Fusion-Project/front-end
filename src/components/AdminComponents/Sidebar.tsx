@@ -45,7 +45,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
           { text: 'Dashboard', icon: <LayoutDashboard />, path: '/admin' },
           { text: 'Product Management', icon: <Package />, path: '/admin/products' },
           { text: 'Origin Management', icon: <MapPin />, path: '/admin/origins' },
-          { text: 'Certifications', icon: <BadgeCheck />, path: '/admin/certifications' },
+          { text: 'Certification Management', icon: <BadgeCheck />, path: '/admin/certifications' },
           { text: 'Booking Management', icon: <CalendarCheck />, path: '/admin/bookings' },
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
