@@ -77,7 +77,7 @@ const Dashboard = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={originData} dataKey="visitors" nameKey="name" cx="50%" cy="50%" outerRadius={100} fill={colors.primary}>
-                    {originData.map((entry, index) => (
+                    {originData.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={[colors.primary, colors.secondary, colors.warning, colors.error][index % 4]} />
                     ))}
                   </Pie>
