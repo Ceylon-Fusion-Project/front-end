@@ -1,8 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import img from "../assets/images/hero-banner.png";
 import Button from "./HeroBannerButton";
 
+
 const HeroBanner: React.FC = () => {
+  const navigate = useNavigate();
+
+  // Navigate to Marketplace when "Shop Now" is clicked
+  const handleShopNow = () => {
+    navigate("/products/product-marketplace");
+  };
+
+  const handleBookingNow = () => {
+    navigate("/products/product-marketplace");
+  };
   return (
     <div
       className="relative h-screen flex items-center justify-center bg-cover bg-center text-white text-center px-4"
@@ -18,8 +30,8 @@ const HeroBanner: React.FC = () => {
 
         {/* Buttons using the reusable Button component */}
         <div className="mt-6 flex flex-wrap justify-center gap-10">
-          <Button text="Shop Now" ariaLabel="Shop Now" />
-          <Button text="Booking" ariaLabel="Booking" />
+          <Button text="Shop Now" ariaLabel="Shop Now" onClick={handleShopNow}/>
+          <Button text="Booking" ariaLabel="Booking" onClick={handleBookingNow}/>
         </div>
       </div>
     </div>

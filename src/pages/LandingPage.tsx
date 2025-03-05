@@ -57,8 +57,8 @@ const LandingPage = () => {
         <HeroBanner />
       </section>
 
-      {/* Intro Section */}
-      <section className="snap-start min-h-screen flex items-center justify-center">
+     {/* Intro Section */} 
+     <section className="snap-start min-h-screen flex items-center justify-center">
         <IntroSection />
       </section>
 
@@ -71,6 +71,8 @@ const LandingPage = () => {
       <section className="snap-start min-h-screen flex items-center justify-center">
         <FeaturedPackages />
       </section>
+
+      
 
       {/* Testimonials Section */}
       <section className="snap-start min-h-screen flex items-center justify-center">

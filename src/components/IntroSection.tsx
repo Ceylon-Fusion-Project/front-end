@@ -6,6 +6,9 @@ import communityImpact from "../assets/images/community-impact.jpg";
 const IntroSection = () => {
   return (
     <div className="bg-[#FAF3E0] min-h-screen flex items-center py-20">  {/* Updated Background */}
+
+
+   
       <div className="container mx-auto px-4">
         {/* Section Title */}
         <div className="text-center mb-10">
