@@ -1,210 +1,254 @@
+// import React, { useState } from "react";
+// import Close from "../assets/Close.svg";
+// import { theme } from "@/styles/theme";
+
+// interface CheckboxProps {
+//   label: string;
+//   checked?: boolean;
+//   onChange?: (checked: boolean) => void;
+// }
+
+// const Checkbox: React.FC<CheckboxProps> = ({ label, checked = false, onChange }) => {
+//   return (
+//     <label className="flex items-center space-x-2 cursor-pointer">
+//       <input
+//         type="checkbox"
+//         className="w-4 h-4 text-blue-600 border-gray-300 rounded"
+//         checked={checked}
+//         onChange={(e) => onChange && onChange(e.target.checked)}
+//       />
+//       <span className="text-gray-700">{label}</span>
+//     </label>
+//   );
+// };
+
+// interface FilteringSidebarProps {
+//   onClose: () => void;
+// }
+
+// const FilterSideBar: React.FC<FilteringSidebarProps> = ({ onClose }) => {
+//   // State variables for filters
+//   const [selectedCategory, setSelectedCategory] = useState("all");
+//   const [isOnSale, setIsOnSale] = useState(false);
+//   const [bestSelling, setBestSelling] = useState(false);
+//   const [priceRange, setPriceRange] = useState(500);
+//   const [selectedRating, setSelectedRating] = useState("4-5");
+
+//   // Reset all filters when clicking "Clear All Filters"
+//   const clearFilters = () => {
+//     setSelectedCategory("all");
+//     setIsOnSale(false);
+//     setBestSelling(false);
+//     setPriceRange(500);
+//     setSelectedRating("4-5");
+//   };
+
+//   return (
+//     <div className="p-4 space-y-4 bg-white border-2 border-gray-300 rounded-lg shadow-md w-80">
+//       {/* Close Button */}
+//       <button onClick={onClose} className="mb-4 text-sm text-gray-500">
+//         <img src={Close} alt="Close" className="inline-block w-5 h-5" />
+//       </button>
+
+//       {/* On Sale */}
+//       <div>
+//         <h3 className="font-bold text-black">Discounts</h3>
+//         <Checkbox label="On Sale" checked={isOnSale} onChange={setIsOnSale} />
+//       </div>
+
+//       <hr className="border-t-2 border-gray-300"/>
+
+//       {/* Best Selling */}
+//       <div>
+//         <h3 className="font-bold text-black">Best Selling</h3>
+//         <Checkbox label="Show Best Selling" checked={bestSelling} onChange={setBestSelling} />
+//       </div>
+
+//       <hr className="border-t-2 border-gray-300"/>
+      
+//       {/* Categories */}
+//       <div>
+//         <h3 className="font-bold text-black">Categories</h3>
+//         <div className="space-y-2">
+//           {[
+//             { value: "all", label: "All Categories" },
+//             { value: "food", label: "Food & Beverage" },
+//             { value: "health", label: "Health & Wellness" },
+//             { value: "personal", label: "Personal Care" },
+//             { value: "ayurvedic", label: "Ayurvedic" },
+//             { value: "home", label: "Home & Lifestyle" },
+//             { value: "industrial", label: "Industrial" },
+//           ].map((option) => (
+//             <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
+//               <input
+//                 type="radio"
+//                 name="categories"
+//                 value={option.value}
+//                 checked={selectedCategory === option.value}
+//                 onChange={() => setSelectedCategory(option.value)}
+//                 className="w-4 h-4 text-blue-600 border-gray-300"
+//               />
+//               <span className="text-gray-700">{option.label}</span>
+//             </label>
+//           ))}
+//         </div>
+//       </div>
+
+//       <hr className="border-t-2 border-gray-300"/>
+
+//       {/* Price Range */}
+//       <div>
+//         <h3 className="font-medium text-gray-800">Price Range</h3>
+//         <input
+//           type="range"
+//           min={0}
+//           max={10000}
+//           step={1}
+//           value={priceRange}
+//           onChange={(e) => setPriceRange(Number(e.target.value))}
+//           className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
+//         />
+//         <div className="mt-2 text-sm text-center text-gray-600">{priceRange}</div>
+//       </div>
+
+//       <hr className="border-t-2 border-gray-300"/>
+
+//       {/* Ratings */}
+//       <div>
+//         <h3 className="font-medium text-gray-800">Ratings</h3>
+//         <div className="space-y-2">
+//           {[
+//             { value: "0-1", label: "⭐ 0 - 1 Stars" },
+//             { value: "1-2", label: "⭐⭐ 1 - 2 Stars" },
+//             { value: "2-3", label: "⭐⭐⭐ 2 - 3 Stars" },
+//             { value: "3-4", label: "⭐⭐⭐⭐ 3 - 4 Stars" },
+//             { value: "4-5", label: "⭐⭐⭐⭐⭐ 4 - 5 Stars" },
+//           ].map((option) => (
+//             <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
+//               <input
+//                 type="radio"
+//                 name="ratings"
+//                 value={option.value}
+//                 checked={selectedRating === option.value}
+//                 onChange={() => setSelectedRating(option.value)}
+//                 className="w-4 h-4 text-blue-600 border-gray-300"
+//               />
+//               <span className="text-gray-700">{option.label}</span>
+//             </label>
+//           ))}
+//         </div>
+//       </div>
+
+//       <hr className="border-t-2 border-gray-300"/>
+
+//       {/* Clear Filters Button */}
+//       <button
+//         className="w-full px-4 py-2 text-black text-lg rounded-md bg-[#a68f83] hover:text-gray-700 transition-all duration-300"
+//         style={{
+//           color: theme.colors.textPrimary,
+//           fontFamily: theme.fonts.sans[0]
+//         }}
+//         onClick={clearFilters}
+//       >
+//         Clear All Filters
+//       </button>
+//     </div>
+//   );
+// };
+
+// export default FilterSideBar;
+
 import React, { useState } from "react";
 import Close from "../assets/Close.svg";
 
-interface CheckboxProps {
-  label: string;
-  checked?: boolean;
-  onChange?: (checked: boolean) => void;
-}
-
-const Checkbox: React.FC<CheckboxProps> = ({ label, checked = false, onChange }) => {
-  const [isChecked, setIsChecked] = useState(checked);
-
-  const handleChange = () => {
-    const newChecked = !isChecked;
-    setIsChecked(newChecked);
-    if (onChange) onChange(newChecked);
-  };
-
-  return (
-    <label className="flex items-center space-x-2 cursor-pointer">
-      <input
-        type="checkbox"
-        className="w-4 h-4 text-blue-600 border-gray-300 rounded"
-        checked={isChecked}
-        onChange={handleChange}
-      />
-      <span className="text-gray-700">{label}</span>
-    </label>
-  );
-};
-
-interface RadioGroupProps {
-  options: { value: string; label: string }[];
-  selectedValue: string;
-  onChange: (value: string) => void;
-}
-
-const RadioGroup: React.FC<RadioGroupProps> = ({ options, selectedValue, onChange }) => {
-  return (
-    <div className="space-y-2">
-      {options.map((option) => (
-        <RadioGroupItem
-          key={option.value}
-          value={option.value}
-          label={option.label}
-          selected={selectedValue === option.value}
-          onChange={onChange}
-        />
-      ))}
-    </div>
-  );
-};
-
-interface RadioGroupItemProps {
-  value: string;
-  label: string;
-  selected: boolean;
-  onChange: (value: string) => void;
-}
-
-const RadioGroupItem: React.FC<RadioGroupItemProps> = ({ value, label, selected, onChange }) => {
-  return (
-    <label className="flex items-center space-x-2 cursor-pointer">
-      <input
-        type="radio"
-        name="radio-group"
-        value={value}
-        checked={selected}
-        onChange={() => onChange(value)}
-        className="w-4 h-4 text-blue-600 border-gray-300"
-      />
-      <span className="text-gray-700">{label}</span>
-    </label>
-  );
-};
-
-interface SliderProps {
-  min?: number;
-  max?: number;
-  step?: number;
-  value?: number;
-  onChange?: (value: number) => void;
-}
-
-const Slider: React.FC<SliderProps> = ({ min = 0, max = 100, step = 1, value = 0, onChange }) => {
-  const [sliderValue, setSliderValue] = useState(value);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(event.target.value);
-    setSliderValue(newValue);
-    if (onChange) onChange(newValue);
-  };
-
-  return (
-    <div className="w-full">
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={sliderValue}
-        onChange={handleChange}
-        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
-      />
-      <div className="mt-2 text-sm text-center text-gray-600">{sliderValue}</div>
-    </div>
-  );
-};
-
-interface FilteringSidebarProps {
+interface FilterSideBarProps {
   onClose: () => void;
+  setFilters: (filters: any) => void;
 }
 
-const FilterSideBar: React.FC<FilteringSidebarProps> = ({ onClose }) => {
+const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [isOnSale, setIsOnSale] = useState(false);
-  const [priceRange, setPriceRange] = useState(500);
-  const [selectedRating, setSelectedRating] = useState("4");
+  //const [isOnSale, setIsOnSale] = useState(false);
+  const [bestSelling, setBestSelling] = useState(false);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [averageRating, setAverageRating] = useState("");
 
-  // UseEffect to log state changes
-  React.useEffect(() => {
-    console.log("State has changed:", { selectedCategory, isOnSale, priceRange, selectedRating });
-  }, [selectedCategory, isOnSale, priceRange, selectedRating]);
+  const applyFilters = () => {
+    setFilters({
+      category: selectedCategory !== "all" ? selectedCategory : undefined,
+      //isOnSale,
+      bestSelling,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      averageRating: averageRating ? Number(averageRating) : undefined,
+    });
+    onClose(); // Close sidebar after applying filters
+  };
 
   return (
-    <div className="p-4 space-y-4 bg-white border-2 border-gray-300 rounded-lg shadow-md w-80">
+    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md w-80">
       <button onClick={onClose} className="mb-4 text-sm text-gray-500">
-        <img 
-          src={Close}
-          alt="Close"
-          className="inline-block w-5 h-5"
-        />
+        <img src={Close} alt="Close" className="inline-block w-5 h-5" />
       </button>
 
-      {/* On Sale */}
-      <div>
-        <h3 className="font-bold text-black">Discounts</h3>
-        <Checkbox label="On Sale" checked={isOnSale} onChange={setIsOnSale} />
-      </div>
-
-      <hr className="border-t-2 border-gray-300"/>
-
-      {/* Best Selling Filter */}
-      <div>
-        <h3 className="font-bold text-black">Best Selling</h3>
-        <Checkbox label="Show Best Selling" />
-      </div>
-
-      <hr className="border-t-2 border-gray-300"/>
-      
-      {/* Categories */}
-      <div>
-        <h3 className="font-bold text-black">Categories</h3>
-        <RadioGroup
-          options={[
-            { value: "all", label: "All Categories" },
-            { value: "food", label: "Food & Beverage" },
-            { value: "health", label: "Health & Wellness" },
-            { value: "personal", label: "Personal Care" },
-            { value: "ayurvedic", label: "Ayurvedic" },
-            { value: "home", label: "Home & Lifestyle" },
-            { value: "industrial", label: "Industrial" },
-          ]}
-          selectedValue={selectedCategory}
-          onChange={setSelectedCategory}
-        />
-      </div>
-
-      <hr className="border-t-2 border-gray-300"/>
+      {/* Category Filter */}
+      <h3 className="font-bold text-black">Categories</h3>
+      <select
+        value={selectedCategory}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+        className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+      >
+        <option value="all">All Categories</option>
+        <option value="food">Food & Beverage</option>
+        <option value="health">Health & Wellness</option>
+        <option value="personal">Personal Care</option>
+      </select>
 
       {/* Price Range */}
-      <div>
-        <h3 className="font-medium text-gray-800">Price Range</h3>
-        <Slider min={0} max={10000} value={priceRange} onChange={setPriceRange} />
-      </div>
-
-      <hr className="border-t-2 border-gray-300"/>
-
-      {/* Ratings */}
-      <div>
-        <h3 className="font-medium text-gray-800">Ratings</h3>
-        <RadioGroup
-          options={[
-            { value: "5", label: "⭐⭐⭐⭐⭐ & Up" },
-            { value: "4", label: "⭐⭐⭐⭐ & Up" },
-            { value: "3", label: "⭐⭐⭐ & Up" },
-            { value: "2", label: "⭐⭐ & Up" },
-            { value: "1", label: "⭐ & Up" },
-          ]}
-          selectedValue={selectedRating}
-          onChange={setSelectedRating}
+      <h3 className="mt-4 font-bold text-black">Price Range</h3>
+      <div className="flex space-x-2">
+        <input
+          type="number"
+          placeholder="Min"
+          value={minPrice}
+          onChange={(e) => setMinPrice(e.target.value)}
+          className="w-1/2 p-2 border border-gray-300 rounded-md"
+        />
+        <input
+          type="number"
+          placeholder="Max"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}
+          className="w-1/2 p-2 border border-gray-300 rounded-md"
         />
       </div>
 
-      <hr className="border-t-2 border-gray-300"/>
+      {/* Average Rating */}
+      <h3 className="mt-4 font-bold text-black">Minimum Rating</h3>
+      <input
+        type="number"
+        min="0"
+        max="5"
+        step="0.1"
+        placeholder="Min Rating"
+        value={averageRating}
+        onChange={(e) => setAverageRating(e.target.value)}
+        className="w-full p-2 border border-gray-300 rounded-md"
+      />
 
-      {/* Clear Filters */}
+      {/* Best Selling Checkbox */}
+      <label className="flex items-center mt-3 space-x-2 cursor-pointer">
+        <input type="checkbox" checked={bestSelling} onChange={() => setBestSelling(!bestSelling)} />
+        <span className="text-gray-700">Best Selling</span>
+      </label>
+
+      {/* Apply Button */}
       <button
-        className="w-full px-4 py-2 text-black border border-gray-300 rounded-full bg-white hover:bg-gradient-to-r hover:from-[#1CD8D2] hover:to-[#93EDC7] hover:text-blue-700 transition-all duration-300 focus-within:border-gray-500"
-        onClick={() => {
-          setSelectedCategory("all");
-          setIsOnSale(false);
-          setPriceRange(500);
-          setSelectedRating("4");
-        }}
+        onClick={applyFilters}
+        className="w-full px-4 py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-700"
       >
-        Clear All Filters
+        Apply Filters
       </button>
     </div>
   );
