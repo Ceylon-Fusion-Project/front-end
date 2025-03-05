@@ -4,7 +4,7 @@ import AdminLayout from '../components/AdminComponents/AdminLayout';
  import Dashboard from '../pages/AdminPages/Dashboard';
 // import ProductManagement from '../pages/AdminPages/ProductManagement';
 // import Origins from '../pages/AdminPages/Origins';
-// import Certifications from '../pages/AdminPages/Certifications';
+import Certifications from '../pages/AdminPages/CertificationManagement';
 // import Bookings from '../pages/AdminPages/Bookings';
 
 export default function AdminRoutes() {
@@ -42,7 +42,7 @@ export default function AdminRoutes() {
         path="certifications"
         element={
           <AdminLayout>
-            <div>{/* <Certifications /> */}</div>
+            <div><Certifications /></div>
           </AdminLayout>
         }
       />
