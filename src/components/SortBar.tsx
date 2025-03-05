@@ -48,7 +48,7 @@ interface SortBarProps {
   className?: string;
 }
 
-const SortBar: React.FC<SortBarProps> = ({ setSortOption, className }) => {
+const SortBar: React.FC<SortBarProps> = ({ setSortOption }) => {
   const [selectedSort, setSelectedSort] = useState("newest");
 
   const handleSortSelection = (sortValue: string) => {
