@@ -31,15 +31,15 @@
 
 //   return (
 
-//     <div className=" bg-secondary-100 py-16 shadow-sm"> {/* Differentiating Background */}
-//       <div className="container mx-auto px-6">
+//     <div className="py-16 shadow-sm bg-secondary-100"> {/* Differentiating Background */}
+//       <div className="container px-6 mx-auto">
 //         {/* Section Title */}
-//         <h2 className="text-4xl font-bold text-center mb-10" style={{ color: "#3E2723" }}>
+//         <h2 className="mb-10 text-4xl font-bold text-center" style={{ color: "#3E2723" }}>
 //           Featured Products
 //         </h2>
 
 //         {/* Products Grid */}
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+//         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
 //           {products.map((product, index) => (
 //              <Card
 //              key={index}
@@ -54,8 +54,8 @@
 //         </div>
 
 //         {/* Shop Now Button - Positioned Outside the Grid */}
-//         {/* <div className="w-full flex justify-center mt-12">
-//           <button className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-primary transition-all duration-300">
+//         {/* <div className="flex justify-center w-full mt-12">
+//           <button className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary">
 //             Shop Now
 //           </button>
 //         </div> */}
@@ -71,8 +71,10 @@
 
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance"; // Importing axios instance
+
 import Card from "./Card";
-import ShopNowButton from "@/components/ShopNowButton";
+import { theme } from "../../src/styles/theme";
+import axios from "axios";
 
 interface Product {
   productID: number;
@@ -114,15 +116,15 @@ const FeaturedProducts: React.FC = () => {
           console.error("Unexpected data structure:", response.data);
           setError("Invalid data format from API.");
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching products:", err);
-        if (err.response) {
-          console.error("Server Response Data:", err.response.data);
-          console.error("Status Code:", err.response.status);
-        } else if (err.request) {
-          console.error("No response received:", err.request);
-        } else {
+        if (axios.isAxiosError(err)) {
+          console.error("Server Response Data:", err.response?.data);
+          console.error("Status Code:", err.response?.status);
+        } else if (err instanceof Error) {
           console.error("Error Message:", err.message);
+        } else {
+          console.error("Unexpected error:", err);
         }
         setError("Failed to load products.");
       } finally {
@@ -135,27 +137,27 @@ const FeaturedProducts: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-10">Loading featured products...</div>
+      <div className="py-10 text-center">Loading featured products...</div>
     );
   }
 
   if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+    return <div className="py-10 text-center text-red-500">{error}</div>;
   }
 
   return (
-    <div className="bg-secondary-100 py-16 shadow-sm">
-      <div className="container mx-auto px-6">
+    <div className="py-16 shadow-sm bg-secondary-100">
+      <div className="container px-6 mx-auto">
         {/* Section Title */}
         <h2
-          className="text-4xl font-bold text-center mb-10"
+          className="mb-10 text-4xl font-bold text-center"
           style={{ color: "#3E2723" }}
         >
           Featured Products
         </h2>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <Card
               key={product.productID}
@@ -170,9 +172,19 @@ const FeaturedProducts: React.FC = () => {
           ))}
         </div>
 
-        {/* Shop Now Button */}
-        <div className="text-center mt-12">
-          <ShopNowButton text="Shop Now" />
+        {/* Shop Now Button - Positioned Outside the Grid */}
+        <div className="flex justify-center w-full mt-12"> 
+        <button
+            className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+                style={{
+            backgroundColor: "#a68f83",
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.sans[0],
+          }}
+            >
+              Shop Now
+            </button>
+
         </div>
       </div>
     </div>

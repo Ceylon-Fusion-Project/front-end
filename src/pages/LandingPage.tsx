@@ -1,6 +1,6 @@
 // src/pages/LandingPage.tsx
 //import React from 'react';
-//import IntroSection from "../components/IntroSection";
+import IntroSection from "../components/IntroSection";
 import FeaturedProducts from "../components/FeaturedProducts";
 import FeaturedPackages from "../components/FeaturedPackages";
 import TestimonialsSection from "../components/TestimonialsSection";
@@ -57,10 +57,10 @@ const LandingPage = () => {
         <HeroBanner />
       </section>
 
-      {/* Intro Section
-      <section className="snap-start min-h-screen flex items-center justify-center">
+     {/* Intro Section */} 
+     <section className="snap-start min-h-screen flex items-center justify-center">
         <IntroSection />
-      </section> */}
+      </section>
 
       {/* Featured Products Section */}
       <section className="snap-start min-h-screen flex items-center justify-center">
@@ -71,6 +71,8 @@ const LandingPage = () => {
       <section className="snap-start min-h-screen flex items-center justify-center">
         <FeaturedPackages />
       </section>
+
+      
 
       {/* Testimonials Section */}
       <section className="snap-start min-h-screen flex items-center justify-center">
