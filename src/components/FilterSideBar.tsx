@@ -168,7 +168,7 @@ interface FilterSideBarProps {
 
 const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [isOnSale, setIsOnSale] = useState(false);
+  //const [isOnSale, setIsOnSale] = useState(false);
   const [bestSelling, setBestSelling] = useState(false);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -177,7 +177,7 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
   const applyFilters = () => {
     setFilters({
       category: selectedCategory !== "all" ? selectedCategory : undefined,
-      isOnSale,
+      //isOnSale,
       bestSelling,
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
