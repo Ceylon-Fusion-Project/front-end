@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, MapPin, BadgeCheck, CalendarCheck, X } from 'lucide-react';
+import { LayoutDashboard, MapPin, BadgeCheck, CalendarCheck, Package, X } from 'lucide-react';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, IconButton, useMediaQuery, useTheme } from '@mui/material';
 
 interface SidebarProps {
@@ -43,8 +43,9 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
       <List>
         {[
           { text: 'Dashboard', icon: <LayoutDashboard />, path: '/admin' },
+          { text: 'Product Management', icon: <Package />, path: '/admin/products' },
           { text: 'Origin Management', icon: <MapPin />, path: '/admin/origins' },
-          { text: 'Certifications', icon: <BadgeCheck />, path: '/admin/certifications' },
+          { text: 'Certification Management', icon: <BadgeCheck />, path: '/admin/certifications' },
           { text: 'Booking Management', icon: <CalendarCheck />, path: '/admin/bookings' },
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
