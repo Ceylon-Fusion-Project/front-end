@@ -114,7 +114,7 @@ const MiddleArea: React.FC = () => {
 
     return (
         <div className="flex flex-col flex-grow py-6">
-            <div className="flex flex-col p-4 bg-gray-100 md:flex-row md:p-6">
+            <div className="flex flex-col p-4 bg-white md:flex-row md:p-6">
                 
                 {/* Filter Button */}
                 <div className="w-full mb-4 md:w-auto md:mb-0">

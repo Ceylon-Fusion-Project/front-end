@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import api from "../api/axiosInstance"; // Import axios instance
+import NotificationService from "@/utils/NotificationService";
+import userConfirmation from "@/utils/useConfirmation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const {requestConfirmation, ConfirmationDialog} = userConfirmation();
 
   // Function to check authentication status
   const checkAuthStatus = async () => {
@@ -22,16 +26,27 @@ const Navbar = () => {
   }, []);
 
   // Logout function
-  const handleLogout = async () => {
-    try {
-      await api.get("/auth/logout");
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const handleLogout = () => {
+    requestConfirmation({
+      title: "Logout Confirmation",
+      message: "Are you sure you want to logout?",
+      onConfirm: async () => {
+        try {
+          await api.get("/auth/logout");
+          setIsLoggedIn(false);
+          NotificationService.success("You have been logged out.");
+          navigate("/");
+        } catch (error) {
+          console.error("Logout failed:", error);
+          NotificationService.error("Logout failed. Try again.");
+        }
+      },
+      onCancel: () => NotificationService.info("Logout canceled."),
+    });
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -145,6 +160,10 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+    
+    {/* Confirmation Dialog */}
+    <ConfirmationDialog />
+    </>
   );
 };
 
