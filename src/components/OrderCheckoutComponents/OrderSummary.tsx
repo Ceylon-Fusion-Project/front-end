@@ -26,7 +26,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   const total = subtotal + shippingCost + tax - discount;
 
   return (
-    <div className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6">
+    <div className="max-w-md mx-auto bg-white rounded-2xl p-6">
       <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
       {/* Order Items */}

@@ -17,7 +17,9 @@ interface ShippingInfoFormProps {
 
 const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({ shippingInfo, onChange, onSubmit }) => {
   return (
+    
     <form onSubmit={onSubmit} className="space-y-4">
+       <h2 className="text-xl font-semibold mb-4">Delivery Information</h2>
       <div>
         <label className="block text-sm font-medium text-gray-700">Full Name</label>
         <input

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import OrderSummary from "../components/OrderCheckoutComponents/OrderSummary";
 import ShippingInfoForm from "../components/OrderCheckoutComponents/ShippingInfo";
 import PlaceOrderButton from "../components/OrderCheckoutComponents/PlaceOrderButton";
+import Navbar from "../components/Navbar";
+import Footer from "../components/footer";
 
 interface Item {
   id: number;
@@ -19,13 +21,6 @@ interface ShippingInfo {
   zip: string;
   country: string;
   phone: string;
-}
-
-interface OrderSummaryProps {
-  items: Item[];
-  subtotal: number;
-  shippingCost: number;
-  tax: number;
 }
 
 const sampleItems: Item[] = [
@@ -57,40 +52,41 @@ const OrderCheckout: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // e.preventDefault();
     // Handle form submission, e.g., send data to the server
     console.log("Shipping Info Submitted:", shippingInfo);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Shipping Information Form */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Delivery Information</h2>
-            <ShippingInfoForm
-              shippingInfo={shippingInfo}
-              onChange={handleShippingInfoChange}
-              onSubmit={handleSubmit}
-            />
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-grow bg-white p-6">
+        <div className="max-w-6xl mx-auto bg-white rounded-2xl p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Shipping Information Form */}
+            <div>
+              <ShippingInfoForm
+                shippingInfo={shippingInfo}
+                onChange={handleShippingInfoChange}
+                onSubmit={handleSubmit}
+              />
+            </div>
+
+            {/* Order Summary */}
+            <div>
+              <OrderSummary
+                items={sampleItems}
+                subtotal={subtotal}
+                shippingCost={shippingCost}
+                tax={tax}
+              />
+            </div>
           </div>
 
-          {/* Order Summary */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-            <OrderSummary
-              items={sampleItems}
-              subtotal={subtotal}
-              shippingCost={shippingCost}
-              tax={tax}
-            />
-          </div>
+          {/* Final Checkout Button */}
+          <PlaceOrderButton onClick={handleSubmit} />
         </div>
-
-        {/* Final Checkout Button */}
-        <PlaceOrderButton onClick={handleSubmit} />
-      </div>
+      </main>
+      <Footer />
     </div>
   );
 };
