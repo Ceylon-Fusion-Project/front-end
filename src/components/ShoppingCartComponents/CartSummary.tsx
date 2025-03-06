@@ -1,11 +1,18 @@
 import React from "react";
 
+interface CartItem {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+}
+
 interface CartSummaryProps {
-    cart: { id: number; name: string; price: number }[];
+    cart: CartItem[];
 }
 
 const CartSummary: React.FC<CartSummaryProps> = ({ cart }) => {
-    const subtotal = cart.reduce((total, item) => total + item.price, 0);
+    const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
     const total = subtotal;
 
     return (

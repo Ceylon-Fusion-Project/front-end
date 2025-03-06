@@ -8,36 +8,55 @@ interface CartItemProps {
         image: string;
     };
     removeItem: (id: number) => void;
+    quantity: number;
+    updateQuantity: (id: number, quantity: number) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item, removeItem }) => {
-    const [quantity, setQuantity] = useState(1);
+const CartItem: React.FC<CartItemProps> = ({ item, removeItem, quantity, updateQuantity }) => {
+    const [localQuantity, setLocalQuantity] = useState(quantity);
+
+    const handleQuantityChange = (newQuantity: number) => {
+        setLocalQuantity(newQuantity);
+        updateQuantity(item.id, newQuantity);
+    };
 
     return (
-        <div className="flex items-center justify-between p-4 border rounded-lg bg-white">
+        <div className="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-4 p-4 border rounded-lg bg-white">
+            {/* Image */}
             <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
-            <div className="flex-1 ml-4">
-                <h3 className="text-lg font-semibold">{item.name}</h3>
+
+            {/* Name and Price */}
+            <div className="flex items-center gap-16">
+                <h3 className="text-lg font-semibold truncate">{item.name}</h3>
                 <p className="text-gray-600">${item.price}</p>
-                <div className="flex items-center gap-2 mt-2">
-                    <button
-                        onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-                        className="px-2 py-1 bg-gray-200 rounded"
-                    >
-                        -
-                    </button>
-                    <span className="text-lg">{quantity}</span>
-                    <button
-                        onClick={() => setQuantity((prev) => prev + 1)}
-                        className="px-2 py-1 bg-gray-200 rounded"
-                    >
-                        +
-                    </button>
-                </div>
             </div>
+
+            {/* Quantity Controls */}
+            <div className="flex items-center gap-2">
+                <button
+                    onClick={() => handleQuantityChange(Math.max(localQuantity - 1, 1))}
+                    className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                    -
+                </button>
+                <span className="text-lg w-6 text-center">{localQuantity}</span>
+                <button
+                    onClick={() => handleQuantityChange(localQuantity + 1)}
+                    className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                    +
+                </button>
+            </div>
+
+            {/* Subtotal */}
+            <p className="text-gray-600 text-right">
+                ${(item.price * localQuantity).toFixed(2)}
+            </p>
+
+            {/* Remove Button */}
             <button
                 onClick={() => removeItem(item.id)}
-                className="px-3 py-1 bg-red-500 text-white rounded"
+                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
             >
                 Remove
             </button>
