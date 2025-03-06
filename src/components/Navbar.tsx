@@ -73,29 +73,20 @@ const Navbar = () => {
 
           {/* Authentication Links - Desktop */}
           <div className="hidden md:flex space-x-6">
-            {!isLoggedIn ? (
-              <>
-                <a
-                  href="http://localhost:3001/api/v1/auth/login"
-                  className="text-gray-800 hover:text-gray-600 px-3 py-2"
-                >
-                  Login
-                </a>
-                <a
-                  href="http://localhost:3001/api/v1/auth/signup"
-                  className="text-gray-800 hover:text-gray-600 px-6 py-2"
-                >
-                  Sign Up
-                </a>
-              </>
-            ) : (
-              <button
-                onClick={handleLogout}
-                className="text-gray-800 hover:text-gray-600 px-3 py-2"
-              >
-                Logout
-              </button>
-            )}
+            <a
+              href="http://localhost:3001/api/v1/auth/login"
+              className="text-gray-800 hover:text-gray-600 px-3 py-2"
+              target="_blank" // Opens in a new tab (optional)
+              rel="noopener noreferrer" // Security best practice when using target="_blank"
+            >
+              Login
+            </a>
+            <Link
+              to="/signup"
+              className="text-gray-800 hover:text-gray-600 px-6 py-2"
+            >
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
@@ -103,45 +94,50 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md absolute top-16 left-0 w-full px-4 py-2">
-          <Link to="/" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Home
           </Link>
-          <Link to="/categories" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/categories"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Categories
           </Link>
-          <Link to="/booking" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/booking"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Booking
           </Link>
-          <Link to="/about" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/about"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             About
           </Link>
-          <Link to="/contact" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/contact"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Contact
           </Link>
-
-          {!isLoggedIn ? (
-            <>
-              <a
-                href="http://localhost:3001/api/v1/auth/login"
-                className="block text-gray-800 hover:text-gray-600 px-3 py-2"
-              >
-                Login
-              </a>
-              <a
-                href="http://localhost:3001/api/v1/auth/signup"
-                className="block text-gray-800 hover:text-gray-600 px-3 py-2"
-              >
-                Sign Up
-              </a>
-            </>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="block text-gray-800 hover:text-gray-600 px-3 py-2 w-full text-left"
-            >
-              Logout
-            </button>
-          )}
+          <a
+            href="http://localhost:3001/api/v1/auth/login"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Login
+          </a>
+          <Link
+            to="/signup"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
+            Sign Up
+          </Link>
         </div>
       )}
     </nav>
