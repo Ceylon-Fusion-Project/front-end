@@ -68,11 +68,6 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           <span>${total.toFixed(2)}</span>
         </div>
       </div>
-
-      {/* Checkout Button */}
-      <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Proceed to Payment
-      </button>
     </div>
   );
 };

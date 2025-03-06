@@ -1,12 +1,14 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import AppRoutes from "./routes/AppRoutes";
+//import AppRoutes from "./routes/AppRoutes";
+import OrderCheckout from "./pages/OrderCheckout";
 
 function App() {
   return (
     <Router>
         <main className="flex-grow">
-          <AppRoutes />
+          {/* <AppRoutes /> */}
+          <OrderCheckout />
         </main>
     </Router>
   );
