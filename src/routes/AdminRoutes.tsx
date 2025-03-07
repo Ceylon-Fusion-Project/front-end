@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
  import Dashboard from '../pages/AdminPages/Dashboard';
 // import ProductManagement from '../pages/AdminPages/ProductManagement';
-// import Origins from '../pages/AdminPages/Origins';
+import Origins from '../pages/AdminPages/OriginManagement';
 import Certifications from '../pages/AdminPages/CertificationManagement';
 // import Bookings from '../pages/AdminPages/Bookings';
 
@@ -33,7 +33,7 @@ export default function AdminRoutes() {
         path="origins"
         element={
           <AdminLayout>
-            <div>{/* <Origins /> */}</div>
+            <div><Origins /></div>
           </AdminLayout>
         }
       />
