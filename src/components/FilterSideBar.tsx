@@ -159,7 +159,6 @@
 // export default FilterSideBar;
 
 import React, { useState } from "react";
-import Close from "../assets/Close.svg";
 import { theme } from "@/styles/theme";
 import { X } from "lucide-react";
 
