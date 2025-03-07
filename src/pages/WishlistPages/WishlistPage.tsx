@@ -1,7 +1,8 @@
 import React from "react";
-import Wishlist from "../components/Wishlistcomponents/Wishlist";
-import Navbar from "../components/Navbar";
-import Footer from "../components/footer";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/footer";
+import Wishlist from "../../components/Wishlistcomponents/Wishlist";
+
 
 const WishlistPage: React.FC = () => {
     return (
