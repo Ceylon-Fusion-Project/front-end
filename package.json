@@ -20,6 +20,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@emotion/use-insertion-effect-with-fallbacks": "^1.2.0",
+    "@fontsource/roboto": "^5.2.5",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@mui/icons-material": "^6.4.6",

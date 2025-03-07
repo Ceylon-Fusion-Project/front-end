@@ -5,7 +5,7 @@ import Footer from "@/components/footer";
 
 const Marketplace: React.FC = () => {
   return (
-    <section className="mt-5 container mx-auto pt-5">
+    <section className="mt-5 pt-5">
       <div className="h-screen text-textPrimary snap-y snap-mandatory">
 
         {/* Navigation Bar */}

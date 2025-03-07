@@ -486,7 +486,7 @@ const Card: React.FC<CardProps> = ({
         {hovered && (
           <button
             className="absolute top-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: theme.colors.background }}
             onClick={() => setIsWishlist(!isWishlist)}
           >
             <Heart
@@ -499,7 +499,7 @@ const Card: React.FC<CardProps> = ({
         {hovered && (
           <button
             className="absolute bottom-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
-            style={{ backgroundColor: "white" }}
+            style={{ backgroundColor: theme.colors.background }}
             onClick={() => setIsInCart(!isInCart)}
           >
             <ShoppingCart
@@ -515,8 +515,8 @@ const Card: React.FC<CardProps> = ({
         <h3
           className="font-bold mb-2"
           style={{
-            color: theme.colors.primary,
-            fontFamily: theme.fonts.serif[0],
+            color: theme.colors.textPrimary,
+            //fontFamily: theme.fonts.body,
           }}
         >
           {title}
@@ -524,8 +524,8 @@ const Card: React.FC<CardProps> = ({
         <p
           className="text-sm mb-4 text-center"
           style={{
-            color: theme.colors.secondary,
-            fontFamily: theme.fonts.sans[0],
+            color: theme.colors.textSecondary,
+            //fontFamily: theme.fonts.body,
           }}
         >
           {description}
@@ -535,7 +535,7 @@ const Card: React.FC<CardProps> = ({
             className="text-lg font-semibold mb-4"
             style={{
               color: theme.colors.accent,
-              fontFamily: theme.fonts.sans[0],
+              //fontFamily: theme.fonts.body,
             }}
           >
             {price}
@@ -552,11 +552,15 @@ const Card: React.FC<CardProps> = ({
             style={{
               backgroundColor: theme.colors.accent,
               color: "white",
-              fontFamily: theme.fonts.sans[0],
+              //fontFamily: theme.fonts.body,
             }}
             disabled={isBuying}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.primary)}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.colors.accent)}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = theme.colors.primary)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = theme.colors.accent)
+            }
           >
             {isBuying ? "Placing Order..." : "Quick Buy"}
           </button>
@@ -567,12 +571,17 @@ const Card: React.FC<CardProps> = ({
           onClick={() => setShowPreview(true)}
           className="w-full py-3 rounded-lg mt-2 transition-all duration-300"
           style={{
-            backgroundColor: "#c4c0c0",
-            color: theme.colors.textPrimary,
-            fontFamily: theme.fonts.sans[0],
+            //backgroundColor: "#c4c0c0",
+            backgroundColor: theme.colors.primary,
+            color: theme.colors.textButton,
+            //fontFamily: theme.fonts.body,
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.secondary)}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#c4c0c0")}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.backgroundColor = theme.colors.secondary)
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.backgroundColor = theme.colors.primary)
+          }
         >
           Quick Preview
         </button>
@@ -589,15 +598,18 @@ const Card: React.FC<CardProps> = ({
               <h2
                 className="text-4xl font-bold"
                 style={{
-                  color: theme.colors.primary,
-                  fontFamily: theme.fonts.serif[0],
+                  color: theme.colors.textPrimary,
+                  //fontFamily: theme.fonts.body,
                 }}
               >
                 {title}
               </h2>
               <button
                 onClick={() => setShowPreview(false)}
-                className="text-gray-500 hover:text-gray-800"
+                style={{
+                  color: theme.colors.textPrimary, // Use your theme color
+                }}
+                className="hover:opacity-75 transition"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -605,11 +617,15 @@ const Card: React.FC<CardProps> = ({
             <img
               src={image}
               alt={title}
-              className="w-full h-96 object-cover mt-4 rounded"
+              className="w-full h-96 object-cover mt-4 rounded shadow-lg"
+              //style={{ border: `2px solid ${theme.colors.accent}` }}
             />
             <p
               className="mt-6 text-lg leading-relaxed"
-              style={{ color: "gray", fontFamily: theme.fonts.sans[0] }}
+              style={{
+                color: theme.colors.textSecondary,
+                fontFamily: theme.fonts.body,
+              }}
             >
               {longDescription || description}
             </p>
@@ -617,8 +633,8 @@ const Card: React.FC<CardProps> = ({
               <p
                 className="text-2xl font-semibold mt-4"
                 style={{
-                  color: theme.colors.primary,
-                  fontFamily: theme.fonts.sans[0],
+                  color: theme.colors.accent,
+                  //fontFamily: theme.fonts.body,
                 }}
               >
                 {price}
@@ -627,12 +643,20 @@ const Card: React.FC<CardProps> = ({
 
             <div className="mt-8 flex justify-between">
               <button
-                className="px-8 py-4 rounded transition text-lg"
+                className="w-full py-3 rounded-lg mt-2 transition-all duration-300"
                 style={{
-                  backgroundColor: "#D3D3D3",
-                  color: theme.colors.textPrimary,
-                  fontFamily: theme.fonts.sans[0],
+                  //backgroundColor: "#c4c0c0",
+                  backgroundColor: theme.colors.primary,
+                  color: theme.colors.textButton,
+                  //fontFamily: theme.fonts.body,
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor =
+                    theme.colors.secondary)
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = theme.colors.primary)
+                }
                 onClick={handleViewMoreDetails}
               >
                 View more details

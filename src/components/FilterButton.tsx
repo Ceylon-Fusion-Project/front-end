@@ -28,6 +28,7 @@
 import React, { useState } from "react";
 import { Filter } from "lucide-react"; // Using lucide-react for icons
 import FilterSideBar from "./FilterSideBar";
+import { theme } from "@/styles/theme";
 
 interface FilterButtonProps {
   setFilters: (filters: any) => void;
@@ -41,14 +42,30 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setFilters }) => {
       {!isSidebarOpen ? (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="flex items-center justify-center w-[90px] h-[35px] gap-2 px-2 py-2 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-amber-20 focus:outline-none focus:ring-2 focus:ring-amber-700"
+          className="flex items-center justify-center w-[90px] h-[35px] gap-2 px-2 py-2 transition rounded-lg shadow-sm 
+                     focus:outline-none focus:ring-2"
+          style={{
+            backgroundColor: theme.colors.background,
+            border: `1px solid ${theme.colors.buttonBorder}`,
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fonts.body,
+            boxShadow: theme.shadows.small,
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.border = `1px solid ${theme.colors.secondary}`)
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.border = `1px solid ${theme.colors.buttonBorder}`)
+          }
         >
-          <Filter className="w-4 h-4 text-amber-800" />
-          <span className="text-gray-600 font-medium">Filters</span>
+          <Filter className="w-4 h-4" style={{ color: theme.colors.iconPrimary }} />
+          <span style={{ color: theme.colors.textPrimary}}>
+            Filters
+            </span>
         </button>
       ) : (
-        <FilterSideBar 
-          onClose={() => setIsSidebarOpen(false)} 
+        <FilterSideBar
+          onClose={() => setIsSidebarOpen(false)}
           setFilters={setFilters} // Pass setFilters to the sidebar
         />
       )}
