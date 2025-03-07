@@ -1,6 +1,6 @@
-import Cart from "../components/ShoppingCartComponents/Cart";
-import Navbar from "../components/Navbar";
-import Footer from "../components/footer";
+import Cart from "../../components/ShoppingCartComponents/Cart";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/footer";
 
 const ShoppingCartPage: React.FC = () => {
   return (
