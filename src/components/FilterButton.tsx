@@ -41,10 +41,10 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setFilters }) => {
       {!isSidebarOpen ? (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="flex items-center w-[100px] h-[45px] gap-2 px-2 py-2 transition bg-gray-300 rounded-lg shadow-sm"
+          className="flex items-center justify-center w-[90px] h-[35px] gap-2 px-2 py-2 transition bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-amber-20 focus:outline-none focus:ring-2 focus:ring-amber-700"
         >
-          <Filter className="w-5 h-5 text-gray-600" />
-          Filters
+          <Filter className="w-4 h-4 text-amber-800" />
+          <span className="text-gray-600 font-medium">Filters</span>
         </button>
       ) : (
         <FilterSideBar 

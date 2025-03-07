@@ -8,7 +8,7 @@ export default function BookingRoutes() {
 
         {/* Booking Page */}
         <Route
-          path="bookings"
+          path="/"
           element={
             <BookingPage />
           }

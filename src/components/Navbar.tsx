@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import api from "../api/axiosInstance"; // Import axios instance
+import NotificationService from "@/utils/NotificationService";
+import userConfirmation from "@/utils/useConfirmation";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const {requestConfirmation, ConfirmationDialog} = userConfirmation();
 
   // Function to check authentication status
   const checkAuthStatus = async () => {
@@ -22,16 +26,27 @@ const Navbar = () => {
   }, []);
 
   // Logout function
-  const handleLogout = async () => {
-    try {
-      await api.get("/auth/logout");
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const handleLogout = () => {
+    requestConfirmation({
+      title: "Logout Confirmation",
+      message: "Are you sure you want to logout?",
+      onConfirm: async () => {
+        try {
+          await api.get("/auth/logout");
+          setIsLoggedIn(false);
+          NotificationService.success("You have been logged out.");
+          navigate("/");
+        } catch (error) {
+          console.error("Logout failed:", error);
+          NotificationService.error("Logout failed. Try again.");
+        }
+      },
+      onCancel: () => NotificationService.info("Logout canceled."),
+    });
   };
 
   return (
+    <>
     <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -73,20 +88,30 @@ const Navbar = () => {
 
           {/* Authentication Links - Desktop */}
           <div className="hidden md:flex space-x-6">
-            <a
-              href="http://localhost:3001/api/v1/auth/login"
-              className="text-gray-800 hover:text-gray-600 px-3 py-2"
-              target="_blank" // Opens in a new tab (optional)
-              rel="noopener noreferrer" // Security best practice when using target="_blank"
-            >
-              Login
-            </a>
-            <Link
-              to="/signup"
-              className="text-gray-800 hover:text-gray-600 px-6 py-2"
-            >
-              Sign Up
-            </Link>
+
+            {!isLoggedIn ? (
+              <>
+                <a
+                  href="http://localhost:3001/api/v1/auth/login"
+                  className="text-gray-800 hover:text-gray-600 px-3 py-2"
+                >
+                  Login
+                </a>
+                <a
+                  href="http://localhost:3001/api/v1/auth/signup"
+                  className="text-gray-800 hover:text-gray-600 px-6 py-2"
+                >
+                  Sign Up
+                </a>
+              </>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="text-gray-800 hover:text-gray-600 px-3 py-2"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -94,10 +119,8 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md absolute top-16 left-0 w-full px-4 py-2">
-          <Link
-            to="/"
-            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
-          >
+ 
+          <Link to="/" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
             Home
           </Link>
           <Link
@@ -124,23 +147,38 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          <a
-            href="http://localhost:3001/api/v1/auth/login"
-            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Login
-          </a>
-          <Link
-            to="/signup"
-            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
-          >
-            Sign Up
-          </Link>
+
+
+          {!isLoggedIn ? (
+            <>
+              <a
+                href="http://localhost:3001/api/v1/auth/login"
+                className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+              >
+                Login
+              </a>
+              <a
+                href="http://localhost:3001/api/v1/auth/signup"
+                className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+              >
+                Sign Up
+              </a>
+            </>
+          ) : (
+            <button
+              onClick={handleLogout}
+              className="block text-gray-800 hover:text-gray-600 px-3 py-2 w-full text-left"
+            >
+              Logout
+            </button>
+          )}
         </div>
       )}
     </nav>
+    
+    {/* Confirmation Dialog */}
+    <ConfirmationDialog />
+    </>
   );
 };
 

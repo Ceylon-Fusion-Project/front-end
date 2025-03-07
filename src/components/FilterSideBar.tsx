@@ -187,17 +187,18 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
   };
 
   return (
-    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md w-80">
-      <button onClick={onClose} className="mb-4 text-sm text-gray-500">
-        <img src={Close} alt="Close" className="inline-block w-5 h-5" />
+    <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm w-80">
+      <button onClick={onClose} className="mb-4 flex items-center text-sm text-gray-500 hover:text-amber-800">
+        <img src={Close} alt="Close" className="inline-block w-5 h-5 mr-2" />
+        <span>Close</span>
       </button>
 
       {/* Category Filter */}
-      <h3 className="font-bold text-black">Categories</h3>
+      <h3 className="font-medium text-gray-800 mb-2">Categories</h3>
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="w-full p-2 mt-1 border border-gray-300 rounded-md"
+        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
       >
         <option value="all">All Categories</option>
         <option value="food">Food & Beverage</option>
@@ -206,26 +207,26 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
       </select>
 
       {/* Price Range */}
-      <h3 className="mt-4 font-bold text-black">Price Range</h3>
+      <h3 className="mt-4 font-medium text-gray-800 mb-2">Price Range</h3>
       <div className="flex space-x-2">
         <input
           type="number"
           placeholder="Min"
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
-          className="w-1/2 p-2 border border-gray-300 rounded-md"
+          className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
         />
         <input
           type="number"
           placeholder="Max"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
-          className="w-1/2 p-2 border border-gray-300 rounded-md"
+          className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
         />
       </div>
 
       {/* Average Rating */}
-      <h3 className="mt-4 font-bold text-black">Minimum Rating</h3>
+      <h3 className="mt-4 font-medium text-gray-800 mb-2">Minimum Rating</h3>
       <input
         type="number"
         min="0"
@@ -234,7 +235,7 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
         placeholder="Min Rating"
         value={averageRating}
         onChange={(e) => setAverageRating(e.target.value)}
-        className="w-full p-2 border border-gray-300 rounded-md"
+        className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
       />
 
       {/* Best Selling Checkbox */}
@@ -246,7 +247,7 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
       {/* Apply Button */}
       <button
         onClick={applyFilters}
-        className="w-full px-4 py-2 mt-4 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+        className="w-full px-4 py-2 mt-4 text-white bg-amber-800 rounded-md hover:bg-amber-700 transition-colors duration-200"
       >
         Apply Filters
       </button>
