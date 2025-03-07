@@ -19,19 +19,30 @@ const brandColors = {
 }
 */
 export const brandColors = {
-  primary: "#8B5E3B",       // Used for headings and icons
-  secondary: "#D2B48C",     // Used for descriptions
-  background: "#FAF3E0",    // Used as the section background
-  textPrimary: "#3E2723",   // Used for all text content
-  accent: "#4A2F1B",        // Used for hover effects on the button
+  primary: "#c29a64",       // Used for Buttons and icons in product
+  secondary: "#cdad81",     // Used for hover effects on the button product
+  background: "#FFFFFF",    // Used as the section background
+  textPrimary: "#4c381e",   // Used for text title
+  textSecondary: "#75572e", //Used for text description
+  //textButton: "#2f2312",    // Used for button text
+  textButton: "#FFFFFF",
+  iconPrimary: "#5e4525",
+  iconSecondary: "#aa7e43",
+  accent: "#291e10",        
   highlight: "#FF3B3B",     // Additional color if needed
   link: "#2563EB",
-  textSecondary: "#B91C1C",
+  border: "#EEEEEE",
+  buttonBorder: "#291e10",
+  //textSecondary: "#B91C1C",
+};
+
+export const brandBookingColors = {
+
 };
 
 
 export const brandFonts = {
-  sans: ["Inter", "sans-serif"],
+  sans: ["roboto", "sans-serif"],
   serif: ["Merriweather", "serif"],
 }
 

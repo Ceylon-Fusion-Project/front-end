@@ -13,7 +13,7 @@ const HeroBanner: React.FC = () => {
   };
 
   const handleBookingNow = () => {
-    navigate("/products/product-marketplace");
+    navigate("/booking/booking-page");
   };
   return (
     <div

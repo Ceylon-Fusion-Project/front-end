@@ -71,7 +71,7 @@
 
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance"; // Importing axios instance
-
+import { useNavigate } from "react-router-dom";
 import Card from "./Card";
 import { theme } from "../../src/styles/theme";
 import axios from "axios";
@@ -90,6 +90,11 @@ const FeaturedProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleShopNow = () => {
+    navigate("/products/product-marketplace");
+  };
 
   // Fetch products from the API
   useEffect(() => {
@@ -179,9 +184,10 @@ const FeaturedProducts: React.FC = () => {
                 style={{
             backgroundColor: "#a68f83",
             color: theme.colors.textPrimary,
-            fontFamily: theme.fonts.sans[0],
+            //fontFamily: theme.fonts.body,
           }}
-            >
+          onClick={handleShopNow}
+          >
               Shop Now
             </button>
 

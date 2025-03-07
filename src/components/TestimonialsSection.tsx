@@ -3,7 +3,7 @@ import TestimonialCard from "./TestimonialCard";
 
 const TestimonialsSection: React.FC = () => {
   return (
-    <section className="bg-[#F8EBD4] py-12"> 
+    <section className="bg-[#FFFFFF] py-12"> 
       {/* You can change the background color to match your design (#F8EBD4, #EDE2CA, etc.) */}
       <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
         What Our Customers Say
