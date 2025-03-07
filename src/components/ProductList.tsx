@@ -345,11 +345,11 @@ const ProductList: React.FC<ProductListProps> = ({
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center mt-6 space-x-2">
+          <div className="flex justify-center mt-6 space-x-2 text-[#352715] ">
             {/* Previous Button */}
             <button
               onClick={() => setPage(page - 1)}
-              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              className="px-4 py-2 bg-[#c9a575] rounded disabled:opacity-50 hover:bg-[#d9c09e]"
               disabled={page === 0}
             >
               Previous
@@ -360,7 +360,7 @@ const ProductList: React.FC<ProductListProps> = ({
               <button
                 key={i}
                 onClick={() => setPage(i)}
-                className={`px-3 py-2 rounded ${page === i ? "bg-black text-white" : "bg-gray-200"}`}
+                className={`px-3 py-2 rounded ${page === i ? "bg-[#7b5b30] text-white hover:bg-[#d9c09e] hover:text-[#352715]" : "bg-[#c9a575] hover:bg-[#d9c09e]"}`}
               >
                 {i + 1}
               </button>
@@ -369,7 +369,7 @@ const ProductList: React.FC<ProductListProps> = ({
             {/* Next Button */}
             <button
               onClick={() => setPage(page + 1)}
-              className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+              className="px-4 py-2 bg-[#c9a575] rounded disabled:opacity-50 hover:bg-[#d9c09e]"
               disabled={page >= totalPages - 1}
             >
               Next

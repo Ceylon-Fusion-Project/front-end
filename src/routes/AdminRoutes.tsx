@@ -2,8 +2,9 @@
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
  import Dashboard from '../pages/AdminPages/Dashboard';
-// import Origins from '../pages/AdminPages/Origins';
-// import Certifications from '../pages/AdminPages/Certifications';
+// import ProductManagement from '../pages/AdminPages/ProductManagement';
+import Origins from '../pages/AdminPages/OriginManagement';
+import Certifications from '../pages/AdminPages/CertificationManagement';
 // import Bookings from '../pages/AdminPages/Bookings';
 
 export default function AdminRoutes() {
@@ -18,12 +19,21 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      {/* Product Management */}
+      <Route
+        path="products"
+        element={
+          <AdminLayout>
+            <div>{/* <ProductManagement /> */}</div>
+          </AdminLayout>
+        }
+      />
       {/* Origin Management Page */}
       <Route
         path="origins"
         element={
           <AdminLayout>
-            <div>{/* <Origins /> */}</div>
+            <div><Origins /></div>
           </AdminLayout>
         }
       />
@@ -32,7 +42,7 @@ export default function AdminRoutes() {
         path="certifications"
         element={
           <AdminLayout>
-            <div>{/* <Certifications /> */}</div>
+            <div><Certifications /></div>
           </AdminLayout>
         }
       />
