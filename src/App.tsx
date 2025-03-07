@@ -1,7 +1,9 @@
 import { BrowserRouter as Router } from "react-router-dom";
 import "./App.css";
-import AppRoutes from "./routes/AppRoutes";
+//import AppRoutes from "./routes/AppRoutes";
 import { Toaster } from "sonner";
+import WishlistPage from "./pages/WishlistPage";
+//import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
@@ -18,7 +20,8 @@ function App() {
       />
     <Router>
         <main className="flex-grow">
-          <AppRoutes />
+          {/* <AppRoutes /> */}
+          <WishlistPage />
         </main>
     </Router>
     </>
