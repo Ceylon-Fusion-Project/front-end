@@ -134,6 +134,7 @@ export function ProductOverviewPage() {
         price={product.sellingPrice}
         originalPrice={product.sellingPrice * 1.2}
         description={product.productDescription}
+        productId={product.productID} // Pass productID for navigation
       />
     </div>
       </section>

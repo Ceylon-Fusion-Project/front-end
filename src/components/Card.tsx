@@ -411,16 +411,18 @@ import { Heart, ShoppingCart, X } from "lucide-react";
 import { theme } from "@/styles/theme";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance"; // Import axios instance
+import { v4 as uuidv4 } from "uuid";
+import NotificationService from "@/utils/NotificationService";
 
 interface CardProps {
   image: string;
   title: string;
   description: string;
   longDescription?: string;
-  price?: string;
-  onClick?: () => void;
+  price: string;
+  //onClick?: () => void;
   isFeatured?: boolean;
-  productID?: number;
+  productID: number;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -437,13 +439,83 @@ const Card: React.FC<CardProps> = ({
   const [isInCart, setIsInCart] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
+  const [idempotencyKey] = useState<string>(uuidv4());
 
   const navigate = useNavigate();
+
+  //Extract Price from String Price
+  function extractPrice(value: string): number {
+    // Remove all non-numeric characters except dots (for decimals)
+    const numericString = value.replace(/[^0-9.]/g, "");
+    // Convert to number
+    return parseFloat(numericString);
+  }
 
   // Navigate to product details using productID
   const handleViewMoreDetails = () => {
     if (productID) {
       navigate(`/products/product-details/${productID}`);
+    }
+  };
+
+  // Add product to cart
+  const addToCart = async () => {
+    if (!productID) {
+      NotificationService.error("Product ID is missing.");
+      return;
+    }
+
+    setIsInCart(true);
+
+    // Get the correct userId dynamically
+    const userId = 4; // Replace this with actual user session data
+    const numericPrice = extractPrice(price);
+    console.log("Price:"+price);
+    console.log("Numeric Price:"+numericPrice);
+    //Construct Request Body Properly
+    const requestBody = {
+      userId:5, // Dynamically passed user ID
+      cartItem: {
+        productId:productID,
+        cartItemQuantity: 1,
+        cartItemPrice: numericPrice,
+      },
+    };
+
+    console.log("🛒 Sending Add to Cart request:", JSON.stringify(requestBody, null, 2));
+
+    try {
+      const response = await api.post("/cart/add-item-to-cart", requestBody, {
+        headers: {
+          "X-Idempotency-Key": idempotencyKey,
+        },
+      });
+
+      console.log("✅ Add to Cart Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success("Product added to cart successfully!");
+      } else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+
+      // Reset cart state if request fails
+    setIsInCart(false);
+
+      if ((error as any).response) {
+        setIsInCart(false);
+        console.error(
+          "❌ Axios Error Response:",(error as any).response?.data);
+        NotificationService.error(
+          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        setIsInCart(false);
+        NotificationService.error("Network error. Please try again.");
+      }
     }
   };
 
@@ -500,7 +572,7 @@ const Card: React.FC<CardProps> = ({
           <button
             className="absolute bottom-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
             style={{ backgroundColor: theme.colors.background }}
-            onClick={() => setIsInCart(!isInCart)}
+            onClick={addToCart}
           >
             <ShoppingCart
               className="w-5 h-5"
