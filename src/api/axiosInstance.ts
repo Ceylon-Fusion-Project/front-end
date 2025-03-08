@@ -2,12 +2,12 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:3001/api/v1",
-  withCredentials: true,
-  timeout: 5000, // Set a timeout of 5 seconds
+  //timeout: 5000, // Set a timeout of 5 seconds
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+  withCredentials: true,
 });
 
 //Response Interceptor for Error Handling

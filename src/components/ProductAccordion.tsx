@@ -127,10 +127,8 @@ export default function ProductAccordion({
               <strong>Factory:</strong> {productOrigin.factoryName}
             </p>
             <p>
-              <strong>Address:</strong> {productOrigin.factoryAddress}
+              <strong>Address:</strong> {productOrigin.factoryAddress}{" "}
             </p>
-
-            {/* View Factory on Map Link */}
             <a
               href={productOrigin.factoryMapLink}
               target="_blank"
