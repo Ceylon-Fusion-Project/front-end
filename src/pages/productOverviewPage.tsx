@@ -111,6 +111,7 @@ export function ProductOverviewPage() {
       : product.productRatingValue;
 
   return (
+    <>
     <section className="mt-5 space-y-2 px-1 lg:px-4 container mx-auto pt-16">
       {/* Navigation Bar */}
       <section className="snap-start">
@@ -158,10 +159,11 @@ export function ProductOverviewPage() {
         ← Back
       </button>
       </section>
-      {/* Footer */}
-      <section className="snap-start">
-        <Footer />
-      </section>
     </section>
+    {/* Footer */}
+    <section className="snap-start pt-4">
+    <Footer />
+  </section>
+    </>
   );
 }

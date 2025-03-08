@@ -30,11 +30,18 @@ export function ProductInfo({
       {/* Product Name and Brand */}
       <div className="space-y-2">
         <h1
-          className={`${tokens.fontSizes["2xl"]} md:${tokens.fontSizes["3xl"]} lg:${tokens.fontSizes["4xl"]} font-bold ${tokens.fonts.heading} text-[${theme.colors.textPrimary}]`}
+          //className={`${tokens.fontSizes["2xl"]} md:${tokens.fontSizes["3xl"]} lg:${tokens.fontSizes["4xl"]} font-bold ${tokens.fonts.heading}`}
+          className="text-4xl md:text-4xl lg:text-5xl font-extrabold"
+          style={{ color: theme.colors.textPrimary }}
         >
           {name}
         </h1>
-        <p className={`text-[${theme.colors.textSecondary}]`}>{brand}</p>
+        <p 
+          className="text-lg font-semibold"
+          style={{ color: theme.colors.textSecondary }}
+        >
+          {brand}
+        </p>
       </div>
 
       {/* Ratings and Reviews */}
@@ -46,12 +53,14 @@ export function ProductInfo({
               className={`h-5 w-5 ${
                 i <= rating
                   ? `text-yellow-500 fill-current`
-                  : `text-[${tokens.colors.border}]`
+                  : `text-[#4c381e]`
               }`}
             />
           ))}
         </div>
-        <span className={`text-sm md:text-base text-[${tokens.colors.textLight}]`}>
+        <span className="text-base "
+          style={{ color: theme.colors.textPrimary }}
+        >
           {rating}/5 - {reviewCount} Reviews
         </span>
       </div>
@@ -73,7 +82,12 @@ export function ProductInfo({
       <p className={`text-green-600 font-semibold`}>In Stock</p>
 
       {/* Product Description */}
-      <p className={`text-sm md:text-base text-[${tokens.colors.text}]`}>{description}</p>
+      <p 
+        className="text-lg lg:text-xl"
+        style={{ color: theme.colors.textPrimary }}
+      >
+        {description}
+      </p>
 
       {/* Quantity Selector */}
       <div className="space-y-4 pt-4">
@@ -86,7 +100,7 @@ export function ProductInfo({
           >
             <Minus className={`h-4 w-4 text-gray-700`} />
           </Button>
-          <span className="text-lg md:text-xl font-semibold w-8 text-center text-gray-800">
+          <span className="text-lg md:text-xl font-semibold w-8 text-center text-[#4c381e]">
             {quantity}
           </span>
           <Button
@@ -121,7 +135,7 @@ export function ProductInfo({
         {/* Wishlist Button */}
         <Button
           variant="outline"
-          className={`w-full border-gray-400 text-gray-800 hover:bg-gray-100 transition duration-200 ease-in-out`}
+          className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}
         >
           <Heart className={`h-5 w-5 mr-2 text-red-500`} />
           Add to Wishlist
