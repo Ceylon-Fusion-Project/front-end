@@ -72,10 +72,10 @@ const Navbar = () => {
             <Link to="/" className="text-gray-800 hover:text-gray-600 px-3 py-2">
               Home
             </Link>
-            <Link to="/categories" className="text-gray-800 hover:text-gray-600 px-3 py-2">
-              Categories
+            <Link to="/products/product-marketplace" className="text-gray-800 hover:text-gray-600 px-3 py-2">
+              Shop Now
             </Link>
-            <Link to="/booking" className="text-gray-800 hover:text-gray-600 px-3 py-2">
+            <Link to="/booking/booking-page" className="text-gray-800 hover:text-gray-600 px-3 py-2">
               Booking
             </Link>
             <Link to="/about" className="text-gray-800 hover:text-gray-600 px-3 py-2">
@@ -88,6 +88,7 @@ const Navbar = () => {
 
           {/* Authentication Links - Desktop */}
           <div className="hidden md:flex space-x-6">
+
             {!isLoggedIn ? (
               <>
                 <a
@@ -118,21 +119,29 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md absolute top-16 left-0 w-full px-4 py-2">
+ 
           <Link to="/" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
             Home
           </Link>
-          <Link to="/categories" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
-            Categories
-          </Link>
-          <Link to="/booking" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link to="/products/product-marketplace" className="text-gray-800 hover:text-gray-600 px-3 py-2">
+              Shop Now
+            </Link>
+          <Link to="/booking/booking-page" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
             Booking
           </Link>
-          <Link to="/about" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/about"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             About
           </Link>
-          <Link to="/contact" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/contact"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Contact
           </Link>
+
 
           {!isLoggedIn ? (
             <>

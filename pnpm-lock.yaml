@@ -17,6 +17,9 @@ importers:
       '@emotion/use-insertion-effect-with-fallbacks':
         specifier: ^1.2.0
         version: 1.2.0(react@19.0.0)
+      '@fontsource/roboto':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@headlessui/react':
         specifier: ^2.2.0
         version: 2.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -89,6 +92,9 @@ importers:
       tailwind-merge:
         specifier: ^3.0.1
         version: 3.0.2
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.19.0
@@ -670,6 +676,9 @@ packages:
 
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
+
+  '@fontsource/roboto@5.2.5':
+    resolution: {integrity: sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ==}
 
   '@headlessui/react@2.2.0':
     resolution: {integrity: sha512-RzCEg+LXsuI7mHiSomsu/gBJSjpupm6A1qIZ5sWjd7JhARNlMiSA4kKfJpCKwU9tE+zMRterhhrP74PvfJrpXQ==}
@@ -3345,6 +3354,10 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  uuid@11.1.0:
+    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
+
   victory-vendor@36.9.2:
     resolution: {integrity: sha512-PnpQQMuxlwYdocC8fIJqVXvkeViHYzotI+NJrCuav0ZYFoq912ZHBk3mCeuj+5/VpodOjPe1z0Fk2ihgzlXqjQ==}
 
@@ -3937,6 +3950,8 @@ snapshots:
       tabbable: 6.2.0
 
   '@floating-ui/utils@0.2.9': {}
+
+  '@fontsource/roboto@5.2.5': {}
 
   '@headlessui/react@2.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
@@ -6633,6 +6648,8 @@ snapshots:
       '@types/react': 19.0.10
 
   util-deprecate@1.0.2: {}
+
+  uuid@11.1.0: {}
 
   victory-vendor@36.9.2:
     dependencies:

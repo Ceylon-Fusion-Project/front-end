@@ -65,7 +65,7 @@
 //       </div>
 
 //       <hr className="border-t-2 border-gray-300"/>
-      
+
 //       {/* Categories */}
 //       <div>
 //         <h3 className="font-bold text-black">Categories</h3>
@@ -159,14 +159,18 @@
 // export default FilterSideBar;
 
 import React, { useState } from "react";
-import Close from "../assets/Close.svg";
+import { theme } from "@/styles/theme";
+import { X } from "lucide-react";
 
 interface FilterSideBarProps {
   onClose: () => void;
   setFilters: (filters: any) => void;
 }
 
-const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) => {
+const FilterSideBar: React.FC<FilterSideBarProps> = ({
+  onClose,
+  setFilters,
+}) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   //const [isOnSale, setIsOnSale] = useState(false);
   const [bestSelling, setBestSelling] = useState(false);
@@ -187,18 +191,45 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
   };
 
   return (
-    <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm w-80">
-      <button onClick={onClose} className="mb-4 flex items-center text-sm text-gray-500 hover:text-amber-800">
-        <img src={Close} alt="Close" className="inline-block w-5 h-5 mr-2" />
-        <span>Close</span>
+    <div
+      className="p-4 rounded-lg shadow-sm w-80"
+      style={{
+        backgroundColor: theme.colors.background,
+        border: `2px solid ${theme.colors.border}`,
+      }}
+    >
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        style={{
+          color: theme.colors.textPrimary, // Use your theme color
+        }}
+        className="hover:opacity-75 transition"
+      >
+        <X className="w-4 h-4" />
       </button>
 
       {/* Category Filter */}
-      <h3 className="font-medium text-gray-800 mb-2">Categories</h3>
+      <h3
+        className="font-medium mb-2"
+        style={{
+          color: theme.colors.textPrimary,
+          fontFamily: theme.fonts.body,
+        }}
+      >
+        Categories
+      </h3>
       <select
         value={selectedCategory}
         onChange={(e) => setSelectedCategory(e.target.value)}
-        className="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
+        className="w-full p-2 mt-1 rounded-md border transition-all duration-200 
+             focus:outline-none focus:ring-2 focus:ring-[#d7bc99]"
+        style={{
+          backgroundColor: theme.colors.background,
+          color: theme.colors.textPrimary,
+          border: `1px solid ${theme.colors.border}`,
+          //fontFamily: theme.fonts.body,
+        }}
       >
         <option value="all">All Categories</option>
         <option value="food">Food & Beverage</option>
@@ -207,26 +238,53 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
       </select>
 
       {/* Price Range */}
-      <h3 className="mt-4 font-medium text-gray-800 mb-2">Price Range</h3>
+      <h3
+        className="mt-4 font-medium mb-2"
+        style={{ color: theme.colors.textPrimary }}
+      >
+        Price Range
+      </h3>
       <div className="flex space-x-2">
         <input
           type="number"
           placeholder="Min"
           value={minPrice}
           onChange={(e) => setMinPrice(e.target.value)}
-          className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
+          className="w-full p-2 mt-1 rounded-md border transition-all duration-200 
+             focus:outline-none focus:ring-2 focus:ring-[#d7bc99]"
+          style={{
+            backgroundColor: theme.colors.background,
+            color: theme.colors.textPrimary,
+            border: `1px solid ${theme.colors.border}`,
+            fontFamily: theme.fonts.body,
+          }}
         />
         <input
           type="number"
           placeholder="Max"
           value={maxPrice}
           onChange={(e) => setMaxPrice(e.target.value)}
-          className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
+          className="w-full p-2 mt-1 rounded-md border transition-all duration-200 
+             focus:outline-none focus:ring-2 focus:ring-[#d7bc99]"
+          style={{
+            backgroundColor: theme.colors.background,
+            color: theme.colors.textPrimary,
+            border: `1px solid ${theme.colors.border}`,
+            fontFamily: theme.fonts.body,
+          }}
         />
       </div>
 
       {/* Average Rating */}
-      <h3 className="mt-4 font-medium text-gray-800 mb-2">Minimum Rating</h3>
+      <h3
+        className="mt-4 font-medium mb-2"
+        style={{
+          color: theme.colors.textPrimary,
+          //fontFamily: theme.fonts.body,
+        }}
+      >
+        Minimum Rating
+      </h3>
       <input
         type="number"
         min="0"
@@ -235,19 +293,45 @@ const FilterSideBar: React.FC<FilterSideBarProps> = ({ onClose, setFilters }) =>
         placeholder="Min Rating"
         value={averageRating}
         onChange={(e) => setAverageRating(e.target.value)}
-        className="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-700"
+        className="w-full p-2 mt-1 rounded-md border transition-all duration-200 
+             focus:outline-none focus:ring-2 focus:ring-[#d7bc99]"
+        style={{
+          backgroundColor: theme.colors.background,
+          color: theme.colors.textPrimary,
+          border: `1px solid ${theme.colors.border}`,
+          fontFamily: theme.fonts.body,
+        }}
       />
 
       {/* Best Selling Checkbox */}
       <label className="flex items-center mt-3 space-x-2 cursor-pointer">
-        <input type="checkbox" checked={bestSelling} onChange={() => setBestSelling(!bestSelling)} />
-        <span className="text-gray-700">Best Selling</span>
+        <input
+          type="checkbox"
+          checked={bestSelling}
+          onChange={() => setBestSelling(!bestSelling)}
+          className="w-4 h-4"
+          style={{
+            accentColor: theme.colors.accent, // Checkbox color from theme
+          }}
+        />
+        <span
+          style={{ color: theme.colors.textPrimary}}
+        >
+          Best Selling
+        </span>
       </label>
 
       {/* Apply Button */}
       <button
         onClick={applyFilters}
-        className="w-full px-4 py-2 mt-4 text-white bg-amber-800 rounded-md hover:bg-amber-700 transition-colors duration-200"
+        className="w-full px-4 py-2 mt-4 rounded-md transition-colors duration-200"
+        style={{
+          backgroundColor: theme.colors.primary,
+          color: theme.colors.textButton,
+          fontFamily: theme.fonts.body,
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = theme.colors.secondary)}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.colors.primary)}
       >
         Apply Filters
       </button>
