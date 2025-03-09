@@ -110,7 +110,7 @@ const MiddleArea: React.FC = () => {
     const [sortOption, setSortOption] = useState("nameAsc");
     const [filters, setFilters] = useState({});
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(6);
+    const [size, setSize] = useState(12);
 
     return (
         <div className="flex flex-col flex-grow py-6">
