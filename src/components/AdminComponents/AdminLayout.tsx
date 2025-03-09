@@ -33,7 +33,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           position="fixed"
           sx={{
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: '#1E293B',
+            backgroundColor: '#4c381e',
           }}
         >
           <Toolbar>

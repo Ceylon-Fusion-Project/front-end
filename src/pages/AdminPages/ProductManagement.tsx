@@ -164,7 +164,7 @@ const ProductManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#3B82F6', color: '#FFFFFF' }}
+        style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}
       >
         Add Product
       </Button>
@@ -192,7 +192,7 @@ const ProductManagement = () => {
                 <TableCell>{MeasuringUnitType[product.measuringUnitType as keyof typeof MeasuringUnitType]}</TableCell>
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleEditClick(product)}>
-                    <Edit style={{ color: '#3B82F6' }} />
+                    <Edit style={{ color: '#291e10' }} />
                   </IconButton>
                   <IconButton color="secondary" onClick={() => handleDeleteClick(product.productID)}>
                     <Delete style={{ color: '#EF4444' }} />
@@ -295,7 +295,7 @@ const ProductManagement = () => {
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="product-form" variant="contained" style={{ backgroundColor: '#3B82F6', color: '#FFFFFF' }}>
+          <Button type="submit" form="product-form" variant="contained" style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}>
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>

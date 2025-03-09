@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
         '& .MuiDrawer-paper': {
           width: 240,
           boxSizing: 'border-box',
-          backgroundColor: '#1E293B', // Modern dark blue
+          backgroundColor: '#4c381e', // Modern dark blue
           color: 'white',
         },
       }}
@@ -53,9 +53,9 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
               component={Link}
               to={item.path}
               sx={{
-                backgroundColor: isActive(item.path) ? '#334155' : 'transparent',
+                backgroundColor: isActive(item.path) ? '#aa7e43' : 'transparent',
                 '&:hover': {
-                  backgroundColor: '#334155',
+                  backgroundColor: '#aa7e43',
                 },
               }}
             >
