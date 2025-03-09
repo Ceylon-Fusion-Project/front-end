@@ -209,6 +209,85 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
+  //Handle add to wishlist 
+  const addToWishList = async () => {
+    if (!productID){
+      NotificationService.error("Product Identification Problem. Please try again.");
+      return;
+    }
+
+    setIsWishlist(true);
+
+    const requestBody = {
+      userId:5,
+      productId:productID,
+    };
+
+    try {
+      const response = await api.post("/wishlist/add-item-to-wishlist", requestBody);
+
+      console.log("��� Add to Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201){
+        NotificationService.success("Product added to wishlist successfully!");
+      }else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      } 
+    } catch (error) {
+      console.error("Error adding to wishlist", error);
+      setIsWishlist(false);
+
+      if ((error as any).response) {
+        console.error(
+          "�� Axios Error Response:",(error as any).response?.data);
+        NotificationService.error(
+          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        NotificationService.error("Network error. Please try again.");
+      }
+    }
+  };
+
+  // Function to handle remove from wishlist
+  const removeFromWishList = async () => {
+    if (!productID){
+      NotificationService.error("Product Identification Problem. Please try again.");
+      return;
+    }
+    setIsWishlist(false);
+
+    const requestBody = {
+      userId:5,
+      productId: productID,
+    };
+     
+    try {
+      const response = await api.post("/wishlist/remove-item-from-wishlist", requestBody);
+
+      console.log("��� Remove from Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201){
+        NotificationService.success("Product removed from wishlist successfully!");
+      } else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error){
+      console.error("Error removing from wishlist:", error);
+      setIsWishlist(true);
+      if ((error as any).response) {
+        console.error("�� Axios Error Response:",(error as any).response?.data);
+        NotificationService.error(
+          `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        NotificationService.error("Network error. Please try again.");
+      }
+    }
+  };
+
   // Handle Quick Buy using axiosInstance
   const handleQuickBuy = async () => {
     if (!productID) {
@@ -249,7 +328,7 @@ const Card: React.FC<CardProps> = ({
           <button
             className="absolute top-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
             style={{ backgroundColor: theme.colors.background }}
-            onClick={() => setIsWishlist(!isWishlist)}
+            onClick={isWishlist? removeFromWishList : addToWishList}
           >
             <Heart
               className="w-5 h-5"
