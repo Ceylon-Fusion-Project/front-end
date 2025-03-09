@@ -8,12 +8,11 @@ export default function BookingRoutes() {
 
         {/* Booking Page */}
         <Route
-          path="bookings"
+          path="/booking-page"
           element={
             <BookingPage />
           }
         />
-        
     </Routes>
   )
 }

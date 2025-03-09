@@ -3,6 +3,8 @@ import LandingPage from '../pages/LandingPage';
 import ProductRoutes from './ProductRoutes';
 import AdminRoutes from './AdminRoutes';
 import BookingRoutes from './BookingRoutes';
+import OrderRoutes from './OrderRoutes';
+import ProfileRoutes from './ProfileRoutes';
 // import FeatureXRoutes from "./FeatureXRoutes"; // Example: Other feature routes
 // import NotFoundPage from "../pages/NotFoundPage"; // Optional 404 Page
 
@@ -21,6 +23,12 @@ export default function AppRoutes() {
 
             {/* Booking Related Routes */}
             <Route path="/booking/*" element={<BookingRoutes />} />
+
+            {/* Order Related Routes */}
+            <Route path="/orders/*" element={<OrderRoutes />} />
+
+            {/* UserAccount Realated routes */}
+            <Route path="/profile/*" element={<ProfileRoutes />} />
         </Routes>
     );
 }

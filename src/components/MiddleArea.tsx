@@ -114,7 +114,7 @@ const MiddleArea: React.FC = () => {
 
     return (
         <div className="flex flex-col flex-grow py-6">
-            <div className="flex flex-col p-4 bg-gray-100 md:flex-row md:p-6">
+            <div className="flex flex-col p-4 bg-white md:flex-row md:p-6">
                 
                 {/* Filter Button */}
                 <div className="w-full mb-4 md:w-auto md:mb-0">
@@ -122,19 +122,25 @@ const MiddleArea: React.FC = () => {
                 </div>
 
                 {/* Search & Sorting */}
-                <div className="flex flex-col flex-grow ml-6">
-                    <div className="flex flex-col items-center justify-between gap-4 mb-6 md:flex-row">
-                        <AutoCompletedSearchBar 
-                          data={ProductsData.map((p) => p.productName)} 
-                          onSearch={setSearchQuery}
-                          className="w-full md:w-auto"
-                        />
-                        <SortBar 
-                            setSortOption={setSortOption} 
-                            className="w-full md:w-auto"
-                        />
-                    </div>
+                <div className="flex flex-col flex-grow gap-4">
+                    
+                    {/* Search Bar & Sorting in Row */}
+                    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+                        
+                        {/* Search Bar with full available width */}
+                        <div className="w-full md:flex-grow">
+                            <AutoCompletedSearchBar 
+                                data={ProductsData.map((p) => p.productName)} 
+                                onSearch={setSearchQuery}
+                                className="w-full"
+                            />
+                        </div>
 
+                        {/* Sort Bar */}
+                        <div className="w-full md:w-auto">
+                            <SortBar setSortOption={setSortOption} />
+                        </div>
+                    </div>
                     {/* Product List */}
                     <ProductList 
                         searchQuery={searchQuery}

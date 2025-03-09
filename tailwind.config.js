@@ -56,7 +56,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        ...brandFonts,
+        sans: ["Roboto", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

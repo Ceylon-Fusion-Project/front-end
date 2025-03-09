@@ -15,8 +15,6 @@ const Button: React.FC<ButtonProps> = ({ text, onClick, ariaLabel }) => {
   >
     {text}
   </button>
-  
-  
   );
 };
 

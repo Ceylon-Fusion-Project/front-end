@@ -1,30 +1,35 @@
 // src/components/FeaturedPackages.tsx
 //import React from 'react';
-import Card from './Card';
+import Card from "./Card";
 import { theme } from "@/styles/theme";
-import NatureRetreat from '../assets/images/nature-retreat.jpg';
-import EcoFriendlyLodge from '../assets/images/eco-friendly-lodge.jpg';
-import CinnamonTour from '../assets/images/cinnamon-tour.jpg';
+import { useNavigate } from "react-router-dom";
+import NatureRetreat from "../assets/images/nature-retreat.jpg";
+import EcoFriendlyLodge from "../assets/images/eco-friendly-lodge.jpg";
+import CinnamonTour from "../assets/images/cinnamon-tour.jpg";
 
 const FeaturedPackages = () => {
+  const navigate = useNavigate();
+  const handleBookingNow = () => {
+    navigate("/booking/booking-page");
+  };
   const packages = [
     {
       image: NatureRetreat,
-      title: 'Nature Retreat',
-      description: 'Experience the beauty of cinnamon plantations.',
-      price: '$200',
+      title: "Nature Retreat",
+      description: "Experience the beauty of cinnamon plantations.",
+      price: "$200",
     },
     {
       image: EcoFriendlyLodge,
-      title: 'Eco-Friendly Lodge',
-      description: 'Stay in our sustainable lodges.',
-      price: '$150',
+      title: "Eco-Friendly Lodge",
+      description: "Stay in our sustainable lodges.",
+      price: "$150",
     },
     {
       image: CinnamonTour,
-      title: 'Cinnamon Tour',
-      description: 'Explore the cinnamon production process.',
-      price: '$100',
+      title: "Cinnamon Tour",
+      description: "Explore the cinnamon production process.",
+      price: "$100",
     },
   ];
 
@@ -47,23 +52,21 @@ const FeaturedPackages = () => {
           ))}
         </div>
 
-          
-                  {/* Shop Now Button - Positioned Outside the Grid */}
-                  <div className="w-full flex justify-center mt-12"> 
-                    <button
-                      className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
+        {/* Shop Now Button - Positioned Outside the Grid */}
+        <div className="w-full flex justify-center mt-12">
+          <button
+            className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
                        hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
-                          style={{
-                      backgroundColor: "#a68f83",
-                      color: theme.colors.textPrimary,
-                      fontFamily: theme.fonts.sans[0],
-                    }}
-                      >
-                        Book Now
-                      </button>
-          
-                  </div>
-
+            style={{
+              backgroundColor: "#a68f83",
+              color: theme.colors.textPrimary,
+              //fontFamily: theme.fonts.body,
+            }}
+            onClick={handleBookingNow}
+          >
+            Book Now
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -5,8 +5,8 @@ import Footer from "@/components/footer";
 
 const Marketplace: React.FC = () => {
   return (
-
-      <div className="h-screen overflow-y-scroll text-textPrimary snap-y snap-mandatory">
+    <section className="mt-5 pt-5">
+      <div className="h-screen text-textPrimary snap-y snap-mandatory">
 
         {/* Navigation Bar */}
         <section className="snap-start">
@@ -29,7 +29,7 @@ const Marketplace: React.FC = () => {
         </section>
 
       </div>
-      
+    </section>
   );
 };
 
