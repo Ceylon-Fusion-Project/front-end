@@ -16,12 +16,13 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
-  InputLabel,
   MenuItem,
   Select,
   FormControl,
+  InputLabel,
   Snackbar,
   Alert,
+  AlertColor,
 } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
 
@@ -33,13 +34,13 @@ const mockData = [
     productName: 'Cinnamon Sticks',
     productDescription: 'High-quality cinnamon sticks from Kandy',
     sellingPrice: 10.99,
-    measuringUnitType: 'KG',
+    measuringUnitType: 'GRAM',
     productImageURLs: ['https://example.com/cinnamon-sticks.jpg'],
     createdDate: '2024-01-01',
     updatedDate: '2024-01-01',
     productActiveState: true,
     productRatingValue: 4.5,
-    categoryType: 'SPICES',
+    categoryType: 'FOOD_AND_BEVERAGE',
     productOriginID: 1,
   },
   {
@@ -48,42 +49,43 @@ const mockData = [
     productName: 'Cinnamon Powder',
     productDescription: 'Organic cinnamon powder from Galle',
     sellingPrice: 8.99,
-    measuringUnitType: 'G',
+    measuringUnitType: 'KILO_GRAM',
     productImageURLs: ['https://example.com/cinnamon-powder.jpg'],
     createdDate: '2024-01-01',
     updatedDate: '2024-01-01',
     productActiveState: true,
-    productRatingValue: 4.2,
-    categoryType: 'SPICES',
+    productRatingValue: 4.7,
+    categoryType: 'FOOD_AND_BEVERAGE',
     productOriginID: 2,
   },
 ];
 
-// Define the type for a product
-interface Product {
-  productID: number;
-  productCode: string;
-  productName: string;
-  productDescription: string;
-  sellingPrice: number;
-  measuringUnitType: string;
-  productImageURLs: string[];
-  createdDate: string;
-  updatedDate: string;
-  productActiveState: boolean;
-  productRatingValue: number;
-  categoryType: string;
-  productOriginID: number;
-}
+// Enums for category and measuring unit types
+const CategoryType: { [key: string]: string } = {
+  FOOD_AND_BEVERAGE: 'Food & Beverage',
+  HEALTH_AND_WELLNESS: 'Health & Wellness',
+  PERSONAL_CARE: 'Personal Care',
+  AYURVEDIC: 'Ayurvedic',
+  HOME_AND_LIFE_STYLE: 'Home & Lifestyle',
+  INDUSTRIAL: 'Industrial',
+};
+
+const MeasuringUnitType = {
+  GRAM: 'Gram',
+  KILO_GRAM: 'Kilogram',
+  LITER: 'Liter',
+  MILLI_LITER: 'Milliliter',
+  NUMBER: 'Number',
+};
 
 const ProductManagement = () => {
-  const [products, setProducts] = useState<Product[]>(mockData);
+  const [products, setProducts] = useState(mockData);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+  const [currentProduct, setCurrentProduct] = useState<typeof mockData[0] | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
 
   // Handle add product
   const handleAddClick = () => {
@@ -93,7 +95,7 @@ const ProductManagement = () => {
   };
 
   // Handle edit product
-  const handleEditClick = (product: Product) => {
+  const handleEditClick = (product: typeof mockData[0]) => {
     setEditMode(true);
     setCurrentProduct(product);
     setOpenDialog(true);
@@ -110,23 +112,22 @@ const ProductManagement = () => {
   // Handle save/update product
   const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(event.target as HTMLFormElement);
 
-    // Convert FormData values to appropriate types
-    const newProduct: Product = {
+    const newProduct = {
       productID: currentProduct ? currentProduct.productID : products.length + 1,
-      productCode: String(formData.get('productCode')),
-      productName: String(formData.get('productName')),
-      productDescription: String(formData.get('productDescription')),
-      sellingPrice: parseFloat(String(formData.get('sellingPrice'))),
-      measuringUnitType: String(formData.get('measuringUnitType')),
-      productImageURLs: String(formData.get('productImageURLs')).split(','),
+      productCode: formData.get('productCode') as string,
+      productName: formData.get('productName') as string,
+      productDescription: formData.get('productDescription') as string,
+      sellingPrice: parseFloat(formData.get('sellingPrice') as string),
+      measuringUnitType: formData.get('measuringUnitType') as string,
+      productImageURLs: (formData.get('productImageURLs') as string)?.split(',') || [],
       createdDate: new Date().toISOString().split('T')[0],
       updatedDate: new Date().toISOString().split('T')[0],
-      productActiveState: Boolean(formData.get('productActiveState')),
-      productRatingValue: parseFloat(String(formData.get('productRatingValue'))),
-      categoryType: String(formData.get('categoryType')),
-      productOriginID: parseInt(String(formData.get('productOriginID'))),
+      productActiveState: true,
+      productRatingValue: 0,
+      categoryType: formData.get('categoryType') as string,
+      productOriginID: parseInt(formData.get('productOriginID') as string),
     };
 
     if (currentProduct) {
@@ -175,8 +176,9 @@ const ProductManagement = () => {
             <TableRow style={{ backgroundColor: '#F8FAFC' }}>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Product Code</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Product Name</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Selling Price</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Category</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Selling Price</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Unit</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -185,8 +187,9 @@ const ProductManagement = () => {
               <TableRow key={product.productID}>
                 <TableCell>{product.productCode}</TableCell>
                 <TableCell>{product.productName}</TableCell>
+                <TableCell>{CategoryType[product.categoryType as keyof typeof CategoryType]}</TableCell>
                 <TableCell>${product.sellingPrice.toFixed(2)}</TableCell>
-                <TableCell>{product.categoryType}</TableCell>
+                <TableCell>{MeasuringUnitType[product.measuringUnitType as keyof typeof MeasuringUnitType]}</TableCell>
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleEditClick(product)}>
                     <Edit style={{ color: '#3B82F6' }} />
@@ -242,16 +245,31 @@ const ProductManagement = () => {
               required
             />
             <FormControl fullWidth margin="normal">
-              <InputLabel>Measuring Unit Type</InputLabel>
+              <InputLabel>Category</InputLabel>
+              <Select
+                name="categoryType"
+                defaultValue={currentProduct?.categoryType || ''}
+                required
+              >
+                {Object.keys(CategoryType).map((key) => (
+                  <MenuItem key={key} value={key}>
+                    {CategoryType[key]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Measuring Unit</InputLabel>
               <Select
                 name="measuringUnitType"
                 defaultValue={currentProduct?.measuringUnitType || ''}
                 required
               >
-                <MenuItem value="KG">Kilograms (KG)</MenuItem>
-                <MenuItem value="G">Grams (G)</MenuItem>
-                <MenuItem value="L">Liters (L)</MenuItem>
-                <MenuItem value="ML">Milliliters (ML)</MenuItem>
+                {Object.keys(MeasuringUnitType).map((key) => (
+                  <MenuItem key={key} value={key}>
+                    {MeasuringUnitType[key as keyof typeof MeasuringUnitType]}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <TextField
@@ -262,19 +280,6 @@ const ProductManagement = () => {
               defaultValue={currentProduct?.productImageURLs.join(',')}
               required
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Category Type</InputLabel>
-              <Select
-                name="categoryType"
-                defaultValue={currentProduct?.categoryType || ''}
-                required
-              >
-                <MenuItem value="SPICES">Spices</MenuItem>
-                <MenuItem value="HERBS">Herbs</MenuItem>
-                <MenuItem value="OILS">Oils</MenuItem>
-                <MenuItem value="TEAS">Teas</MenuItem>
-              </Select>
-            </FormControl>
             <TextField
               label="Product Origin ID"
               name="productOriginID"
