@@ -25,52 +25,52 @@ import { Add, Edit, Delete } from '@mui/icons-material';
 // Mock data for experience centers
 const mockData = [
     {
-      experienceId: 1,
-      experienceCode: 'EXP001',
-      experienceName: 'Cinnamon Harvesting',
-      experienceDescription: 'Learn how to harvest cinnamon in traditional ways.',
+      experienceCenterId: 1,
+      experienceCenterCode: 'EXP001',
+      experienceCenterName: 'Cinnamon Harvesting',
+      experienceCenterDescription: 'Learn how to harvest cinnamon in traditional ways.',
       location: 'Kandy',
       totalPrice: 50.0,
     },
     {
-      experienceId: 2,
-      experienceCode: 'EXP002',
-      experienceName: 'Tea Tasting',
-      experienceDescription: 'Experience the finest tea flavors in Sri Lanka.',
+      experienceCenterId: 2,
+      experienceCenterCode: 'EXP002',
+      experienceCenterName: 'Tea Tasting',
+      experienceCenterDescription: 'Experience the finest tea flavors in Sri Lanka.',
       location: 'Nuwara Eliya',
       totalPrice: 30.0,
     },
     {
-      experienceId: 3,
-      experienceCode: 'EXP003',
-      experienceName: 'Coconut Plantation Tour',
-      experienceDescription: 'Discover the process of coconut farming and its uses.',
+      experienceCenterId: 3,
+      experienceCenterCode: 'EXP003',
+      experienceCenterName: 'Coconut Plantation Tour',
+      experienceCenterDescription: 'Discover the process of coconut farming and its uses.',
       location: 'Galle',
       totalPrice: 40.0,
     },
     {
-      experienceId: 4,
-      experienceCode: 'EXP004',
-      experienceName: 'Wildlife Safari',
-      experienceDescription: 'Explore the diverse wildlife of Sri Lanka in a guided safari.',
+      experienceCenterId: 4,
+      experienceCenterCode: 'EXP004',
+      experienceCenterName: 'Wildlife Safari',
+      experienceCenterDescription: 'Explore the diverse wildlife of Sri Lanka in a guided safari.',
       location: 'Yala National Park',
       totalPrice: 75.0,
     },
     {
-      experienceId: 5,
-      experienceCode: 'EXP005',
-      experienceName: 'Traditional Pottery Making',
-      experienceDescription: 'Get hands-on experience in crafting traditional clay pottery.',
+      experienceCenterId: 5,
+      experienceCenterCode: 'EXP005',
+      experienceCenterName: 'Traditional Pottery Making',
+      experienceCenterDescription: 'Get hands-on experience in crafting traditional clay pottery.',
       location: 'Matale',
       totalPrice: 35.0,
     }
 ];
 
 const ExperienceCenterManagement = () => {
-  const [experiences, setExperiences] = useState(mockData);
+  const [experienceCenters, setExperienceCenters] = useState(mockData);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentExperience, setCurrentExperience] = useState<typeof mockData[0] | null>(null);
+  const [currentExperienceCenter, setCurrentExperienceCenter] = useState<typeof mockData[0] | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
@@ -78,20 +78,20 @@ const ExperienceCenterManagement = () => {
   // Handle add experience
   const handleAddClick = () => {
     setEditMode(false);
-    setCurrentExperience(null);
+    setCurrentExperienceCenter(null);
     setOpenDialog(true);
   };
 
   // Handle edit experience
-  const handleEditClick = (experience: SetStateAction<{ experienceId: number; experienceCode: string; experienceName: string; experienceDescription: string; location: string; totalPrice: number; } | null>) => {
+  const handleEditClick = (experienceCenter: SetStateAction<{ experienceCenterId: number; experienceCenterCode: string; experienceCenterName: string; experienceCenterDescription: string; location: string; totalPrice: number; } | null>) => {
     setEditMode(true);
-    setCurrentExperience(experience);
+    setCurrentExperienceCenter(experienceCenter);
     setOpenDialog(true);
   };
 
   // Handle delete experience
   const handleDeleteClick = (id: number) => {
-    setExperiences(experiences.filter((experience) => experience.experienceId !== id));
+    setExperienceCenters(experienceCenters.filter((experienceCenter) => experienceCenter.experienceCenterId !== id));
     setSnackbarMessage('Experience deleted successfully!');
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
@@ -102,27 +102,27 @@ const ExperienceCenterManagement = () => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
 
-    const newExperience = {
-      experienceId: currentExperience ? currentExperience.experienceId : experiences.length + 1,
-      experienceCode: String(formData.get('experienceCode')),
-      experienceName: String(formData.get('experienceName')),
-      experienceDescription: String(formData.get('experienceDescription')),
+    const newExperienceCenter = {
+      experienceCenterId: currentExperienceCenter ? currentExperienceCenter.experienceCenterId : experienceCenters.length + 1,
+      experienceCenterCode: String(formData.get('experienceCenterCode')),
+      experienceCenterName: String(formData.get('experienceCenterName')),
+      experienceCenterDescription: String(formData.get('experienceCenterDescription')),
       location: String(formData.get('location')),
       totalPrice: parseFloat(String(formData.get('totalPrice'))),
     };
 
-    if (currentExperience) {
+    if (currentExperienceCenter) {
       // Update existing experience
-      setExperiences(
-        experiences.map((experience) =>
-          experience.experienceId === currentExperience.experienceId ? newExperience : experience
+      setExperienceCenters(
+        experienceCenters.map((experienceCenter) =>
+          experienceCenter.experienceCenterId === currentExperienceCenter.experienceCenterId ? newExperienceCenter : experienceCenter
         )
       );
-      setSnackbarMessage('Experience updated successfully!');
+      setSnackbarMessage('Experience center updated successfully!');
     } else {
       // Add new experience
-      setExperiences([...experiences, newExperience]);
-      setSnackbarMessage('Experience added successfully!');
+      setExperienceCenters([...experienceCenters, newExperienceCenter]);
+      setSnackbarMessage('Experience center added successfully!');
     }
 
     setSnackbarSeverity('success');
@@ -145,9 +145,9 @@ const ExperienceCenterManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}
+        style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
       >
-        Add Experience
+        Add Experience Center
       </Button>
 
       {/* Experiences Table */}
@@ -155,25 +155,25 @@ const ExperienceCenterManagement = () => {
         <Table>
           <TableHead>
             <TableRow style={{ backgroundColor: '#F8FAFC' }}>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Experience Code</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Experience Name</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Experience Center Code</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Experience Center Name</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Location</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Total Price</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {experiences.map((experience) => (
-              <TableRow key={experience.experienceId}>
-                <TableCell>{experience.experienceCode}</TableCell>
-                <TableCell>{experience.experienceName}</TableCell>
-                <TableCell>{experience.location}</TableCell>
-                <TableCell>${experience.totalPrice.toFixed(2)}</TableCell>
+            {experienceCenters.map((experienceCenter) => (
+              <TableRow key={experienceCenter.experienceCenterId}>
+                <TableCell>{experienceCenter.experienceCenterCode}</TableCell>
+                <TableCell>{experienceCenter.experienceCenterName}</TableCell>
+                <TableCell>{experienceCenter.location}</TableCell>
+                <TableCell>${experienceCenter.totalPrice.toFixed(2)}</TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleEditClick(experience)}>
+                  <IconButton color="primary" onClick={() => handleEditClick(experienceCenter)}>
                     <Edit style={{ color: '#291e10' }} />
                   </IconButton>
-                  <IconButton color="secondary" onClick={() => handleDeleteClick(experience.experienceId)}>
+                  <IconButton color="secondary" onClick={() => handleDeleteClick(experienceCenter.experienceCenterId)}>
                     <Delete style={{ color: '#EF4444' }} />
                   </IconButton>
                 </TableCell>
@@ -186,32 +186,32 @@ const ExperienceCenterManagement = () => {
       {/* Add/Edit Experience Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-          {editMode ? 'Edit Experience' : 'Add Experience'}
+          {editMode ? 'Edit Experience Center' : 'Add Experience Center'}
         </DialogTitle>
         <DialogContent>
-          <form id="experience-form" onSubmit={handleSave}>
+          <form id="experience-center-form" onSubmit={handleSave}>
             <TextField
-              label="Experience Code"
-              name="experienceCode"
+              label="Experience Center Code"
+              name="experienceCenterCode"
               fullWidth
               margin="normal"
-              defaultValue={currentExperience?.experienceCode}
+              defaultValue={currentExperienceCenter?.experienceCenterCode}
               required
             />
             <TextField
-              label="Experience Name"
-              name="experienceName"
+              label="Experience Center Name"
+              name="experienceCenterName"
               fullWidth
               margin="normal"
-              defaultValue={currentExperience?.experienceName}
+              defaultValue={currentExperienceCenter?.experienceCenterName}
               required
             />
             <TextField
-              label="Experience Description"
-              name="experienceDescription"
+              label="Experience Center Description"
+              name="experienceCenterDescription"
               fullWidth
               margin="normal"
-              defaultValue={currentExperience?.experienceDescription}
+              defaultValue={currentExperienceCenter?.experienceCenterDescription}
               required
             />
             <TextField
@@ -219,7 +219,7 @@ const ExperienceCenterManagement = () => {
               name="location"
               fullWidth
               margin="normal"
-              defaultValue={currentExperience?.location}
+              defaultValue={currentExperienceCenter?.location}
               required
             />
             <TextField
@@ -228,7 +228,7 @@ const ExperienceCenterManagement = () => {
               type="number"
               fullWidth
               margin="normal"
-              defaultValue={currentExperience?.totalPrice}
+              defaultValue={currentExperienceCenter?.totalPrice}
               required
             />
           </form>
@@ -237,7 +237,7 @@ const ExperienceCenterManagement = () => {
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="experience-form" variant="contained" style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}>
+          <Button type="submit" form="experience-center-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>
