@@ -486,7 +486,7 @@ const ProductManagement = () => {
             color="primary"
             startIcon={<Add />}
             onClick={handleAddClick}
-            style={{ backgroundColor: "#3B82F6", color: "#FFFFFF" }}
+            style={{ backgroundColor: "#291e10", color: "#FFFFFF" }}
           >
             Add Product
           </Button>
@@ -517,7 +517,7 @@ const ProductManagement = () => {
                     <TableCell>{product.measuringUnitType}</TableCell>
                     <TableCell>
                       <IconButton color="primary" onClick={() => handleEditClick(product)}>
-                        <Edit style={{ color: "#3B82F6" }} />
+                        <Edit style={{ color: "#291e10" }} />
                       </IconButton>
                       <IconButton color="secondary" onClick={() => handleDeleteClick(product.productID)}>
                         <Delete style={{ color: "#EF4444" }} />

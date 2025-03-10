@@ -505,6 +505,9 @@ import { ImageUploader } from "./ImageUploader";
 import { ProductPreview } from "./ProductPreview";
 import { categoryTypes, measuringUnitTypes, origins } from "../../lib/data";
 
+
+
+
 const formSchema = z.object({
   productCode: z.string().min(2, {
     message: "Product code must be at least 2 characters.",
