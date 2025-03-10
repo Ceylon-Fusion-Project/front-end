@@ -315,18 +315,18 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <div
-      className="relative rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="relative overflow-hidden transition-shadow duration-300 rounded-lg shadow-lg hover:shadow-xl"
       style={{ backgroundColor: theme.colors.background }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {/* Product Image */}
       <div className="relative">
-        <img src={image} alt={title} className="w-full h-48 object-cover" />
+        <img src={image} alt={title} className="object-cover w-full h-48" />
 
         {hovered && (
           <button
-            className="absolute top-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
+            className="absolute p-2 transition rounded-full shadow-md top-3 right-3 hover:opacity-75"
             style={{ backgroundColor: theme.colors.background }}
             onClick={isWishlist? removeFromWishList : addToWishList}
           >
@@ -339,7 +339,7 @@ const Card: React.FC<CardProps> = ({
 
         {hovered && (
           <button
-            className="absolute bottom-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
+            className="absolute p-2 transition rounded-full shadow-md bottom-3 right-3 hover:opacity-75"
             style={{ backgroundColor: theme.colors.background }}
             onClick={isInCart? removeItemFromCart : addToCart}
           >
@@ -352,9 +352,9 @@ const Card: React.FC<CardProps> = ({
       </div>
 
       {/* Product Details */}
-      <div className="p-6 flex flex-col items-center">
+      <div className="flex flex-col items-center p-6">
         <h3
-          className="font-bold mb-2"
+          className="mb-2 font-bold"
           style={{
             color: theme.colors.textPrimary,
             //fontFamily: theme.fonts.body,
@@ -363,7 +363,7 @@ const Card: React.FC<CardProps> = ({
           {title}
         </h3>
         <p
-          className="text-sm mb-4 text-center"
+          className="mb-4 text-sm text-center"
           style={{
             color: theme.colors.textSecondary,
             //fontFamily: theme.fonts.body,
@@ -373,7 +373,7 @@ const Card: React.FC<CardProps> = ({
         </p>
         {price && (
           <p
-            className="text-lg font-semibold mb-4"
+            className="mb-4 text-lg font-semibold"
             style={{
               color: theme.colors.accent,
               //fontFamily: theme.fonts.body,
@@ -410,7 +410,7 @@ const Card: React.FC<CardProps> = ({
         {/* Quick Preview Button */}
         <button
           onClick={() => setShowPreview(true)}
-          className="w-full py-3 rounded-lg mt-2 transition-all duration-300"
+          className="w-full py-3 mt-2 transition-all duration-300 rounded-lg"
           style={{
             //backgroundColor: "#c4c0c0",
             backgroundColor: theme.colors.primary,
@@ -431,11 +431,11 @@ const Card: React.FC<CardProps> = ({
       {/* Quick Preview Modal */}
       {showPreview && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           <div className="p-12 rounded-lg shadow-lg w-[900px] max-w-full bg-white">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <h2
                 className="text-4xl font-bold"
                 style={{
@@ -450,7 +450,7 @@ const Card: React.FC<CardProps> = ({
                 style={{
                   color: theme.colors.textPrimary, // Use your theme color
                 }}
-                className="hover:opacity-75 transition"
+                className="transition hover:opacity-75"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -458,7 +458,7 @@ const Card: React.FC<CardProps> = ({
             <img
               src={image}
               alt={title}
-              className="w-full h-96 object-cover mt-4 rounded shadow-lg"
+              className="object-cover w-full mt-4 rounded shadow-lg h-96"
               //style={{ border: `2px solid ${theme.colors.accent}` }}
             />
             <p
@@ -472,7 +472,7 @@ const Card: React.FC<CardProps> = ({
             </p>
             {price && (
               <p
-                className="text-2xl font-semibold mt-4"
+                className="mt-4 text-2xl font-semibold"
                 style={{
                   color: theme.colors.accent,
                   //fontFamily: theme.fonts.body,
@@ -482,9 +482,9 @@ const Card: React.FC<CardProps> = ({
               </p>
             )}
 
-            <div className="mt-8 flex justify-between">
+            <div className="flex justify-between mt-8">
               <button
-                className="w-full py-3 rounded-lg mt-2 transition-all duration-300"
+                className="w-full py-3 mt-2 transition-all duration-300 rounded-lg"
                 style={{
                   //backgroundColor: "#c4c0c0",
                   backgroundColor: theme.colors.primary,
