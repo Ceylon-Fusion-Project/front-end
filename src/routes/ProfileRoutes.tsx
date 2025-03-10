@@ -1,7 +1,8 @@
 import ProfileLayout from '@/components/UserAccount/ProfileLayout';
+import OrdersPage from '@/pages/AccountPages/OrdersPage';
 import ProfileHome from '@/pages/AccountPages/ProfileHome';
+import SettingsPage from '@/pages/AccountPages/SettingsPage';
 import { Routes, Route } from 'react-router-dom';
-// import OrdersPage from '@/pages/AccountPages/OrdersPage';
 // import BookingsPage from '@/pages/AccountPages/BookingsPage';
 // import SettingsPage from '@/pages/AccountPages/SettingsPage';
 // import BuyerDashboard from '@/pages/AccountPages/BuyerDashboard';
@@ -18,14 +19,14 @@ export default function ProfileRoutes() {
           </ProfileLayout>
         }
       />
-      {/* <Route
+      <Route
         path="orders"
         element={
           <ProfileLayout>
             <OrdersPage />
           </ProfileLayout>
         }
-      /> */}
+      />
       {/* <Route
         path="bookings"
         element={
@@ -34,14 +35,14 @@ export default function ProfileRoutes() {
           </ProfileLayout>
         }
       /> */}
-      {/* <Route
+      <Route
         path="settings"
         element={
           <ProfileLayout>
             <SettingsPage />
           </ProfileLayout>
         }
-      /> */}
+      />
       
       {/* Buyer Dashboard */}
       {/* <Route

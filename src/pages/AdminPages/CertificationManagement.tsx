@@ -132,7 +132,7 @@ const CertificationManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#3B82F6', color: '#FFFFFF' }}
+        style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}
       >
         Add Certification
       </Button>
@@ -166,7 +166,7 @@ const CertificationManagement = () => {
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleEditClick(cert)}>
-                    <Edit style={{ color: '#3B82F6' }} />
+                    <Edit style={{ color: '#291e10' }} />
                   </IconButton>
                   <IconButton color="secondary" onClick={() => handleDeleteClick(cert.certificationID)}>
                     <Delete style={{ color: '#EF4444' }} />
@@ -244,7 +244,7 @@ const CertificationManagement = () => {
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#3B82F6', color: '#FFFFFF' }}>
+          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}>
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>

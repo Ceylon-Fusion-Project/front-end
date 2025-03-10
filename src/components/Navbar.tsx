@@ -92,13 +92,13 @@ const Navbar = () => {
             {!isLoggedIn ? (
               <>
                 <a
-                  href="http://localhost:3001/api/v1/auth/login"
+                  href="https://localhost:3001/api/v1/auth/login"
                   className="text-gray-800 hover:text-gray-600 px-3 py-2"
                 >
                   Login
                 </a>
                 <a
-                  href="http://localhost:3001/api/v1/auth/signup"
+                  href="https://localhost:3001/api/v1/auth/signup"
                   className="text-gray-800 hover:text-gray-600 px-6 py-2"
                 >
                   Sign Up
@@ -146,13 +146,13 @@ const Navbar = () => {
           {!isLoggedIn ? (
             <>
               <a
-                href="http://localhost:3001/api/v1/auth/login"
+                href="https://localhost:3001/api/v1/auth/login"
                 className="block text-gray-800 hover:text-gray-600 px-3 py-2"
               >
                 Login
               </a>
               <a
-                href="http://localhost:3001/api/v1/auth/signup"
+                href="https://localhost:3001/api/v1/auth/signup"
                 className="block text-gray-800 hover:text-gray-600 px-3 py-2"
               >
                 Sign Up
