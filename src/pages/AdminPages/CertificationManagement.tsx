@@ -19,8 +19,10 @@ import {
   Snackbar,
   Alert,
   AlertColor,
+  Box,
+  styled,
 } from '@mui/material';
-import { Add, Edit, Delete } from '@mui/icons-material';
+import { Add, Edit, Delete, CloudUpload } from '@mui/icons-material';
 
 // Mock data for certifications
 const mockData = [
@@ -50,14 +52,28 @@ const mockData = [
   },
 ];
 
+// Styled file upload button
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
+
 const CertificationManagement = () => {
   const [certifications, setCertifications] = useState(mockData);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentCertification, setCurrentCertification] = useState<null | typeof mockData[0]>(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [currentCertification, setCurrentCertification] = useState<typeof mockData[0] | null>(null);
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
 
   // Handle add certification
   const handleAddClick = () => {
@@ -81,6 +97,13 @@ const CertificationManagement = () => {
     setSnackbarOpen(true);
   };
 
+  // Handle file upload
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setFile(event.target.files[0]);
+    }
+  };
+
   // Handle save/update certification
   const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -95,14 +118,14 @@ const CertificationManagement = () => {
       certActiveState: true,
       createdDate: new Date().toISOString().split('T')[0],
       updatedDate: new Date().toISOString().split('T')[0],
-      certURL: formData.get('certURL') as string,
+      certURL: file ? URL.createObjectURL(file) : currentCertification?.certURL || '',
     };
 
     if (currentCertification) {
       // Update existing certification
       setCertifications(
         certifications.map((cert) =>
-          cert.certificationID === (currentCertification ? currentCertification.certificationID : -1) ? newCertification : cert
+          cert.certificationID === currentCertification.certificationID ? newCertification : cert
         )
       );
       setSnackbarMessage('Certification updated successfully!');
@@ -115,6 +138,7 @@ const CertificationManagement = () => {
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
     setOpenDialog(false);
+    setFile(null);
   };
 
   // Handle snackbar close
@@ -132,7 +156,7 @@ const CertificationManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}
+        style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
       >
         Add Certification
       </Button>
@@ -160,7 +184,7 @@ const CertificationManagement = () => {
                 <TableCell>{cert.expiryDate}</TableCell>
                 <TableCell>{cert.productID}</TableCell>
                 <TableCell>
-                  <a href={cert.certURL} target="_blank" rel="noopener noreferrer" style={{ color: '#3B82F6', textDecoration: 'none' }}>
+                  <a href={cert.certURL} target="_blank" rel="noopener noreferrer" style={{ color: '#B45309', textDecoration: 'none' }}>
                     View File
                   </a>
                 </TableCell>
@@ -185,66 +209,69 @@ const CertificationManagement = () => {
         </DialogTitle>
         <DialogContent>
           <form id="certification-form" onSubmit={handleSave}>
-            <TextField
-              label="Certification Name"
-              name="certificationName"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.certificationName}
-              required
-            />
-            <TextField
-              label="Issuer"
-              name="issuer"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.issuer}
-              required
-            />
-            <TextField
-              label="Issued Date"
-              name="issuedDate"
-              type="date"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.issuedDate}
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-            <TextField
-              label="Expiry Date"
-              name="expiryDate"
-              type="date"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.expiryDate}
-              InputLabelProps={{ shrink: true }}
-              required
-            />
-            <TextField
-              label="Product ID"
-              name="productID"
-              type="number"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.productID}
-              required
-            />
-            <TextField
-              label="File URL"
-              name="certURL"
-              fullWidth
-              margin="normal"
-              defaultValue={currentCertification?.certURL}
-              required
-            />
+            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2}>
+              <TextField
+                label="Certification Name"
+                name="certificationName"
+                fullWidth
+                margin="normal"
+                defaultValue={currentCertification?.certificationName}
+                required
+              />
+              <TextField
+                label="Issuer"
+                name="issuer"
+                fullWidth
+                margin="normal"
+                defaultValue={currentCertification?.issuer}
+                required
+              />
+              <TextField
+                label="Issued Date"
+                name="issuedDate"
+                type="date"
+                fullWidth
+                margin="normal"
+                defaultValue={currentCertification?.issuedDate}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+              <TextField
+                label="Expiry Date"
+                name="expiryDate"
+                type="date"
+                fullWidth
+                margin="normal"
+                defaultValue={currentCertification?.expiryDate}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+              <TextField
+                label="Product ID"
+                name="productID"
+                type="number"
+                fullWidth
+                margin="normal"
+                defaultValue={currentCertification?.productID}
+                required
+              />
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUpload />}
+                style={{ backgroundColor: '#B45309', color: '#FFFFFF', marginTop: '1rem' }}
+              >
+                Upload File
+                <VisuallyHiddenInput type="file" onChange={handleFileChange} />
+              </Button>
+            </Box>
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}>
+          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>
