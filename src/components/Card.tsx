@@ -3,7 +3,7 @@ import { Heart, ShoppingCart, X } from "lucide-react";
 import { theme } from "@/styles/theme";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance"; // Import axios instance
-import { v4 as uuidv4 } from "uuid";
+//import { v4 as uuidv4 } from "uuid";
 import NotificationService from "@/utils/NotificationService";
 
 interface CardProps {
@@ -14,11 +14,12 @@ interface CardProps {
   price: string;
   isFeatured?: boolean;
   productID: number;
+  onClick: () => void;
 }
 
-interface IdempotencyKeys {
-  [productId: number]: { addToCartKey: string; removeFromCartKey: string };
-}
+// interface IdempotencyKeys {
+//   [productId: number]: { addToCartKey: string; removeFromCartKey: string };
+// }
 
 const Card: React.FC<CardProps> = ({
   image,
@@ -34,30 +35,30 @@ const Card: React.FC<CardProps> = ({
   const [isInCart, setIsInCart] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
-  const [idempotencyKeys, setIdempotencyKeys] = useState<IdempotencyKeys>({});
+  //const [idempotencyKeys, setIdempotencyKeys] = useState<IdempotencyKeys>({});
   const navigate = useNavigate();
 
   // ✅ Function to generate or retrieve idempotency keys for a product
-  const getIdempotencyKeys = (productId: number) => {
-    // Check if the key already exists in state
-    if (idempotencyKeys[productId]) {
-      return idempotencyKeys[productId]; // Return existing keys
-    }
+  // const getIdempotencyKeys = (productId: number) => {
+  //   // Check if the key already exists in state
+  //   if (idempotencyKeys[productId]) {
+  //     return idempotencyKeys[productId]; // Return existing keys
+  //   }
   
-    // Generate new keys
-    const newKeys = {
-      addToCartKey: uuidv4(),
-      removeFromCartKey: uuidv4(),
-    };
+  //   // Generate new keys
+  //   const newKeys = {
+  //     addToCartKey: uuidv4(),
+  //     removeFromCartKey: uuidv4(),
+  //   };
   
-    // Update state properly
-    setIdempotencyKeys((prevKeys) => ({
-      ...prevKeys,
-      [productId]: newKeys,
-    }));
+  //   // Update state properly
+  //   setIdempotencyKeys((prevKeys) => ({
+  //     ...prevKeys,
+  //     [productId]: newKeys,
+  //   }));
   
-    return newKeys; // Return new keys immediately
-  };
+  //   return newKeys; // Return new keys immediately
+  // };
   
 
   //Extract Price from String Price
@@ -84,9 +85,9 @@ const Card: React.FC<CardProps> = ({
 
     setIsInCart(true);
 
-    const { addToCartKey } = getIdempotencyKeys(productID);
+    //const { addToCartKey } = getIdempotencyKeys(productID);
 
-    console.log("🛒 Using Idempotency Key:", addToCartKey);
+    //console.log("🛒 Using Idempotency Key:", addToCartKey);
 
     //Construct Request Body Properly
     const requestBody = {
@@ -101,13 +102,15 @@ const Card: React.FC<CardProps> = ({
     console.log("🛒 Sending Add to Cart request:", JSON.stringify(requestBody, null, 2));
 
     try {
-      const response = await api.post("/cart/add-item-to-cart", requestBody, {
-        headers: {
-          "X-Idempotency-Key": addToCartKey
-        },
-      });
+      const response = await api.post("/cart/add-item-to-cart-byCard", requestBody, 
+      //{
+      //   headers: {
+      //     "X-Idempotency-Key": addToCartKey
+      //   },
+      // }
+    );
 
-      console.log("✅ Add to Cart Response:", response);
+      console.log("✅ Add to Cart Response:",response);
 
       if (response?.status === 200 || response?.status === 201) {
         NotificationService.success("Product added to cart successfully!");
@@ -121,17 +124,36 @@ const Card: React.FC<CardProps> = ({
       // Reset cart state if request fails
     setIsInCart(false);
 
-      if ((error as any).response) {
-        setIsInCart(false);
-        console.error(
-          "❌ Axios Error Response:",(error as any).response?.data);
-        NotificationService.error(
-          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
-        );
+    //   if ((error as any).response) {
+    //     setIsInCart(false);
+    //     console.error(
+    //       "❌ Axios Error Response:",(error as any).response?.data);
+    //     NotificationService.error(
+    //       `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+    //     );
+    //   } else {
+    //     NotificationService.error("Network error. Please try again.");
+    //   }
+    // }
+    // Handle Different Error Scenarios
+    if (!(error as any).response) {
+      const { status, data } = (error as any).response;
+
+      if (status === 401) {
+        NotificationService.error("Unauthorized! Please log in again.");
+      } else if (status === 403) {
+        NotificationService.error("Forbidden! You don’t have permission.");
+      } else if (status === 404) {
+        NotificationService.error("Product not found.");
+      } else if (status === 500) {
+        NotificationService.error("Server error! Please try again later.");
       } else {
-        NotificationService.error("Network error. Please try again.");
+        NotificationService.error(data?.message || "An unexpected error occurred.");
       }
+    } else {
+      NotificationService.error("Network error! Please check your connection.");
     }
+  }
   };
 
   // Remove product from cart
@@ -143,9 +165,9 @@ const Card: React.FC<CardProps> = ({
 
     setIsInCart(false);
 
-    const { removeFromCartKey } = getIdempotencyKeys(productID);
+    //const { removeFromCartKey } = getIdempotencyKeys(productID);
 
-    console.log("🗑️ Using Remove Idempotency Key:", removeFromCartKey);
+    //console.log("🗑️ Using Remove Idempotency Key:", removeFromCartKey);
 
     const requestBody = {
       userId:5,
@@ -155,13 +177,14 @@ const Card: React.FC<CardProps> = ({
     console.log("🗑️ Removing from cart:", JSON.stringify(requestBody, null, 2));
 
     try {
-      const response = await api.post("/cart/remove-item-from-cart",
+      const response = await api.post("/cart/remove-item-from-cart-byCard",
       requestBody,
-      {
-        headers: {
-          "X-Idempotency-Key": removeFromCartKey
-        },
-      });
+      // {
+      //   headers: {
+      //     "X-Idempotency-Key": removeFromCartKey
+      //   },
+      // }
+    );
 
       console.log("�� Remove from Cart Response:", response);
 
@@ -177,6 +200,85 @@ const Card: React.FC<CardProps> = ({
       if ((error as any).response) {
         console.error(
           "�� Axios Error Response:",(error as any).response?.data);
+        NotificationService.error(
+          `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        NotificationService.error("Network error. Please try again.");
+      }
+    }
+  };
+
+  //Handle add to wishlist 
+  const addToWishList = async () => {
+    if (!productID){
+      NotificationService.error("Product Identification Problem. Please try again.");
+      return;
+    }
+
+    setIsWishlist(true);
+
+    const requestBody = {
+      userId:5,
+      productId:productID,
+    };
+
+    try {
+      const response = await api.post("/wishlist/add-item-to-wishlist", requestBody);
+
+      console.log("��� Add to Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201){
+        NotificationService.success("Product added to wishlist successfully!");
+      }else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      } 
+    } catch (error) {
+      console.error("Error adding to wishlist", error);
+      setIsWishlist(false);
+
+      if ((error as any).response) {
+        console.error(
+          "�� Axios Error Response:",(error as any).response?.data);
+        NotificationService.error(
+          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        NotificationService.error("Network error. Please try again.");
+      }
+    }
+  };
+
+  // Function to handle remove from wishlist
+  const removeFromWishList = async () => {
+    if (!productID){
+      NotificationService.error("Product Identification Problem. Please try again.");
+      return;
+    }
+    setIsWishlist(false);
+
+    const requestBody = {
+      userId:5,
+      productId: productID,
+    };
+     
+    try {
+      const response = await api.post("/wishlist/remove-item-from-wishlist", requestBody);
+
+      console.log("��� Remove from Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201){
+        NotificationService.success("Product removed from wishlist successfully!");
+      } else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error){
+      console.error("Error removing from wishlist:", error);
+      setIsWishlist(true);
+      if ((error as any).response) {
+        console.error("�� Axios Error Response:",(error as any).response?.data);
         NotificationService.error(
           `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
         );
@@ -226,11 +328,11 @@ const Card: React.FC<CardProps> = ({
           <button
             className="absolute top-3 right-3 p-2 rounded-full shadow-md hover:opacity-75 transition"
             style={{ backgroundColor: theme.colors.background }}
-            onClick={() => setIsWishlist(!isWishlist)}
+            onClick={isWishlist? removeFromWishList : addToWishList}
           >
             <Heart
               className="w-5 h-5"
-              style={{ color: isWishlist ? theme.colors.primary : "gray" }}
+              style={{ color: isWishlist ? theme.colors.accent : "gray" }}
             />
           </button>
         )}
@@ -243,7 +345,7 @@ const Card: React.FC<CardProps> = ({
           >
             <ShoppingCart
               className="w-5 h-5"
-              style={{ color: isInCart ? theme.colors.textPrimary : "gray" }}
+              style={{ color: isInCart ? theme.colors.accent : "gray" }}
             />
           </button>
         )}
