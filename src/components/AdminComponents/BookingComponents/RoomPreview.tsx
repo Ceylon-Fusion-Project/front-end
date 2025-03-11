@@ -82,7 +82,7 @@ export function RoomPreview({ room, onBack }: RoomPreviewProps) {
           </div>
 
           <h1 className="text-2xl font-bold">
-            {room.roomCode || "Untitled Room"}
+            Room {room.roomCode || "Untitled Room"}
           </h1>
           <div className="flex items-center space-x-2">
             <span className="px-2 py-1 bg-gray-100 border border-gray-300 rounded">

@@ -19,51 +19,84 @@ import {
   Snackbar,
   Alert,
   AlertColor,
+  Pagination, // Import Pagination
 } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
 
 // Mock data for experience centers
 const mockData = [
-    {
-      experienceCenterId: 1,
-      experienceCenterCode: 'EXP001',
-      experienceCenterName: 'Cinnamon Harvesting',
-      experienceCenterDescription: 'Learn how to harvest cinnamon in traditional ways.',
-      location: 'Kandy',
-      totalPrice: 50.0,
-    },
-    {
-      experienceCenterId: 2,
-      experienceCenterCode: 'EXP002',
-      experienceCenterName: 'Tea Tasting',
-      experienceCenterDescription: 'Experience the finest tea flavors in Sri Lanka.',
-      location: 'Nuwara Eliya',
-      totalPrice: 30.0,
-    },
-    {
-      experienceCenterId: 3,
-      experienceCenterCode: 'EXP003',
-      experienceCenterName: 'Coconut Plantation Tour',
-      experienceCenterDescription: 'Discover the process of coconut farming and its uses.',
-      location: 'Galle',
-      totalPrice: 40.0,
-    },
-    {
-      experienceCenterId: 4,
-      experienceCenterCode: 'EXP004',
-      experienceCenterName: 'Wildlife Safari',
-      experienceCenterDescription: 'Explore the diverse wildlife of Sri Lanka in a guided safari.',
-      location: 'Yala National Park',
-      totalPrice: 75.0,
-    },
-    {
-      experienceCenterId: 5,
-      experienceCenterCode: 'EXP005',
-      experienceCenterName: 'Traditional Pottery Making',
-      experienceCenterDescription: 'Get hands-on experience in crafting traditional clay pottery.',
-      location: 'Matale',
-      totalPrice: 35.0,
-    }
+  {
+    experienceCenterId: 1,
+    experienceCenterCode: 'CIN001',
+    experienceCenterName: 'Cinnamon Harvesting Basics',
+    experienceCenterDescription: 'Learn the traditional methods of harvesting cinnamon in a scenic setting.',
+    location: 'Kandy',
+    totalPrice: 50.0,
+  },
+  {
+    experienceCenterId: 2,
+    experienceCenterCode: 'CIN002',
+    experienceCenterName: 'Cinnamon Processing Workshop',
+    experienceCenterDescription: 'Discover the art of processing cinnamon bark into premium spices.',
+    location: 'Matale',
+    totalPrice: 45.0,
+  },
+  {
+    experienceCenterId: 3,
+    experienceCenterCode: 'CIN003',
+    experienceCenterName: 'Cinnamon Plantation Tour',
+    experienceCenterDescription: 'Explore lush cinnamon plantations and learn about their cultivation.',
+    location: 'Galle',
+    totalPrice: 40.0,
+  },
+  {
+    experienceCenterId: 4,
+    experienceCenterCode: 'CIN004',
+    experienceCenterName: 'Cinnamon Cooking Class',
+    experienceCenterDescription: 'Master the use of cinnamon in authentic Sri Lankan cuisine.',
+    location: 'Colombo',
+    totalPrice: 55.0,
+  },
+  {
+    experienceCenterId: 5,
+    experienceCenterCode: 'CIN005',
+    experienceCenterName: 'Cinnamon Aromatherapy Session',
+    experienceCenterDescription: 'Experience relaxation with cinnamon-infused aromatherapy treatments.',
+    location: 'Nuwara Eliya',
+    totalPrice: 60.0,
+  },
+  {
+    experienceCenterId: 6,
+    experienceCenterCode: 'CIN006',
+    experienceCenterName: 'Cinnamon History Walk',
+    experienceCenterDescription: 'Walk through history while learning about cinnamon’s cultural significance.',
+    location: 'Matara',
+    totalPrice: 35.0,
+  },
+  {
+    experienceCenterId: 7,
+    experienceCenterCode: 'CIN007',
+    experienceCenterName: 'Cinnamon Craft Making',
+    experienceCenterDescription: 'Create handmade crafts using cinnamon sticks and natural materials.',
+    location: 'Ella',
+    totalPrice: 45.0,
+  },
+  {
+    experienceCenterId: 8,
+    experienceCenterCode: 'CIN008',
+    experienceCenterName: 'Cinnamon Garden Exploration',
+    experienceCenterDescription: 'Explore a cinnamon garden with guided insights into its ecosystem.',
+    location: 'Pinnawala',
+    totalPrice: 50.0,
+  },
+  {
+    experienceCenterId: 9,
+    experienceCenterCode: 'CIN009',
+    experienceCenterName: 'Cinnamon Tea Blending',
+    experienceCenterDescription: 'Learn to blend cinnamon with local teas for a unique flavor experience.',
+    location: 'Arugam Bay',
+    totalPrice: 40.0,
+  },
 ];
 
 const ExperienceCenterManagement = () => {
@@ -74,6 +107,11 @@ const ExperienceCenterManagement = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
+  const [currentPage, setCurrentPage] = useState(1); // Current page for Pagination
+  const rowsPerPage = 5; // Number of rows per page
+
+  // Calculate the total number of pages
+  const pageCount = Math.ceil(experienceCenters.length / rowsPerPage);
 
   // Handle add experience
   const handleAddClick = () => {
@@ -135,6 +173,17 @@ const ExperienceCenterManagement = () => {
     setSnackbarOpen(false);
   };
 
+  // Handle page change for Pagination
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Get data for the current page
+  const paginatedData = experienceCenters.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
       <Typography variant="h4" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
@@ -163,7 +212,7 @@ const ExperienceCenterManagement = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {experienceCenters.map((experienceCenter) => (
+            {paginatedData.map((experienceCenter) => (
               <TableRow key={experienceCenter.experienceCenterId}>
                 <TableCell>{experienceCenter.experienceCenterCode}</TableCell>
                 <TableCell>{experienceCenter.experienceCenterName}</TableCell>
@@ -182,6 +231,23 @@ const ExperienceCenterManagement = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination */}
+      <Pagination
+        count={pageCount}
+        page={currentPage}
+        onChange={handlePageChange}
+        color="primary"
+        sx={{
+          marginTop: '1.5rem',
+          display: 'flex',
+          justifyContent: 'center',
+          "& .MuiPaginationItem-root.Mui-selected": {
+            backgroundColor: "#A0522D",
+            color: "white",
+          },
+        }}
+      />
 
       {/* Add/Edit Experience Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
