@@ -140,7 +140,7 @@ const OriginManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}
+        style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
       >
         Add Origin
       </Button>
@@ -263,7 +263,7 @@ const OriginManagement = () => {
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="origin-form" variant="contained" style={{ backgroundColor: '#291e10', color: '#FFFFFF' }}>
+          <Button type="submit" form="origin-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>
