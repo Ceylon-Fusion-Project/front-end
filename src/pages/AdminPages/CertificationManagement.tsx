@@ -20,7 +20,6 @@ import {
   Alert,
   AlertColor,
   Box,
-  styled,
 } from '@mui/material';
 import { Add, Edit, Delete, CloudUpload } from '@mui/icons-material';
 
@@ -52,18 +51,71 @@ const mockData = [
   },
 ];
 
-// Styled file upload button
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
+// Drag-and-drop file uploader component
+const ImageUploader = ({ value, onChange }: { value: File[]; onChange: (files: File[]) => void }) => {
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      onChange([e.dataTransfer.files[0]]); // Replace existing file
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      onChange([e.target.files[0]]); // Replace existing file
+    }
+  };
+
+  return (
+    <div
+      onDragEnter={handleDrag}
+      onDragOver={handleDrag}
+      onDragLeave={handleDrag}
+      onDrop={handleDrop}
+      style={{
+        border: dragActive ? '2px dashed #B45309' : '2px dashed #CBD5E1',
+        borderRadius: '8px',
+        padding: '20px',
+        textAlign: 'center',
+        backgroundColor: dragActive ? '#FFFBEB' : '#F8FAFC',
+        cursor: 'pointer',
+      }}
+    >
+      <input
+        type="file"
+        id="file-upload"
+        style={{ display: 'none' }}
+        onChange={handleChange}
+      />
+      <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
+        <CloudUpload style={{ color: '#B45309', fontSize: '40px' }} />
+        <p style={{ color: '#1E293B', marginTop: '10px' }}>
+          Drag & drop a file or <span style={{ color: '#B45309', textDecoration: 'underline' }}>browse</span>
+        </p>
+      </label>
+      {value.length > 0 && (
+        <div style={{ marginTop: '10px' }}>
+          <p style={{ color: '#1E293B', fontWeight: 'bold' }}>Uploaded File:</p>
+          <p style={{ color: '#1E293B' }}>{value[0].name}</p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CertificationManagement = () => {
   const [certifications, setCertifications] = useState(mockData);
@@ -73,12 +125,13 @@ const CertificationManagement = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File[]>([]);
 
   // Handle add certification
   const handleAddClick = () => {
     setEditMode(false);
     setCurrentCertification(null);
+    setFile([]); // Reset file when adding a new certification
     setOpenDialog(true);
   };
 
@@ -86,6 +139,7 @@ const CertificationManagement = () => {
   const handleEditClick = (certification: typeof mockData[0]) => {
     setEditMode(true);
     setCurrentCertification(certification);
+    setFile([]); // Reset file when editing (optional, depending on your use case)
     setOpenDialog(true);
   };
 
@@ -95,13 +149,6 @@ const CertificationManagement = () => {
     setSnackbarMessage('Certification deleted successfully!');
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
-  };
-
-  // Handle file upload
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setFile(event.target.files[0]);
-    }
   };
 
   // Handle save/update certification
@@ -118,7 +165,7 @@ const CertificationManagement = () => {
       certActiveState: true,
       createdDate: new Date().toISOString().split('T')[0],
       updatedDate: new Date().toISOString().split('T')[0],
-      certURL: file ? URL.createObjectURL(file) : currentCertification?.certURL || '',
+      certURL: file.length > 0 ? URL.createObjectURL(file[0]) : currentCertification?.certURL || '',
     };
 
     if (currentCertification) {
@@ -138,7 +185,13 @@ const CertificationManagement = () => {
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
     setOpenDialog(false);
-    setFile(null);
+    setFile([]); // Reset file after saving
+  };
+
+  // Handle dialog close
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setFile([]); // Reset file when dialog is closed without saving
   };
 
   // Handle snackbar close
@@ -203,7 +256,7 @@ const CertificationManagement = () => {
       </TableContainer>
 
       {/* Add/Edit Certification Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog open={openDialog} onClose={handleDialogClose}>
         <DialogTitle style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
           {editMode ? 'Edit Certification' : 'Add Certification'}
         </DialogTitle>
@@ -255,20 +308,15 @@ const CertificationManagement = () => {
                 defaultValue={currentCertification?.productID}
                 required
               />
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUpload />}
-                style={{ backgroundColor: '#B45309', color: '#FFFFFF', marginTop: '1rem' }}
-              >
-                Upload File
-                <VisuallyHiddenInput type="file" onChange={handleFileChange} />
-              </Button>
+              <div>
+                <label className="block font-semibold mb-1">Certification File</label>
+                <ImageUploader value={file} onChange={setFile} />
+              </div>
             </Box>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
+          <Button onClick={handleDialogClose} style={{ color: '#64748B' }}>
             Cancel
           </Button>
           <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>

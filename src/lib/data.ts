@@ -30,3 +30,16 @@ export const origins: Origin[] = [
   { id: 6, name: "Madagascar", country: "Madagascar" },
 ]
 
+
+export const roomTypes = [
+  { value: "SINGLE", label: "Single Room" },
+  { value: "DOUBLE", label: "Double Room" },
+  { value: "SUITE", label: "Suite" },
+  { value: "DELUXE", label: "Deluxe Room" },
+];
+
+export const accommodations = [
+  { id: 1, name: "Cinnamon Villa", country: "USA" },
+  { id: 2, name: "Cinnamon Garden", country: "UK" },
+  { id: 3, name: "Cinnamon Resort", country: "Canada" },
+];
