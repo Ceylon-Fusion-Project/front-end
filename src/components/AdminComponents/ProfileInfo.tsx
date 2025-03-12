@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {
-  Box, Card, CardContent, Typography, Button, TextField, Avatar, Grid, Snackbar, Alert
+  Box, Card, CardContent, Typography, Button, TextField, Avatar, Grid, Snackbar, Alert,
+  Accordion, AccordionSummary, AccordionDetails, Switch, FormControlLabel, Divider
 } from '@mui/material';
-import { Person, Edit } from '@mui/icons-material';
+import { Person, Edit, ExpandMore, Lock, Security, Notifications, Delete, CloudDownload } from '@mui/icons-material';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDropzone } from 'react-dropzone';
@@ -13,6 +14,7 @@ const ProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 30, height: 30, x: 0, y: 0 });
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   // Mock user data - would come from API
@@ -128,7 +130,7 @@ const ProfileInfo = () => {
                       <Person sx={{ fontSize: 80 }} />
                     )}
                   </Avatar>
-                  <Typography variant="body2" color= '#4c381e'>
+                  <Typography variant="body2" color="#4c381e">
                     Click to upload a photo
                   </Typography>
                 </Box>
@@ -237,6 +239,72 @@ const ProfileInfo = () => {
             </Grid>
           </Grid>
         </Grid>
+
+        {/* Additional Features */}
+        <Accordion sx={{ mt: 3 }}>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">Security Settings</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>Change Password</Typography>
+              <TextField
+                fullWidth
+                label="Current Password"
+                type="password"
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="New Password"
+                type="password"
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="Confirm New Password"
+                type="password"
+                sx={{ mb: 2 }}
+              />
+              <Button variant="contained" sx={{ backgroundColor: '#A0522D', '&:hover': { backgroundColor: '#8B4513' } }}>
+                Update Password
+              </Button>
+            </Box>
+
+            <Divider sx={{ my: 3 }} />
+
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>Two-Factor Authentication</Typography>
+              <FormControlLabel
+                control={<Switch checked={twoFactorEnabled} onChange={() => setTwoFactorEnabled(!twoFactorEnabled)} />}
+                label="Enable Two-Factor Authentication"
+              />
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+
+        <Accordion sx={{ mt: 3 }}>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            <Typography variant="h6">Account Management</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>Export Data</Typography>
+              <Button variant="outlined" startIcon={<CloudDownload />} sx={{ mb: 2 }}>
+                Export Profile Data
+              </Button>
+            </Box>
+
+            <Divider sx={{ my: 3 }} />
+
+            <Box>
+              <Typography variant="subtitle1" gutterBottom>Delete Account</Typography>
+              <Button variant="outlined" color="error" startIcon={<Delete />}>
+                Delete Account
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </CardContent>
 
       <Snackbar
