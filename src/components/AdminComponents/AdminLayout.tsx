@@ -4,6 +4,7 @@ import {
   Menu, MenuItem, Badge, Tooltip 
 } from '@mui/material';
 import { Menu as MenuIcon, Notifications, Settings } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
 import Sidebar from './Sidebar';
 
 interface AdminLayoutProps {
@@ -14,6 +15,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate(); // Use React Router's useNavigate hook
 
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -88,14 +90,14 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-              <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                <MenuItem onClick={() => navigate('/admin/profile')}>My Profile</MenuItem> {/* Use navigate */}
               <MenuItem onClick={handleMenuClose}>Account Settings</MenuItem>
               <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
         <Toolbar />
-        {children}
+        {children} {/* Render the nested routes */}
       </Box>
     </Box>
   );

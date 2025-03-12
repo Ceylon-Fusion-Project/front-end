@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
         '& .MuiDrawer-paper': {
           width: 240,
           boxSizing: 'border-box',
-          backgroundColor: '#4c381e', // Modern dark blue
+          backgroundColor: '#4c381e', // Modern dark brown
           color: 'white',
         },
       }}
