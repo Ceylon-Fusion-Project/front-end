@@ -1,11 +1,20 @@
-import { useState } from 'react';
-import { Box, Card, CardContent, Typography, Button, TextField, Avatar, Grid, Snackbar, Alert } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import {
+  Box, Card, CardContent, Typography, Button, TextField, Avatar, Grid, Snackbar, Alert
+} from '@mui/material';
 import { Person, Edit } from '@mui/icons-material';
+import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
+import { useDropzone } from 'react-dropzone';
 
 const ProfileInfo = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
-  
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [crop, setCrop] = useState<Crop>({ unit: '%', width: 30, height: 30, x: 0, y: 0 });
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
   // Mock user data - would come from API
   const [userData, setUserData] = useState({
     name: 'John Doe',
@@ -13,9 +22,54 @@ const ProfileInfo = () => {
     phone: '+94 71 234 5678',
     address: '123 Temple Road, Colombo',
   });
-  
-  const [formData, setFormData] = useState({...userData});
-  
+
+  const [formData, setFormData] = useState({ ...userData });
+
+  // Handle file upload
+  const onDrop = (acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImageSrc(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: { 'image/*': [] } });
+
+  // Handle image crop
+  const onImageLoad = (img: HTMLImageElement) => {
+    imgRef.current = img;
+  };
+
+  const onCropComplete = (crop: Crop) => {
+    if (imgRef.current && crop.width && crop.height) {
+      const canvas = document.createElement('canvas');
+      const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+      const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext('2d');
+
+      if (ctx) {
+        ctx.drawImage(
+          imgRef.current,
+          crop.x! * scaleX,
+          crop.y! * scaleY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          crop.width,
+          crop.height
+        );
+
+        const croppedImageUrl = canvas.toDataURL('image/jpeg');
+        setCroppedImage(croppedImageUrl);
+      }
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -23,56 +77,89 @@ const ProfileInfo = () => {
       [name]: value,
     });
   };
-  
+
   const handleSubmit = () => {
     // Here you would make an API call to update the user data
-    setUserData({...formData});
+    setUserData({ ...formData });
     setIsEditing(false);
     setNotification({
       open: true,
       message: 'Profile updated successfully!',
-      severity: 'success'
+      severity: 'success',
     });
   };
-  
+
   return (
-    <Card>
+    <Card sx={{ boxShadow: 3, borderRadius: 2, backgroundColor: '#F8FAFC', p: 3 }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" component="h2" sx={{ flexGrow: 1 }}>
+          <Typography variant="h5" component="h2" sx={{ flexGrow: 1, color: '#4c381e', fontWeight: 'bold' }}>
             Profile Information
           </Typography>
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             startIcon={isEditing ? null : <Edit />}
             onClick={() => setIsEditing(!isEditing)}
-            sx={{ mr: 1 }}
+            sx={{ mr: 1, color: '#A0522D', borderColor: '#A0522D', '&:hover': { borderColor: '#8B4513' } }}
           >
             {isEditing ? 'Cancel' : 'Edit Profile'}
           </Button>
           {isEditing && (
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               onClick={handleSubmit}
-              sx={{ backgroundColor: '#A0522D' }}
+              sx={{ backgroundColor: '#A0522D', '&:hover': { backgroundColor: '#8B4513' } }}
             >
               Save Changes
             </Button>
           )}
         </Box>
-        
+
         <Grid container spacing={3}>
           <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Avatar sx={{ width: 120, height: 120, bgcolor: '#D2691E', mb: 2 }}>
-              <Person sx={{ fontSize: 80 }} />
-            </Avatar>
-            {isEditing && (
-              <Button variant="outlined" size="small">
-                Upload Photo
-              </Button>
+            {isEditing ? (
+              <Box>
+                <Box {...getRootProps()} sx={{ textAlign: 'center', cursor: 'pointer' }}>
+                  <input {...getInputProps()} />
+                  <Avatar sx={{ width: 120, height: 120, bgcolor: '#D2691E', mb: 2 }}>
+                    {croppedImage ? (
+                      <img src={croppedImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <Person sx={{ fontSize: 80 }} />
+                    )}
+                  </Avatar>
+                  <Typography variant="body2" color= '#4c381e'>
+                    Click to upload a photo
+                  </Typography>
+                </Box>
+                {imageSrc && (
+                  <Box sx={{ mt: 2 }}>
+                    <ReactCrop
+                      crop={crop}
+                      onChange={(newCrop: Crop) => setCrop(newCrop)}
+                      onComplete={onCropComplete}
+                    >
+                      <img
+                        src={imageSrc}
+                        alt="Crop me"
+                        onLoad={(e) => onImageLoad(e.currentTarget)}
+                        style={{ maxWidth: '100%', borderRadius: '8px' }}
+                      />
+                    </ReactCrop>
+                  </Box>
+                )}
+              </Box>
+            ) : (
+              <Avatar sx={{ width: 120, height: 120, bgcolor: '#D2691E', mb: 2 }}>
+                {croppedImage ? (
+                  <img src={croppedImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  <Person sx={{ fontSize: 80 }} />
+                )}
+              </Avatar>
             )}
           </Grid>
-          
+
           <Grid item xs={12} md={8}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -83,6 +170,7 @@ const ProfileInfo = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
+                    sx={{ mb: 2 }}
                   />
                 ) : (
                   <>
@@ -91,7 +179,7 @@ const ProfileInfo = () => {
                   </>
                 )}
               </Grid>
-              
+
               <Grid item xs={12}>
                 {isEditing ? (
                   <TextField
@@ -101,6 +189,7 @@ const ProfileInfo = () => {
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    sx={{ mb: 2 }}
                   />
                 ) : (
                   <>
@@ -109,7 +198,7 @@ const ProfileInfo = () => {
                   </>
                 )}
               </Grid>
-              
+
               <Grid item xs={12}>
                 {isEditing ? (
                   <TextField
@@ -118,6 +207,7 @@ const ProfileInfo = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
+                    sx={{ mb: 2 }}
                   />
                 ) : (
                   <>
@@ -126,7 +216,7 @@ const ProfileInfo = () => {
                   </>
                 )}
               </Grid>
-              
+
               <Grid item xs={12}>
                 {isEditing ? (
                   <TextField
@@ -135,6 +225,7 @@ const ProfileInfo = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
+                    sx={{ mb: 2 }}
                   />
                 ) : (
                   <>
@@ -147,11 +238,11 @@ const ProfileInfo = () => {
           </Grid>
         </Grid>
       </CardContent>
-      
-      <Snackbar 
-        open={notification.open} 
-        autoHideDuration={6000} 
-        onClose={() => setNotification({...notification, open: false})}
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={() => setNotification({ ...notification, open: false })}
       >
         <Alert severity={notification.severity}>{notification.message}</Alert>
       </Snackbar>
