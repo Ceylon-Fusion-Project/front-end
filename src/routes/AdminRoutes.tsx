@@ -8,6 +8,8 @@ import Certifications from '../pages/AdminPages/CertificationManagement';
 import Bookings from '../pages/AdminPages/BookingManagement';
 import AdminProfile from '../pages/AdminPages/AdminProfile';
 import ExperienceCenterManagement from '../components/AdminComponents/BookingComponents/ExperienceCenterManagement';
+import AccommodationManagement from '@/components/AdminComponents/BookingComponents/AccommodationManagement';
+
 
 export default function AdminRoutes() {
   return (
@@ -57,12 +59,20 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
-      {/* Experience Center Management Page */}
+      {/* Experience Center Management  */}
       <Route
         path="experience-center-management"
         element={
           <AdminLayout>
             <div><ExperienceCenterManagement /></div>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="accommodation-management"
+        element={
+          <AdminLayout>
+            <div><AccommodationManagement /></div>
           </AdminLayout>
         }
       />
