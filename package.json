@@ -46,7 +46,7 @@
     "react-hook-form": "^7.54.2",
     "react-icons": "^5.5.0",
     "react-leaflet": "^5.0.0",
-    "react-router-dom": "^7.1.5",
+    "react-router-dom": "^7.2.0",
     "rechart": "^0.0.1",
     "recharts": "^2.15.1",
     "sonner": "^2.0.1",

@@ -6,6 +6,7 @@ import ProductManagement from '../pages/AdminPages/ProductManagement';
 import Origins from '../pages/AdminPages/OriginManagement';
 import Certifications from '../pages/AdminPages/CertificationManagement';
 // import Bookings from '../pages/AdminPages/Bookings';
+import AdminProfile from '../pages/AdminPages/AdminProfile';
 
 export default function AdminRoutes() {
   return (
@@ -55,6 +56,19 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      {/* Admin Profile Page */}
+      <Route
+        path="profile"
+        element={
+          <AdminLayout>
+            <div><AdminProfile /></div>
+          </AdminLayout>
+        }
+      />
+      
+
     </Routes>
+
+    
   );
 }
