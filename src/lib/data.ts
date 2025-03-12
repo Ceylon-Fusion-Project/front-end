@@ -43,3 +43,9 @@ export const accommodations = [
   { id: 2, name: "Cinnamon Garden", country: "UK" },
   { id: 3, name: "Cinnamon Resort", country: "Canada" },
 ];
+
+export const experienceCenters = [
+  { id: 1, name: "Experience Center A" },
+  { id: 2, name: "Experience Center B" },
+  { id: 3, name: "Experience Center C" },
+];
