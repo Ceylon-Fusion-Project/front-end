@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Typography, Grid, Card, CardContent, CardActionArea, Box } from '@mui/material';
+import { Container, Typography, Grid, Card, CardContent, CardActionArea } from '@mui/material';
 import {
   LocalActivity as PackageIcon,
   Hotel as AccommodationIcon,
@@ -38,7 +37,7 @@ const BookingManagement = () => {
   // Navigation handlers
   const navigateToPackageManagement = () => navigate('/package-management');
   const navigateToAccommodationManagement = () => navigate('/admin/accommodation-management');
-  const navigateToRoomManagement = () => navigate('/room-management');
+  const navigateToRoomManagement = () => navigate('/admin/room-management');
   const navigateToExperienceCenterManagement = () => navigate('/admin/experience-center-management');
   const navigateToEventManagement = () => navigate('/event-management');
 

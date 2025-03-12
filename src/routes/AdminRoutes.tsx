@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
 import Dashboard from '../pages/AdminPages/Dashboard';
@@ -9,6 +8,7 @@ import Bookings from '../pages/AdminPages/BookingManagement';
 import AdminProfile from '../pages/AdminPages/AdminProfile';
 import ExperienceCenterManagement from '../components/AdminComponents/BookingComponents/ExperienceCenterManagement';
 import AccommodationManagement from '@/components/AdminComponents/BookingComponents/AccommodationManagement';
+import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomManagement';
 
 
 export default function AdminRoutes() {
@@ -76,6 +76,15 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      <Route
+        path="room-management"
+        element={
+          <AdminLayout>
+            <div><RoomManagement /></div>
+          </AdminLayout>
+        }
+      />
+
       {/* Admin Profile Page */}
       <Route
         path="profile"
