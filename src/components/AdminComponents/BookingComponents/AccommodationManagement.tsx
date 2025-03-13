@@ -229,7 +229,7 @@ const AccommodationManagement = () => {
 
   // Handle view rooms
   const handleViewRooms = (accommodationId: number) => {
-    navigate(`rooms/${accommodationId}`); // Navigate to room details page
+    navigate(`/admin/accommodation-management/rooms/${accommodationId}`); // Navigate to room details page
   };
 
   return (
