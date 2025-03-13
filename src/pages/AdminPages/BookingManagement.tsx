@@ -39,7 +39,7 @@ const BookingManagement = () => {
   const navigateToAccommodationManagement = () => navigate('/admin/accommodation-management');
   const navigateToRoomManagement = () => navigate('/admin/room-management');
   const navigateToExperienceCenterManagement = () => navigate('/admin/experience-center-management');
-  const navigateToEventManagement = () => navigate('/event-management');
+  const navigateToEventManagement = () => navigate('/admin/event-management');
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
