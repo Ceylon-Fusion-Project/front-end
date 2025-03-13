@@ -9,7 +9,7 @@ import AdminProfile from '../pages/AdminPages/AdminProfile';
 import ExperienceCenterManagement from '../components/AdminComponents/BookingComponents/ExperienceCenterManagement';
 import AccommodationManagement from '@/components/AdminComponents/BookingComponents/AccommodationManagement';
 import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomManagement';
-
+import RoomDetails from '@/components/AdminComponents/BookingComponents/RoomDetails';
 
 export default function AdminRoutes() {
   return (
@@ -50,7 +50,7 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
-      {/* Booking Management Page */}
+      {/* Booking Management Page  Navigations*/}
       <Route
         path="bookings"
         element={
@@ -73,6 +73,15 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <div><AccommodationManagement /></div>
+          </AdminLayout>
+        }
+      />
+      {/* Room Details Page */}
+      <Route
+        path="accommodation-management/rooms/:accommodationId"
+        element={
+          <AdminLayout>
+            <div><RoomDetails /></div>
           </AdminLayout>
         }
       />
