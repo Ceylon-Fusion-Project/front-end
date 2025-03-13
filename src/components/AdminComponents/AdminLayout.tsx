@@ -4,7 +4,7 @@ import {
   Menu, MenuItem, Badge, Tooltip 
 } from '@mui/material';
 import { Menu as MenuIcon, Notifications, Settings } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link and useNavigate
+import { useNavigate } from 'react-router-dom'; // Import Link and useNavigate
 import Sidebar from './Sidebar';
 
 interface AdminLayoutProps {
