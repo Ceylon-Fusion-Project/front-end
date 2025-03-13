@@ -11,6 +11,7 @@ import AccommodationManagement from '@/components/AdminComponents/BookingCompone
 import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomManagement';
 import RoomDetails from '@/components/AdminComponents/BookingComponents/RoomDetails';
 import EventDetails from '@/components/AdminComponents/BookingComponents/EventDetails';
+import EventManagement from '@/components/AdminComponents/BookingComponents/EventManagement';
 
 export default function AdminRoutes() {
   return (
@@ -103,6 +104,15 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      <Route
+        path="event-management"
+        element={
+          <AdminLayout>
+            <div><EventManagement /></div>
+          </AdminLayout>
+        }
+      />
+      
 
       {/* Admin Profile Page */}
       <Route
