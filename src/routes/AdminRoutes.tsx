@@ -1,12 +1,15 @@
-//import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../components/AdminComponents/AdminLayout';
- import Dashboard from '../pages/AdminPages/Dashboard';
+import Dashboard from '../pages/AdminPages/Dashboard';
 import ProductManagement from '../pages/AdminPages/ProductManagement';
 import Origins from '../pages/AdminPages/OriginManagement';
 import Certifications from '../pages/AdminPages/CertificationManagement';
-// import Bookings from '../pages/AdminPages/Bookings';
+import Bookings from '../pages/AdminPages/BookingManagement';
 import AdminProfile from '../pages/AdminPages/AdminProfile';
+import ExperienceCenterManagement from '../components/AdminComponents/BookingComponents/ExperienceCenterManagement';
+import AccommodationManagement from '@/components/AdminComponents/BookingComponents/AccommodationManagement';
+import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomManagement';
+
 
 export default function AdminRoutes() {
   return (
@@ -52,10 +55,36 @@ export default function AdminRoutes() {
         path="bookings"
         element={
           <AdminLayout>
-            <div>{/* <Bookings /> */}</div>
+            <div><Bookings /></div>
           </AdminLayout>
         }
       />
+      {/* Experience Center Management  */}
+      <Route
+        path="experience-center-management"
+        element={
+          <AdminLayout>
+            <div><ExperienceCenterManagement /></div>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="accommodation-management"
+        element={
+          <AdminLayout>
+            <div><AccommodationManagement /></div>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="room-management"
+        element={
+          <AdminLayout>
+            <div><RoomManagement /></div>
+          </AdminLayout>
+        }
+      />
+
       {/* Admin Profile Page */}
       <Route
         path="profile"
@@ -65,10 +94,6 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
-      
-
     </Routes>
-
-    
   );
 }

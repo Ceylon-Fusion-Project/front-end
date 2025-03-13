@@ -163,9 +163,9 @@ const AccommodationManagement = () => {
   };
 
   // Handle edit accommodation
-  const handleEditClick = (accommodation: SetStateAction<{ accommodationId: number; accommodationCode: string; accommodationName: string; accommodationType: string; description: string; location: string; } | null>) => {
+  const handleEditClick = (accommodation: { accommodationId: number; accommodationCode: string; accommodationName: string; accommodationType: string; description: string; location: string; rooms: { roomId: number; roomCode: string; roomNumber: string; roomType: string; beds: number; pricePerNight: number; }[]; }) => {
     setEditMode(true);
-    setCurrentAccommodation(accommodation);
+    setCurrentAccommodation(accommodation as typeof mockData[0]);
     setOpenDialog(true);
   };
 
