@@ -334,7 +334,7 @@ const ExperienceCenterManagement = () => {
 
   // Handle view events
   const handleViewEvents = (experienceCenterId: number) => {
-    navigate(`events/${experienceCenterId}`); // Navigate to events details page
+    navigate(`/admin/experience-center-management/events/${experienceCenterId}`); // Navigate to events details page
   };
 
   return (

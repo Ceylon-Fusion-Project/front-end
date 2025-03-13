@@ -10,6 +10,7 @@ import ExperienceCenterManagement from '../components/AdminComponents/BookingCom
 import AccommodationManagement from '@/components/AdminComponents/BookingComponents/AccommodationManagement';
 import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomManagement';
 import RoomDetails from '@/components/AdminComponents/BookingComponents/RoomDetails';
+import EventDetails from '@/components/AdminComponents/BookingComponents/EventDetails';
 
 export default function AdminRoutes() {
   return (
@@ -82,6 +83,15 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <div><RoomDetails /></div>
+          </AdminLayout>
+        }
+      />
+      {/*Event  Details Page */}
+      <Route
+        path="experience-center-management/events/:experienceCenterId"
+        element={
+          <AdminLayout>
+            <div><EventDetails /></div>
           </AdminLayout>
         }
       />
