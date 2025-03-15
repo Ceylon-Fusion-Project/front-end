@@ -240,7 +240,7 @@ const ProfileInfo = () => {
           </Grid>
         </Grid>
 
-        {/* Additional Features */}
+        {/* Additional Features
         <Accordion sx={{ mt: 3 }}>
           <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography variant="h6">Security Settings</Typography>
@@ -304,7 +304,7 @@ const ProfileInfo = () => {
               </Button>
             </Box>
           </AccordionDetails>
-        </Accordion>
+        </Accordion> */}
       </CardContent>
 
       <Snackbar
