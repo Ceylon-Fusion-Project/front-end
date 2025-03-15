@@ -91,7 +91,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
                 <MenuItem onClick={() => navigate('/admin/profile')}>My Profile</MenuItem> {/* Use navigate */}
-              <MenuItem onClick={handleMenuClose}>Account Settings</MenuItem>
+              <MenuItem onClick={() => navigate('/admin/profilesettings')}>Account Settings</MenuItem>
               <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
             </Menu>
           </Toolbar>

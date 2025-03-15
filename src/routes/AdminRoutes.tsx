@@ -12,6 +12,7 @@ import RoomManagement from '@/components/AdminComponents/BookingComponents/RoomM
 import RoomDetails from '@/components/AdminComponents/BookingComponents/RoomDetails';
 import EventDetails from '@/components/AdminComponents/BookingComponents/EventDetails';
 import EventManagement from '@/components/AdminComponents/BookingComponents/EventManagement';
+import AdminSettings from '@/pages/AdminPages/AdminSettings';
 
 export default function AdminRoutes() {
   return (
@@ -120,6 +121,14 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <div><AdminProfile /></div>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="profilesettings"
+        element={
+          <AdminLayout>
+            <div><AdminSettings /></div>
           </AdminLayout>
         }
       />
