@@ -45,7 +45,7 @@ const ProfileSidebar = ({ isOpen, toggleSidebar }: ProfileSidebarProps) => {
           { text: 'Profile', icon: <User />, path: '/' },
           { text: 'My Orders', icon: <ShoppingBag />, path: '/orders' },
           { text: 'My Bookings', icon: <CalendarCheck />, path: '/bookings' },
-          { text: 'Dashboard', icon: <LayoutDashboard />, path: '/dashboard' },
+          //{ text: 'Dashboard', icon: <LayoutDashboard />, path: '/dashboard' },
           { text: 'Settings', icon: <Settings />, path: '/settings' },
         ].map((item) => (
           <ListItem key={item.text} disablePadding>
