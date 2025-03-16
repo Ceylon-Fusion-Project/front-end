@@ -3,7 +3,7 @@ import OrdersPage from '@/pages/AccountPages/OrdersPage';
 import ProfileHome from '@/pages/AccountPages/ProfileHome';
 import SettingsPage from '@/pages/AccountPages/SettingsPage';
 import { Routes, Route } from 'react-router-dom';
-// import BookingsPage from '@/pages/AccountPages/BookingsPage';
+import BookingsPage from '@/pages/AccountPages/BookingsPage';
 // import SettingsPage from '@/pages/AccountPages/SettingsPage';
 // import BuyerDashboard from '@/pages/AccountPages/BuyerDashboard';
 
@@ -27,14 +27,14 @@ export default function ProfileRoutes() {
           </ProfileLayout>
         }
       />
-      {/* <Route
+      <Route
         path="bookings"
         element={
           <ProfileLayout>
             <BookingsPage />
           </ProfileLayout>
         }
-      /> */}
+      />
       <Route
         path="settings"
         element={
