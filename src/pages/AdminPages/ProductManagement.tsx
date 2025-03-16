@@ -486,7 +486,7 @@ const ProductManagement = () => {
             color="primary"
             startIcon={<Add />}
             onClick={handleAddClick}
-            style={{ backgroundColor: "#291e10", color: "#FFFFFF" }}
+            style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}
           >
             Add Product
           </Button>
