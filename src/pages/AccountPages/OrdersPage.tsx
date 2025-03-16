@@ -60,7 +60,7 @@ const mockOrders: Order[] = [
       zip: "10300",
       country: "Sri Lanka",
     },
-    paymentMethod: "PayPal",
+    paymentMethod: "creadit Card",
     trackingNumber: "SL9876543209",
   },
   {
