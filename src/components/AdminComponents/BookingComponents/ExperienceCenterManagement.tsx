@@ -20,6 +20,7 @@ import {
   Alert,
   AlertColor,
   Pagination,
+  Grid,
 } from '@mui/material';
 import { Add, Edit, Delete, Visibility } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -418,54 +419,73 @@ const ExperienceCenterManagement = () => {
         </DialogTitle>
         <DialogContent>
           <form id="experience-center-form" onSubmit={handleSave}>
-            <TextField
-              label="Experience Center Code"
-              name="experienceCenterCode"
-              fullWidth
-              margin="normal"
-              defaultValue={currentExperienceCenter?.experienceCenterCode}
-              required
-            />
-            <TextField
-              label="Experience Center Name"
-              name="experienceCenterName"
-              fullWidth
-              margin="normal"
-              defaultValue={currentExperienceCenter?.experienceCenterName}
-              required
-            />
-            <TextField
-              label="Experience Center Description"
-              name="experienceCenterDescription"
-              fullWidth
-              margin="normal"
-              defaultValue={currentExperienceCenter?.experienceCenterDescription}
-              required
-            />
-            <TextField
-              label="Location"
-              name="location"
-              fullWidth
-              margin="normal"
-              defaultValue={currentExperienceCenter?.location}
-              required
-            />
-            <TextField
-              label="Total Price"
-              name="totalPrice"
-              type="number"
-              fullWidth
-              margin="normal"
-              defaultValue={currentExperienceCenter?.totalPrice}
-              required
-            />
+            <Grid container spacing={2}> {/* Use Grid container with spacing */}
+              <Grid item xs={12} sm={6}> {/* First column */}
+                <TextField
+                  label="Experience Center Code"
+                  name="experienceCenterCode"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.experienceCenterCode}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}> {/* Second column */}
+                <TextField
+                  label="Experience Center Name"
+                  name="experienceCenterName"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.experienceCenterName}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}> {/* Full-width description field */}
+                <TextField
+                  label="Experience Center Description"
+                  name="experienceCenterDescription"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.experienceCenterDescription}
+                  required
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Location"
+                  name="location"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.location}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Total Price"
+                  name="totalPrice"
+                  type="number"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.totalPrice}
+                  required
+                />
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="experience-center-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
+          <Button
+            type="submit"
+            form="experience-center-form"
+            variant="contained"
+            style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
+          >
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>

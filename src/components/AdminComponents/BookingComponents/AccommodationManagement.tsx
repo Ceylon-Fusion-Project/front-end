@@ -24,6 +24,7 @@ import {
   FormControl,
   InputLabel,
   Pagination,
+  Grid,
 } from '@mui/material';
 import { Add, Edit, Delete, Visibility } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'; // For navigation
@@ -313,59 +314,78 @@ const AccommodationManagement = () => {
         </DialogTitle>
         <DialogContent>
           <form id="accommodation-form" onSubmit={handleSave}>
-            <TextField
-              label="Accommodation Code"
-              name="accommodationCode"
-              fullWidth
-              margin="normal"
-              defaultValue={currentAccommodation?.accommodationCode}
-              required
-            />
-            <TextField
-              label="Accommodation Name"
-              name="accommodationName"
-              fullWidth
-              margin="normal"
-              defaultValue={currentAccommodation?.accommodationName}
-              required
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Accommodation Type</InputLabel>
-              <Select
-                label="Accommodation Type"
-                name="accommodationType"
-                defaultValue={currentAccommodation?.accommodationType || ''}
-                required
-              >
-                <MenuItem value="Hotel">Hotel</MenuItem>
-                <MenuItem value="Resort">Resort</MenuItem>
-                <MenuItem value="Villa">Villa</MenuItem>
-                <MenuItem value="Guest House">Guest House</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              label="Description"
-              name="description"
-              fullWidth
-              margin="normal"
-              defaultValue={currentAccommodation?.description}
-              required
-            />
-            <TextField
-              label="Location"
-              name="location"
-              fullWidth
-              margin="normal"
-              defaultValue={currentAccommodation?.location}
-              required
-            />
+            <Grid container spacing={2}> {/* Use Grid container with spacing */}
+              <Grid item xs={12} sm={6}> {/* First column */}
+                <TextField
+                  label="Accommodation Code"
+                  name="accommodationCode"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentAccommodation?.accommodationCode}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}> {/* Second column */}
+                <TextField
+                  label="Accommodation Name"
+                  name="accommodationName"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentAccommodation?.accommodationName}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>Accommodation Type</InputLabel>
+                  <Select
+                    label="Accommodation Type"
+                    name="accommodationType"
+                    defaultValue={currentAccommodation?.accommodationType || ''}
+                    required
+                  >
+                    <MenuItem value="Hotel">Hotel</MenuItem>
+                    <MenuItem value="Resort">Resort</MenuItem>
+                    <MenuItem value="Villa">Villa</MenuItem>
+                    <MenuItem value="Guest House">Guest House</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Location"
+                  name="location"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentAccommodation?.location}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}> {/* Full-width description field */}
+                <TextField
+                  label="Description"
+                  name="description"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentAccommodation?.description}
+                  required
+                  multiline
+                  rows={4}
+                />
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
             Cancel
           </Button>
-          <Button type="submit" form="accommodation-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
+          <Button
+            type="submit"
+            form="accommodation-form"
+            variant="contained"
+            style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
+          >
             {editMode ? 'Update' : 'Save'}
           </Button>
         </DialogActions>
