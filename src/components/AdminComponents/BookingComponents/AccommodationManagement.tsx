@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import {
   Container,
   Typography,
@@ -217,7 +217,7 @@ const AccommodationManagement = () => {
   };
 
   // Handle page change for Pagination
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 

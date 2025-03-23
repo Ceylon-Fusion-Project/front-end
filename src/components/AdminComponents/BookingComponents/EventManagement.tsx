@@ -163,7 +163,7 @@ const EventManagement = () => {
   );
 
   // Handle page change
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
@@ -242,7 +242,7 @@ const EventManagement = () => {
 
       {showEventForm ? (
         // Render EventForm instead of table
-        <EventForm event={currentEvent} onSave={handleSave} onCancel={handleCancel} />
+        <EventForm event={currentEvent ?? undefined} onSave={handleSave} onCancel={handleCancel} />
       ) : (
         <>
           <Button
