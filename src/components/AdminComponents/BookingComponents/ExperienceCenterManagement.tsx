@@ -322,7 +322,7 @@ const ExperienceCenterManagement = () => {
   };
 
   // Handle page change for Pagination
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
