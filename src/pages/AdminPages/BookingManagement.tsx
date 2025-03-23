@@ -35,7 +35,7 @@ const BookingManagement = () => {
   const navigate = useNavigate();
 
   // Navigation handlers
-  const navigateToPackageManagement = () => navigate('/package-management');
+  const navigateToPackageManagement = () => navigate('/admin/package-management');
   const navigateToAccommodationManagement = () => navigate('/admin/accommodation-management');
   const navigateToRoomManagement = () => navigate('/admin/room-management');
   const navigateToExperienceCenterManagement = () => navigate('/admin/experience-center-management');
