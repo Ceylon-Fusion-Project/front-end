@@ -77,14 +77,14 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
-      <Route
+      {/* <Route
         path="package-management/add-package"
         element={
           <AdminLayout>
             <div><PackageForm /></div>
           </AdminLayout>
         }
-      />
+      /> */}
       <Route
         path="package-management/package-details/:packageId"
         element={
