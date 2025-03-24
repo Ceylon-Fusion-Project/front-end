@@ -15,8 +15,9 @@ import EventManagement from '@/components/AdminComponents/BookingComponents/Even
 import AdminSettings from '@/pages/AdminPages/AdminSettings';
 import PackageManagement from '@/components/AdminComponents/BookingComponents/PackageManagement';
 import PackageForm from '@/components/AdminComponents/BookingComponents/PackageForm';
+import PackageDetails from '@/components/AdminComponents/BookingComponents/PackageDetails';
 
-//import { PackageDetails } from '@/components/AdminComponents/BookingComponents/PackageDetails';
+
 
 export default function AdminRoutes() {
   return (
@@ -84,14 +85,14 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
-      {/* <Route
+      <Route
         path="package-management/package-details/:packageId"
         element={
           <AdminLayout>
             <div><PackageDetails /></div>
           </AdminLayout>
         }
-      /> */}
+      />
       {/* Experience Center Management  */}
       <Route
         path="experience-center-management"
