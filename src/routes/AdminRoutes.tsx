@@ -13,6 +13,11 @@ import RoomDetails from '@/components/AdminComponents/BookingComponents/RoomDeta
 import EventDetails from '@/components/AdminComponents/BookingComponents/EventDetails';
 import EventManagement from '@/components/AdminComponents/BookingComponents/EventManagement';
 import AdminSettings from '@/pages/AdminPages/AdminSettings';
+import PackageManagement from '@/components/AdminComponents/BookingComponents/PackageManagement';
+import PackageForm from '@/components/AdminComponents/BookingComponents/PackageForm';
+import PackageDetails from '@/components/AdminComponents/BookingComponents/PackageDetails';
+
+
 
 export default function AdminRoutes() {
   return (
@@ -59,6 +64,32 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <div><Bookings /></div>
+          </AdminLayout>
+        }
+      />
+
+         {/* Package Management Page  Navigations*/}
+      <Route
+        path="package-management"
+        element={
+          <AdminLayout>
+            <div><PackageManagement /></div>
+          </AdminLayout>
+        }
+      />
+      {/* <Route
+        path="package-management/add-package"
+        element={
+          <AdminLayout>
+            <div><PackageForm /></div>
+          </AdminLayout>
+        }
+      /> */}
+      <Route
+        path="package-management/package-details/:packageId"
+        element={
+          <AdminLayout>
+            <div><PackageDetails /></div>
           </AdminLayout>
         }
       />
