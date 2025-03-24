@@ -1,3 +1,4 @@
+// Updated PackageForm.tsx
 import React, { useState } from 'react';
 import {
   Container,
@@ -11,6 +12,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
+import { ImageUploader } from '@/components/AdminComponents/ImageUploader';
 
 // Event and Room types
 interface Room {
@@ -51,8 +53,8 @@ interface LocalPackage {
 
 interface PackageFormProps {
   packageData?: LocalPackage;
-  onSave: (pkg: LocalPackage) => void;
-  onCancel: () => void;
+  onSave?: (pkg: LocalPackage) => void;
+  onCancel?: () => void;
 }
 
 const roomTypes = [
@@ -162,14 +164,16 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
       return;
     }
 
-    onSave(formData);
+    if (onSave) {
+      onSave(formData);
+    }
     setSnackbarMessage(packageData ? 'Package updated successfully!' : 'Package added successfully!');
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
   };
 
   const handleCancel = () => {
-    onCancel();
+    onCancel?.();
   };
 
   const handleSnackbarClose = () => {
@@ -307,6 +311,19 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
                           required
                         />
                       </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
+                          Room Images
+                        </Typography>
+                        <ImageUploader
+                          value={room.roomImageURLs || []}
+                          onChange={(urls: string[]) => {
+                          const updatedRooms: Room[] = [...formData.rooms];
+                          updatedRooms[index].roomImageURLs = urls;
+                          setFormData({ ...formData, rooms: updatedRooms });
+                          }}
+                        />
+                        </Grid>
                     </Grid>
                   </Paper>
                 ))}
@@ -397,6 +414,19 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
                           }}
                         />
                       </Grid>
+                        <Grid item xs={12}>
+                        <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
+                          Event Images
+                        </Typography>
+                        <ImageUploader
+                          value={event.eventImageURLs || []}
+                          onChange={(urls: string[]) => {
+                          const updatedEvents: Event[] = [...formData.events];
+                          updatedEvents[index].eventImageURLs = urls;
+                          setFormData({ ...formData, events: updatedEvents });
+                          }}
+                        />
+                        </Grid>
                     </Grid>
                   </Paper>
                 ))}
