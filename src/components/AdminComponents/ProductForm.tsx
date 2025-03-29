@@ -506,8 +506,6 @@ import { ProductPreview } from "./ProductPreview";
 import { categoryTypes, measuringUnitTypes, origins } from "../../lib/data";
 
 
-
-
 const formSchema = z.object({
   productCode: z.string().min(2, {
     message: "Product code must be at least 2 characters.",
@@ -523,7 +521,7 @@ const formSchema = z.object({
   }),
   categoryType: z.string().nonempty("Please select a category."),
   measuringUnitType: z.string().nonempty("Please select a measuring unit."),
-  productOrigin: z.coerce.number().min(1, {
+  productOriginID: z.coerce.number().min(1, {
     message: "Please select a product origin.",
   }),
   productImageURLs: z.array(z.string()).min(1, {
@@ -533,15 +531,26 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function ProductForm() {
+// Props interface
+interface ProductFormProps {
+  product: Partial<FormValues> | null;
+  onSave: (data: FormValues) => void;
+  onCancel: () => void;
+}
+
+// Main component
+export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
   const [showPreview, setShowPreview] = useState(false);
 
   const defaultValues: Partial<FormValues> = {
-    productCode: "",
-    productName: "",
-    productDescription: "",
-    sellingPrice: 0,
-    productImageURLs: [],
+    productCode: product?.productCode || "",
+    productName: product?.productName || "",
+    productDescription: product?.productDescription || "",
+    sellingPrice: product?.sellingPrice || 0,
+    categoryType: product?.categoryType || "",
+    measuringUnitType: product?.measuringUnitType || "",
+    productOriginID: product?.productOriginID || 0,
+    productImageURLs: product?.productImageURLs || [],
   };
 
   const form = useForm<FormValues>({
@@ -552,16 +561,20 @@ export function ProductForm() {
   // Watch all form values to pass them to the preview
   const formValues = form.watch();
 
-  function onSubmit(values: FormValues) {
-    console.log("Form Submitted:", values);
-    alert("Product saved successfully!");
+  // function onSubmit(values: FormValues) {
+  //   console.log("Form Submitted:", values);
+  //   alert("Product saved successfully!");
+  // }
+
+  function handleSubmit(values: FormValues) {
+    onSave(values);
   }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 border border-amber-100">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold text-amber-800">
-          Add New Cinnamon Product
+        {product ? "Edit Product" : "Add New Cinnamon Product"}
         </h2>
         <button
           onClick={() => setShowPreview(!showPreview)}
@@ -574,7 +587,7 @@ export function ProductForm() {
       {showPreview ? (
         <ProductPreview product={formValues} onBack={() => setShowPreview(false)} />
       ) : (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           {/* Product Code */}
           <div>
             <label className="block font-semibold mb-1">Product Code</label>
@@ -673,7 +686,7 @@ export function ProductForm() {
             <label className="block font-semibold mb-1">Product Origin</label>
             <select
               className="border px-3 py-2 rounded w-full"
-              {...form.register("productOrigin", { valueAsNumber: true })}
+              {...form.register("productOriginID", { valueAsNumber: true })}
             >
               <option value={0}>Select origin</option>
               {origins.map((origin) => (
@@ -683,7 +696,7 @@ export function ProductForm() {
               ))}
             </select>
             <p className="text-red-600 text-sm mt-1">
-              {form.formState.errors.productOrigin?.message}
+              {form.formState.errors.productOriginID?.message}
             </p>
           </div>
 
@@ -701,22 +714,31 @@ export function ProductForm() {
 
           {/* Buttons */}
           <div className="flex justify-end space-x-4 pt-4">
-            <button
-              type="button"
-              onClick={() => form.reset()}
-              className="border px-4 py-2 rounded text-gray-700 hover:bg-gray-50"
-            >
-              Reset
-            </button>
-            <button
-              type="submit"
-              className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded"
-            >
-              Save Product
-            </button>
-          </div>
+  <button
+    type="button"
+    onClick={onCancel}
+    className="border px-4 py-2 rounded text-gray-500 hover:bg-gray-50"
+  >
+    Cancel
+  </button>
+  <button
+    type="button"
+    onClick={() => form.reset()}
+    className="border px-4 py-2 rounded text-gray-700 hover:bg-gray-50"
+  >
+    Reset
+  </button>
+  <button
+    type="submit"
+    className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded"
+  >
+    Save Product
+  </button>
+</div>
         </form>
       )}
     </div>
   );
 }
+
+export default ProductForm;

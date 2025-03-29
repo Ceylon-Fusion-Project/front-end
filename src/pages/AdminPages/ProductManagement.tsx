@@ -332,7 +332,7 @@ import {
   AlertColor,
 } from "@mui/material";
 import { Add, Edit, Delete } from "@mui/icons-material";
-import {ProductForm} from "@/components/AdminComponents/ProductForm";
+import ProductForm from "@/components/AdminComponents/ProductForm"; // default export
 
 // Define the Product type with productID as required.
 export interface Product {
