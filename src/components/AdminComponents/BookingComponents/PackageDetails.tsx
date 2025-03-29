@@ -19,6 +19,7 @@ import {
   Button,
   Snackbar,
   Alert,
+  Box,
 } from '@mui/material';
 import { Edit, Delete, ArrowBack } from '@mui/icons-material';
 import { mockPackages } from './PackageManagement';
@@ -67,6 +68,11 @@ const PackageDetails = () => {
     );
   }
 
+  // Handle back navigation
+  const handleBackClick = () => {
+    navigate('/admin/package-management');
+  };
+
   // Handle edit event
   const handleEditEvent = (event: {
     eventId: number;
@@ -103,7 +109,7 @@ const PackageDetails = () => {
     setSnackbarOpen(true);
   };
 
-  // Handle cancel edit
+  // Handle cancel edit - just closes the dialog without navigation
   const handleCancelEdit = () => {
     setEditMode(false);
     setCurrentEvent(null);
@@ -135,9 +141,15 @@ const PackageDetails = () => {
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-        {pkg.packageName}
-      </Typography>
+      <Box display="flex" alignItems="center" marginBottom={2}>
+        <IconButton onClick={handleBackClick} style={{ marginRight: '8px', color: '#B45309' }}>
+          <ArrowBack />
+        </IconButton>
+        <Typography variant="h4" style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
+          {pkg.packageName}
+        </Typography>
+      </Box>
+      
       <Typography variant="h6" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
         {pkg.description}
       </Typography>
