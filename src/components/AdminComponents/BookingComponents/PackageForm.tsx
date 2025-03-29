@@ -1,4 +1,3 @@
-// Updated PackageForm.tsx
 import React, { useState } from 'react';
 import {
   Container,
@@ -15,7 +14,7 @@ import { Add } from '@mui/icons-material';
 import { ImageUploader } from '@/components/AdminComponents/ImageUploader';
 import { useNavigate } from 'react-router-dom';
 
-// Event and Room types
+// Event and Room types (unchanged from your PackageManagement)
 interface Room {
   roomId: number;
   roomCode: string;
@@ -84,8 +83,8 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
-  const [showRoomForm, setShowRoomForm] = useState(false);
-  const [showEventForm, setShowEventForm] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -96,7 +95,6 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
   };
 
   const handleAddEvent = () => {
-    setShowEventForm(true);
     setFormData({
       ...formData,
       events: [
@@ -117,7 +115,6 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
   };
 
   const handleAddRoom = () => {
-    setShowRoomForm(true);
     setFormData({
       ...formData,
       rooms: [
@@ -172,8 +169,6 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
     setSnackbarSeverity('success');
     setSnackbarOpen(true);
   };
-
-  const navigate = useNavigate(); // Move this to the top level
 
   const handleCancel = () => {
     if (onCancel) {
@@ -238,6 +233,84 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
               <Typography variant="h6" style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B', marginBottom: '1rem' }}>
                 Rooms
               </Typography>
+              {formData.rooms.map((room, index) => (
+                <Paper key={index} elevation={2} style={{ padding: '1rem', marginBottom: '1rem' }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Room Code"
+                        name="roomCode"
+                        fullWidth
+                        value={room.roomCode}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Room Number"
+                        name="roomNumber"
+                        fullWidth
+                        value={room.roomNumber}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        select
+                        label="Room Type"
+                        value={room.roomType}
+                        onChange={(e) => handleRoomTypeChange(index, e.target.value as string)}
+                        fullWidth
+                        required
+                        variant="outlined"
+                      >
+                        {roomTypes.map((type) => (
+                          <MenuItem key={type.value} value={type.value}>
+                            {type.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Beds"
+                        name="beds"
+                        type="number"
+                        fullWidth
+                        value={room.beds}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Price Per Night"
+                        name="pricePerNight"
+                        type="number"
+                        fullWidth
+                        value={room.pricePerNight}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
+                        Room Images
+                      </Typography>
+                      <ImageUploader
+                        value={room.roomImageURLs || []}
+                        onChange={(urls: string[]) => {
+                          const updatedRooms: Room[] = [...formData.rooms];
+                          updatedRooms[index].roomImageURLs = urls;
+                          setFormData({ ...formData, rooms: updatedRooms });
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              ))}
               <Button
                 variant="outlined"
                 startIcon={<Add />}
@@ -255,85 +328,6 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
               >
                 Add Room
               </Button>
-              {showRoomForm &&
-                formData.rooms.map((room, index) => (
-                  <Paper key={index} elevation={2} style={{ padding: '1rem', marginBottom: '1rem' }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Room Code"
-                          name="roomCode"
-                          fullWidth
-                          value={room.roomCode}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Room Number"
-                          name="roomNumber"
-                          fullWidth
-                          value={room.roomNumber}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          select
-                          label="Room Type"
-                          value={room.roomType}
-                          onChange={(e) => handleRoomTypeChange(index, e.target.value as string)}
-                          fullWidth
-                          required
-                          variant="outlined"
-                        >
-                          {roomTypes.map((type) => (
-                            <MenuItem key={type.value} value={type.value}>
-                              {type.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Beds"
-                          name="beds"
-                          type="number"
-                          fullWidth
-                          value={room.beds}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Price Per Night"
-                          name="pricePerNight"
-                          type="number"
-                          fullWidth
-                          value={room.pricePerNight}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleRoomChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
-                          Room Images
-                        </Typography>
-                        <ImageUploader
-                          value={room.roomImageURLs || []}
-                          onChange={(urls: string[]) => {
-                          const updatedRooms: Room[] = [...formData.rooms];
-                          updatedRooms[index].roomImageURLs = urls;
-                          setFormData({ ...formData, rooms: updatedRooms });
-                          }}
-                        />
-                        </Grid>
-                    </Grid>
-                  </Paper>
-                ))}
             </Grid>
 
             {/* Right Column: Events Section */}
@@ -341,6 +335,84 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
               <Typography variant="h6" style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B', marginBottom: '1rem' }}>
                 Events
               </Typography>
+              {formData.events.map((event, index) => (
+                <Paper key={index} elevation={2} style={{ padding: '1rem', marginBottom: '1rem' }}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Event Name"
+                        name="eventName"
+                        fullWidth
+                        value={event.eventName}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Event Description"
+                        name="eventDescription"
+                        fullWidth
+                        value={event.eventDescription}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        label="Price Per Event"
+                        name="pricePerEvent"
+                        type="number"
+                        fullWidth
+                        value={event.pricePerEvent}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Start Time"
+                        name="startTime"
+                        type="datetime-local"
+                        fullWidth
+                        value={event.startTime}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
+                        required
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="End Time"
+                        name="endTime"
+                        type="datetime-local"
+                        fullWidth
+                        value={event.endTime}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
+                        required
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
+                        Event Images
+                      </Typography>
+                      <ImageUploader
+                        value={event.eventImageURLs || []}
+                        onChange={(urls: string[]) => {
+                          const updatedEvents: Event[] = [...formData.events];
+                          updatedEvents[index].eventImageURLs = urls;
+                          setFormData({ ...formData, events: updatedEvents });
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Paper>
+              ))}
               <Button
                 variant="outlined"
                 startIcon={<Add />}
@@ -358,85 +430,6 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
               >
                 Add Event
               </Button>
-              {showEventForm &&
-                formData.events.map((event, index) => (
-                  <Paper key={index} elevation={2} style={{ padding: '1rem', marginBottom: '1rem' }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Event Name"
-                          name="eventName"
-                          fullWidth
-                          value={event.eventName}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Event Description"
-                          name="eventDescription"
-                          fullWidth
-                          value={event.eventDescription}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          label="Price Per Event"
-                          name="pricePerEvent"
-                          type="number"
-                          fullWidth
-                          value={event.pricePerEvent}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
-                          required
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Start Time"
-                          name="startTime"
-                          type="datetime-local"
-                          fullWidth
-                          value={event.startTime}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
-                          required
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="End Time"
-                          name="endTime"
-                          type="datetime-local"
-                          fullWidth
-                          value={event.endTime}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleEventChange(index, e)}
-                          required
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </Grid>
-                        <Grid item xs={12}>
-                        <Typography variant="subtitle2" style={{ marginBottom: '0.5rem' }}>
-                          Event Images
-                        </Typography>
-                        <ImageUploader
-                          value={event.eventImageURLs || []}
-                          onChange={(urls: string[]) => {
-                          const updatedEvents: Event[] = [...formData.events];
-                          updatedEvents[index].eventImageURLs = urls;
-                          setFormData({ ...formData, events: updatedEvents });
-                          }}
-                        />
-                        </Grid>
-                    </Grid>
-                  </Paper>
-                ))}
             </Grid>
 
             {/* Form Buttons */}
