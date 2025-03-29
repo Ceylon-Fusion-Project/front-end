@@ -59,7 +59,7 @@ const Dashboard = () => {
     secondary: '#10B981', // Green
     error: '#EF4444', // Red
     warning: '#F59E0B', // Orange
-    background: '#F8FAFC', // Light Gray
+    background: '#fcfbf8', // Light Gray
     text: '#1E293B', // Dark Blue
   };
 
@@ -255,3 +255,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
