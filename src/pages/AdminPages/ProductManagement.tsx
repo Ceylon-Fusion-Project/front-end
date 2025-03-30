@@ -508,7 +508,7 @@ const ProductManagement = () => {
   };
 
   const handleSnackbarClose = (
-    event: Event | SyntheticEvent<any, Event>, 
+    _event: Event | SyntheticEvent<any, Event>, 
     reason: SnackbarCloseReason
   ) => {
     if (reason === 'clickaway') {
