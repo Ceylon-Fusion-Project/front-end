@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, SyntheticEvent } from "react";
 import {
   Container,
   Typography,
@@ -20,233 +20,370 @@ import {
   Alert,
   AlertColor,
   Box,
-} from '@mui/material';
-import { Add, Edit, Delete, CloudUpload } from '@mui/icons-material';
+  Drawer,
+  SnackbarCloseReason,
+} from "@mui/material";
+import { Add, Edit, Delete, FilterAlt, CloudUpload } from "@mui/icons-material";
+import AutoCompleteSearchBar from "@/components/AutoCompletedSearchBar";
 
-// Mock data for certifications
-const mockData = [
+
+export interface Certification {
+  certificationID: number;
+  productID: number;
+  certificationName: string;
+  issuer: string;
+  issuedDate: string;
+  expiryDate: string;
+  certActiveState: boolean;
+  createdDate: string;
+  updatedDate: string;
+  certURL: string;
+}
+
+const mockData: Certification[] = [
   {
     certificationID: 1,
     productID: 101,
-    certificationName: 'Organic Certification',
-    issuer: 'Certified Org',
-    issuedDate: '2024-03-01',
-    expiryDate: '2025-03-01',
+    certificationName: "Organic Certification",
+    issuer: "Certified Org",
+    issuedDate: "2024-03-01",
+    expiryDate: "2025-03-01",
     certActiveState: true,
-    createdDate: '2024-01-01',
-    updatedDate: '2024-01-01',
-    certURL: 'cert1.pdf',
+    createdDate: "2024-01-01",
+    updatedDate: "2024-01-01",
+    certURL: "cert1.pdf",
   },
   {
     certificationID: 2,
     productID: 102,
-    certificationName: 'Fair Trade',
-    issuer: 'Fair Trade Intl',
-    issuedDate: '2024-02-15',
-    expiryDate: '2025-02-15',
+    certificationName: "Fair Trade",
+    issuer: "Fair Trade Intl",
+    issuedDate: "2024-02-15",
+    expiryDate: "2025-02-15",
     certActiveState: true,
-    createdDate: '2024-01-01',
-    updatedDate: '2024-01-01',
-    certURL: 'cert2.pdf',
+    createdDate: "2024-01-01",
+    updatedDate: "2024-01-01",
+    certURL: "cert2.pdf",
   },
 ];
 
-// Drag-and-drop file uploader component
-const ImageUploader = ({ value, onChange }: { value: File[]; onChange: (files: File[]) => void }) => {
-  const [dragActive, setDragActive] = useState(false);
-
-  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      onChange([e.dataTransfer.files[0]]); // Replace existing file
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      onChange([e.target.files[0]]); // Replace existing file
-    }
-  };
-
-  return (
-    <div
-      onDragEnter={handleDrag}
-      onDragOver={handleDrag}
-      onDragLeave={handleDrag}
-      onDrop={handleDrop}
-      style={{
-        border: dragActive ? '2px dashed #B45309' : '2px dashed #CBD5E1',
-        borderRadius: '8px',
-        padding: '20px',
-        textAlign: 'center',
-        backgroundColor: dragActive ? '#FFFBEB' : '#F8FAFC',
-        cursor: 'pointer',
-      }}
-    >
-      <input
-        type="file"
-        id="file-upload"
-        style={{ display: 'none' }}
-        onChange={handleChange}
-      />
-      <label htmlFor="file-upload" style={{ cursor: 'pointer' }}>
-        <CloudUpload style={{ color: '#B45309', fontSize: '40px' }} />
-        <p style={{ color: '#1E293B', marginTop: '10px' }}>
-          Drag & drop a file or <span style={{ color: '#B45309', textDecoration: 'underline' }}>browse</span>
-        </p>
-      </label>
-      {value.length > 0 && (
-        <div style={{ marginTop: '10px' }}>
-          <p style={{ color: '#1E293B', fontWeight: 'bold' }}>Uploaded File:</p>
-          <p style={{ color: '#1E293B' }}>{value[0].name}</p>
-        </div>
-      )}
-    </div>
-  );
-};
-
 const CertificationManagement = () => {
-  const [certifications, setCertifications] = useState(mockData);
+  const [certifications, setCertifications] = useState<Certification[]>(mockData);
+  const [filteredCertifications, setFilteredCertifications] = useState<Certification[]>(mockData);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentCertification, setCurrentCertification] = useState<typeof mockData[0] | null>(null);
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
-  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [currentCertification, setCurrentCertification] = useState<Certification | null>(null);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [file, setFile] = useState<File[]>([]);
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState<any>({});
 
-  // Handle add certification
+  const certificationNames = mockData.map(cert => cert.certificationName);
+
+  // Apply filters and search
+  useEffect(() => {
+    let result = [...certifications];
+    
+    if (searchQuery) {
+      result = result.filter(cert => 
+        cert.certificationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cert.issuer.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    if (filters.issuer) {
+      result = result.filter(cert => 
+        cert.issuer.toLowerCase().includes(filters.issuer.toLowerCase())
+      );
+    }
+    
+    if (filters.productID) {
+      result = result.filter(cert => 
+        cert.productID.toString().includes(filters.productID.toString())
+      );
+    }
+    
+    if (filters.activeOnly) {
+      result = result.filter(cert => cert.certActiveState);
+    }
+    
+    if (filters.expiringSoon) {
+      const today = new Date();
+      const nextMonth = new Date();
+      nextMonth.setMonth(today.getMonth() + 1);
+      result = result.filter(cert => {
+        const expiryDate = new Date(cert.expiryDate);
+        return expiryDate >= today && expiryDate <= nextMonth;
+      });
+    }
+
+    setFilteredCertifications(result);
+  }, [certifications, searchQuery, filters]);
+
   const handleAddClick = () => {
     setEditMode(false);
     setCurrentCertification(null);
-    setFile([]); // Reset file when adding a new certification
+    setFile([]);
     setOpenDialog(true);
   };
 
-  // Handle edit certification
-  const handleEditClick = (certification: typeof mockData[0]) => {
+  const handleEditClick = (certification: Certification) => {
     setEditMode(true);
     setCurrentCertification(certification);
-    setFile([]); // Reset file when editing (optional, depending on your use case)
+    setFile([]);
     setOpenDialog(true);
   };
 
-  // Handle delete certification
   const handleDeleteClick = (id: number) => {
-    setCertifications(certifications.filter((cert) => cert.certificationID !== id));
-    setSnackbarMessage('Certification deleted successfully!');
-    setSnackbarSeverity('success');
+    setCertifications(certifications.filter(cert => cert.certificationID !== id));
+    setSnackbarMessage("Certification deleted successfully!");
+    setSnackbarSeverity("success");
     setSnackbarOpen(true);
   };
 
-  // Handle save/update certification
   const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
-    const newCertification = {
+    const newCertification: Certification = {
       certificationID: currentCertification ? currentCertification.certificationID : certifications.length + 1,
-      productID: parseInt(formData.get('productID') as string),
-      certificationName: formData.get('certificationName') as string,
-      issuer: formData.get('issuer') as string,
-      issuedDate: formData.get('issuedDate') as string,
-      expiryDate: formData.get('expiryDate') as string,
+      productID: parseInt(formData.get("productID") as string),
+      certificationName: formData.get("certificationName") as string,
+      issuer: formData.get("issuer") as string,
+      issuedDate: formData.get("issuedDate") as string,
+      expiryDate: formData.get("expiryDate") as string,
       certActiveState: true,
-      createdDate: new Date().toISOString().split('T')[0],
-      updatedDate: new Date().toISOString().split('T')[0],
-      certURL: file.length > 0 ? URL.createObjectURL(file[0]) : currentCertification?.certURL || '',
+      createdDate: currentCertification?.createdDate || new Date().toISOString().split("T")[0],
+      updatedDate: new Date().toISOString().split("T")[0],
+      certURL: file.length > 0 ? URL.createObjectURL(file[0]) : currentCertification?.certURL || "",
     };
 
     if (currentCertification) {
-      // Update existing certification
       setCertifications(
-        certifications.map((cert) =>
+        certifications.map(cert =>
           cert.certificationID === currentCertification.certificationID ? newCertification : cert
         )
       );
-      setSnackbarMessage('Certification updated successfully!');
+      setSnackbarMessage("Certification updated successfully!");
     } else {
-      // Add new certification
       setCertifications([...certifications, newCertification]);
-      setSnackbarMessage('Certification added successfully!');
+      setSnackbarMessage("Certification added successfully!");
     }
 
-    setSnackbarSeverity('success');
+    setSnackbarSeverity("success");
     setSnackbarOpen(true);
     setOpenDialog(false);
-    setFile([]); // Reset file after saving
+    setFile([]);
   };
 
-  // Handle dialog close
   const handleDialogClose = () => {
     setOpenDialog(false);
-    setFile([]); // Reset file when dialog is closed without saving
+    setFile([]);
   };
 
-  // Handle snackbar close
-  const handleSnackbarClose = () => {
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleApplyFilters = (newFilters: any) => {
+    setFilters(newFilters);
+    setShowFilters(false);
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setFilters({});
+  };
+
+  const handleSnackbarClose = (
+    event?: SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
     setSnackbarOpen(false);
   };
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
+    <Container maxWidth="lg" style={{ marginTop: "2rem" }}>
+      <Typography variant="h4" gutterBottom style={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}>
         Certification Management
       </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<Add />}
-        onClick={handleAddClick}
-        style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
-      >
-        Add Certification
-      </Button>
+
+      {/* Search and Filter Bar */}
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center',
+        gap: 2, 
+        mb: 3,
+        flexWrap: 'wrap'
+      }}>
+        {/* Add Certification Button - Left */}
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={handleAddClick}
+          style={{ 
+            backgroundColor: "#B45309", 
+            color: "#FFFFFF",
+            minWidth: '150px',
+            order: 1
+          }}
+        >
+          Add Certification
+        </Button>
+
+        {/* Search Bar - Middle */}
+        <Box sx={{ 
+          flexGrow: 1,
+          maxWidth: '400px',
+          order: 2
+        }}>
+          <AutoCompleteSearchBar 
+            data={certificationNames} 
+            onSearch={handleSearch} 
+          />
+        </Box>
+
+        {/* Filter Button - Right */}
+        <Button
+          variant="outlined"
+          startIcon={<FilterAlt />}
+          onClick={() => setShowFilters(true)}
+          sx={{ 
+            backgroundColor: "#F8FAFC",
+            borderColor: "#CBD5E1",
+            color: "#1E293B",
+            order: 3,
+            marginLeft: 'auto',
+            '&:hover': {
+              backgroundColor: '#F1F5F9',
+              borderColor: '#94A3B8'
+            }
+          }}
+        >
+          Filters
+        </Button>
+      </Box>
+
+      {/* Filter Chips */}
+      {(searchQuery || Object.keys(filters).length > 0) && (
+        <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+          {searchQuery && (
+            <Box
+              component="span"
+              sx={{
+                px: 2,
+                py: 1,
+                bgcolor: '#E2E8F0',
+                borderRadius: '16px',
+                fontSize: '0.875rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1
+              }}
+            >
+              Search: "{searchQuery}"
+              <IconButton size="small" onClick={() => setSearchQuery("")}>
+                <Delete fontSize="small" style={{ color: "#64748B" }} />
+              </IconButton>
+            </Box>
+          )}
+          {Object.entries(filters).map(([key, value]) => (
+            value !== undefined && (
+              <Box
+                key={key}
+                component="span"
+                sx={{
+                  px: 2,
+                  py: 1,
+                  bgcolor: '#E2E8F0',
+                  borderRadius: '16px',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}
+              >
+                {key}: {String(value)}
+                <IconButton 
+                  size="small" 
+                  onClick={() => setFilters((prev: typeof filters) => ({ ...prev, [key]: undefined }))}
+                >
+                  <Delete fontSize="small" style={{ color: "#64748B" }} />
+                </IconButton>
+              </Box>
+            )
+          ))}
+          <Button 
+            size="small" 
+            onClick={clearAllFilters}
+            sx={{ 
+              color: '#3B82F6',
+              '&:hover': {
+                backgroundColor: '#EFF6FF'
+              }
+            }}
+          >
+            Clear all
+          </Button>
+        </Box>
+      )}
 
       {/* Certifications Table */}
-      <TableContainer component={Paper} style={{ marginTop: '1.5rem', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+      <TableContainer component={Paper} style={{ marginTop: "1.5rem", boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)" }}>
         <Table>
           <TableHead>
-            <TableRow style={{ backgroundColor: '#F8FAFC' }}>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Certification Name</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Issuer</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Issued Date</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Expiry Date</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Product ID</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>File</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Actions</TableCell>
+            <TableRow style={{ backgroundColor: "#F8FAFC" }}>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Certification Name</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Issuer</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Issued Date</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Expiry Date</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Status</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Product ID</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>File</TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {certifications.map((cert) => (
+            {filteredCertifications.map((cert) => (
               <TableRow key={cert.certificationID}>
                 <TableCell>{cert.certificationName}</TableCell>
                 <TableCell>{cert.issuer}</TableCell>
                 <TableCell>{cert.issuedDate}</TableCell>
                 <TableCell>{cert.expiryDate}</TableCell>
+                <TableCell>
+                  <Box
+                    component="span"
+                    sx={{
+                      px: 1.5,
+                      py: 0.5,
+                      borderRadius: '12px',
+                      fontSize: '0.75rem',
+                      fontWeight: 'bold',
+                      backgroundColor: new Date(cert.expiryDate) >= new Date() ? '#D1FAE5' : '#FEE2E2',
+                      color: new Date(cert.expiryDate) >= new Date() ? '#065F46' : '#B91C1C'
+                    }}
+                  >
+                    {new Date(cert.expiryDate) >= new Date() ? 'Active' : 'Expired'}
+                  </Box>
+                </TableCell>
                 <TableCell>{cert.productID}</TableCell>
                 <TableCell>
-                  <a href={cert.certURL} target="_blank" rel="noopener noreferrer" style={{ color: '#B45309', textDecoration: 'none' }}>
+                  <a href={cert.certURL} target="_blank" rel="noopener noreferrer" style={{ color: "#B45309", textDecoration: "none" }}>
                     View File
                   </a>
                 </TableCell>
                 <TableCell>
                   <IconButton color="primary" onClick={() => handleEditClick(cert)}>
-                    <Edit style={{ color: '#291e10' }} />
+                    <Edit style={{ color: "#291e10" }} />
                   </IconButton>
                   <IconButton color="secondary" onClick={() => handleDeleteClick(cert.certificationID)}>
-                    <Delete style={{ color: '#EF4444' }} />
+                    <Delete style={{ color: "#EF4444" }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -255,10 +392,46 @@ const CertificationManagement = () => {
         </Table>
       </TableContainer>
 
+      {/* Empty state */}
+      {filteredCertifications.length === 0 && (
+        <Box sx={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          p: 4,
+          mt: 2,
+          backgroundColor: '#F8FAFC',
+          borderRadius: 1
+        }}>
+          <Typography variant="h6" color="textSecondary" gutterBottom>
+            No certifications found
+          </Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+            Try adjusting your search or filters
+          </Typography>
+          <Button 
+            variant="outlined" 
+            onClick={clearAllFilters}
+            startIcon={<FilterAlt />}
+            sx={{
+              borderColor: '#CBD5E1',
+              color: '#1E293B',
+              '&:hover': {
+                borderColor: '#94A3B8',
+                backgroundColor: '#F1F5F9'
+              }
+            }}
+          >
+            Clear filters
+          </Button>
+        </Box>
+      )}
+
       {/* Add/Edit Certification Dialog */}
       <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-          {editMode ? 'Edit Certification' : 'Add Certification'}
+        <DialogTitle style={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}>
+          {editMode ? "Edit Certification" : "Add Certification"}
         </DialogTitle>
         <DialogContent>
           <form id="certification-form" onSubmit={handleSave}>
@@ -316,18 +489,152 @@ const CertificationManagement = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose} style={{ color: '#64748B' }}>
+          <Button onClick={handleDialogClose} style={{ color: "#64748B" }}>
             Cancel
           </Button>
-          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}>
-            {editMode ? 'Update' : 'Save'}
+          <Button type="submit" form="certification-form" variant="contained" style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}>
+            {editMode ? "Update" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Snackbar for notifications */}
+      {/* Filter Sidebar */}
+      <Drawer
+        anchor="right"
+        open={showFilters}
+        onClose={() => setShowFilters(false)}
+      >
+        <Box sx={{ width: 350, p: 3, backgroundColor: '#F8FAFC', height: '100%' }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#1E293B', mb: 3 }}>
+            Filter Certifications
+          </Typography>
+          
+          {/* Active/Inactive Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Status
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button
+                variant={filters.activeOnly ? 'contained' : 'outlined'}
+                onClick={() => setFilters({ ...filters, activeOnly: !filters.activeOnly })}
+                sx={{
+                  backgroundColor: filters.activeOnly ? '#291e10' : 'transparent',
+                  color: filters.activeOnly ? '#FFFFFF' : '#291e10',
+                  borderColor: '#291e10',
+                  '&:hover': {
+                    backgroundColor: filters.activeOnly ? '#291e10' : '#c9bda9',
+                    borderColor: '#2563EB'
+                  }
+                }}
+              >
+                Active Only
+              </Button>
+              <Button
+                variant={filters.expiringSoon ? 'contained' : 'outlined'}
+                onClick={() => setFilters({ ...filters, expiringSoon: !filters.expiringSoon })}
+                sx={{
+                  backgroundColor: filters.expiringSoon ? '#10B981' : 'transparent',
+                  color: filters.expiringSoon ? '#FFFFFF' : '#10B981',
+                  borderColor: '#10B981',
+                  '&:hover': {
+                    backgroundColor: filters.expiringSoon ? '#059669' : '#ECFDF5',
+                    borderColor: '#059669'
+                  }
+                }}
+              >
+                Expiring Soon
+              </Button>
+            </Box>
+          </Box>
+
+          {/* Issuer Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Issuer
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              value={filters.issuer || ''}
+              onChange={(e) => setFilters({ ...filters, issuer: e.target.value })}
+              placeholder="Filter by issuer"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Product ID Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Product ID
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              type="number"
+              value={filters.productID || ''}
+              onChange={(e) => setFilters({ ...filters, productID: e.target.value })}
+              placeholder="Filter by product ID"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Action Buttons */}
+          <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => setFilters({})}
+              sx={{
+                color: '#64748B',
+                borderColor: '#CBD5E1',
+                '&:hover': {
+                  borderColor: '#94A3B8',
+                  backgroundColor: '#F1F5F9'
+                }
+              }}
+            >
+              Clear All
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setShowFilters(false)}
+              sx={{
+                backgroundColor: '#B45309',
+                color: '#FFFFFF',
+                '&:hover': {
+                  backgroundColor: '#B45309'
+                }
+              }}
+            >
+              Apply Filters
+            </Button>
+          </Box>
+        </Box>
+      </Drawer>
+
+      {/* Snackbar */}
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+        <Alert onClose={(event) => handleSnackbarClose(event, "timeout")} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
@@ -335,4 +642,72 @@ const CertificationManagement = () => {
   );
 };
 
+// ImageUploader component
+const ImageUploader = ({ value, onChange }: { value: File[]; onChange: (files: File[]) => void }) => {
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      onChange([e.dataTransfer.files[0]]);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      onChange([e.target.files[0]]);
+    }
+  };
+
+  return (
+    <div
+      onDragEnter={handleDrag}
+      onDragOver={handleDrag}
+      onDragLeave={handleDrag}
+      onDrop={handleDrop}
+      style={{
+        border: dragActive ? "2px dashed #B45309" : "2px dashed #CBD5E1",
+        borderRadius: "8px",
+        padding: "20px",
+        textAlign: "center",
+        backgroundColor: dragActive ? "#FFFBEB" : "#F8FAFC",
+        cursor: "pointer",
+      }}
+    >
+      <input
+        type="file"
+        id="file-upload"
+        style={{ display: "none" }}
+        onChange={handleChange}
+      />
+      <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+        <CloudUpload style={{ color: "#B45309", fontSize: "40px" }} />
+        <p style={{ color: "#1E293B", marginTop: "10px" }}>
+          Drag & drop a file or <span style={{ color: "#B45309", textDecoration: "underline" }}>browse</span>
+        </p>
+      </label>
+      {value.length > 0 && (
+        <div style={{ marginTop: "10px" }}>
+          <p style={{ color: "#1E293B", fontWeight: "bold" }}>Uploaded File:</p>
+          <p style={{ color: "#1E293B" }}>{value[0].name}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default CertificationManagement;
+
+
