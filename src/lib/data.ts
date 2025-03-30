@@ -1,24 +1,25 @@
 import type { CategoryType, MeasuringUnitType, Origin } from "./types"
 
 export const categoryTypes: CategoryType[] = [
-  { value: "CINNAMON_STICKS", label: "Cinnamon Sticks" },
-  { value: "CINNAMON_POWDER", label: "Cinnamon Powder" },
-  { value: "CINNAMON_OIL", label: "Cinnamon Oil" },
-  { value: "CINNAMON_TEA", label: "Cinnamon Tea" },
-  { value: "CINNAMON_SUPPLEMENTS", label: "Cinnamon Supplements" },
-  { value: "CINNAMON_SPICE_BLENDS", label: "Cinnamon Spice Blends" },
+  { value: "FOOD_AND_BEVERAGE", label: "Food and Beverages" },
+  { value: "HEALTH_AND_WELLNESS", label: "Health and wellness" },
+  { value: "PERSONAL_CARE", label: "Personal Care" },
+  { value: "AYURVEDIC", label: "Ayurvedic" },
+  { value: "HOME_AND_LIFE_STYLE", label: "Home and Life Style" },
+  { value: "INDUSTRIAL", label: "Industrial" },
 ]
 
 export const measuringUnitTypes: MeasuringUnitType[] = [
-  { value: "GRAMS", label: "Grams (g)" },
-  { value: "KILOGRAMS", label: "Kilograms (kg)" },
+  { value: "GRAM", label: "Grams (g)" },
+  { value: "KILO_GRAM", label: "Kilograms (kg)" },
   { value: "OUNCES", label: "Ounces (oz)" },
   { value: "POUNDS", label: "Pounds (lb)" },
-  { value: "MILLILITERS", label: "Milliliters (ml)" },
-  { value: "LITERS", label: "Liters (l)" },
+  { value: "MILLI_LITER", label: "Milliliters (ml)" },
+  { value: "LITER", label: "Liters (l)" },
   { value: "PIECES", label: "Pieces (pcs)" },
   { value: "STICKS", label: "Sticks" },
   { value: "PACKETS", label: "Packets" },
+  { value: "NUMBER", label: "Each"},
 ]
 
 export const origins: Origin[] = [

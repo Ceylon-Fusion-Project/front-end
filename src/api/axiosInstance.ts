@@ -1,4 +1,6 @@
 import axios from "axios";
+import { handleAxiosError } from "@/api/handleAxiosError";
+import type { AxiosError } from "axios";
 
 const api = axios.create({
   baseURL: "https://localhost:3001/api/v1",
@@ -15,8 +17,10 @@ api.interceptors.response.use(
   (response) => response, // Return response as it is used
   (error) => {
     console.error("API Error:",error);
+    handleAxiosError(error as AxiosError);
     Promise.reject(error);
   }   
 );
 
 export default api;
+
