@@ -52,7 +52,14 @@ export const mockData = [
     location: 'Thodupuzha, India',
     rooms: [
       { roomId: 3, roomCode: 'R201', roomNumber: '201', roomType: 'Standard', beds: 1, pricePerNight: 40 },
-      { roomId: 4, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 19, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 20, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 21, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 22, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 23, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 24, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+      { roomId: 25, roomCode: 'R202', roomNumber: '202', roomType: 'Double', beds: 2, pricePerNight: 60 },
+
     ],
   },
   {

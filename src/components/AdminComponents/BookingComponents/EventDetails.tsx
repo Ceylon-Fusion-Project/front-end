@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -18,13 +18,16 @@ import {
   Button,
   Snackbar,
   Alert,
+  Box,
+  Grid,
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, ArrowBack } from '@mui/icons-material';
 import { mockData } from './ExperienceCenterManagement'; // Import mockData
 import { useState } from 'react';
 
 const EventDetails = () => {
   const { experienceCenterId } = useParams(); // Get experienceCenterId from URL
+  const navigate = useNavigate(); // Navigate hook for back functionality
   const [editMode, setEditMode] = useState(false); // State to toggle edit mode
   const [currentEvent, setCurrentEvent] = useState<{
     eventId: number;
@@ -41,11 +44,19 @@ const EventDetails = () => {
   // Find the experience center by ID
   const experienceCenter = mockData.find((exp) => exp.experienceCenterId === parseInt(experienceCenterId || '', 10));
 
-  // If experience center is not found, display a message
+  // If experience center is not found, display a message with back button
   if (!experienceCenter) {
     return (
       <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
         <Typography variant="h6">Experience Center not found</Typography>
+        <Button
+          variant="contained"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate('/admin/experience-center-management')} // Adjust path as needed
+          style={{ marginTop: '1rem', backgroundColor: '#B45309', color: '#FFFFFF' }}
+        >
+          Back to Experience Center Management
+        </Button>
       </Container>
     );
   }
@@ -64,6 +75,11 @@ const EventDetails = () => {
     return date.toISOString();
   };
 
+  // Handle back navigation
+  const handleBackClick = () => {
+    navigate('/admin/experience-center-management'); // Adjust path as needed
+  };
+
   // Handle edit event
   const handleEditEvent = (event: {
     eventId: number;
@@ -78,7 +94,8 @@ const EventDetails = () => {
   };
 
   // Handle save changes
-  const handleSaveChanges = () => {
+  const handleSaveChanges = (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent form submission from refreshing the page
     if (!currentEvent) return;
 
     // Update the event in the experience center
@@ -122,9 +139,20 @@ const EventDetails = () => {
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-        {experienceCenter.experienceCenterName}
-      </Typography>
+      <Box display="flex" alignItems="center" marginBottom={2}>
+        <IconButton
+          onClick={handleBackClick}
+          style={{ marginRight: '8px', color: '#B45309' }}
+        >
+          <ArrowBack />
+        </IconButton>
+        <Typography
+          variant="h4"
+          style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}
+        >
+          {experienceCenter.experienceCenterName}
+        </Typography>
+      </Box>
       <Typography variant="h6" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
         {experienceCenter.experienceCenterDescription}
       </Typography>
@@ -175,56 +203,74 @@ const EventDetails = () => {
           Edit Event {currentEvent?.eventName}
         </DialogTitle>
         <DialogContent>
-          <form>
-            <TextField
-              label="Event Name"
-              value={currentEvent?.eventName || ''}
-              fullWidth
-              margin="normal"
-              onChange={(e) => handleFormChange('eventName', e.target.value)}
-              required
-            />
-            <TextField
-              label="Event Description"
-              value={currentEvent?.eventDescription || ''}
-              fullWidth
-              margin="normal"
-              onChange={(e) => handleFormChange('eventDescription', e.target.value)}
-              required
-            />
-            <TextField
-              label="Price Per Event"
-              value={currentEvent?.pricePerEvent || 0}
-              type="number"
-              fullWidth
-              margin="normal"
-              onChange={(e) => handleFormChange('pricePerEvent', parseFloat(e.target.value))}
-              required
-            />
-            <TextField
-              label="Start Time"
-              type="datetime-local"
-              value={currentEvent?.startTime ? toLocalDateTime(currentEvent.startTime) : ''}
-              fullWidth
-              margin="normal"
-              onChange={(e) => handleFormChange('startTime', toISODateTime(e.target.value))}
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              label="End Time"
-              type="datetime-local"
-              value={currentEvent?.endTime ? toLocalDateTime(currentEvent.endTime) : ''}
-              fullWidth
-              margin="normal"
-              onChange={(e) => handleFormChange('endTime', toISODateTime(e.target.value))}
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+          <form id="event-form" onSubmit={handleSaveChanges}>
+            <Grid container spacing={2}>
+              {/* First Row: Event Name and Event Description */}
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Event Name"
+                  value={currentEvent?.eventName || ''}
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => handleFormChange('eventName', e.target.value)}
+                  required
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Event Description"
+                  value={currentEvent?.eventDescription || ''}
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => handleFormChange('eventDescription', e.target.value)}
+                  required
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              {/* Second Row: Price Per Event and Start Time */}
+              <Grid item xs={12}>
+                <TextField
+                  label="Price Per Event"
+                  value={currentEvent?.pricePerEvent || 0}
+                  type="number"
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => handleFormChange('pricePerEvent', parseFloat(e.target.value))}
+                  required
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Start Time"
+                  type="datetime-local"
+                  value={currentEvent?.startTime ? toLocalDateTime(currentEvent.startTime) : ''}
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => handleFormChange('startTime', toISODateTime(e.target.value))}
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+              {/* Third Row: End Time (Full Width) */}
+              <Grid item xs={6}>
+                <TextField
+                  label="End Time"
+                  type="datetime-local"
+                  value={currentEvent?.endTime ? toLocalDateTime(currentEvent.endTime) : ''}
+                  fullWidth
+                  margin="normal"
+                  onChange={(e) => handleFormChange('endTime', toISODateTime(e.target.value))}
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
+            </Grid>
           </form>
         </DialogContent>
         <DialogActions>
@@ -232,7 +278,8 @@ const EventDetails = () => {
             Cancel
           </Button>
           <Button
-            onClick={handleSaveChanges}
+            type="submit"
+            form="event-form"
             variant="contained"
             style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
           >
