@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import {
   Container,
   Typography,
@@ -14,11 +14,15 @@ import {
   Snackbar,
   Alert,
   AlertColor,
+  Box,
+  Drawer,
+  SnackbarCloseReason,
 } from "@mui/material";
-import { Add, Edit, Delete } from "@mui/icons-material";
-import ProductForm from "@/components/AdminComponents/ProductForm"; // default export
+import { Add, Edit, Delete, FilterAlt } from "@mui/icons-material";
+import ProductForm from "@/components/AdminComponents/ProductForm";
+import AutoCompleteSearchBar from "@/components/AutoCompletedSearchBar";
+import FilterSideBar from "@/components/FilterSideBar";
 
-// Define the Product type with productID as required.
 export interface Product {
   productID: number;
   productCode: string;
@@ -35,7 +39,6 @@ export interface Product {
   productOrigin: number;
 }
 
-// Mock data for products
 const mockData: Product[] = [
   {
     productID: 1,
@@ -82,6 +85,7 @@ type ProductInput = Omit<
 
 const ProductManagement = () => {
   const [products, setProducts] = useState<Product[]>(mockData);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(mockData);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -89,31 +93,71 @@ const ProductManagement = () => {
   const [snackbarSeverity, setSnackbarSeverity] =
     useState<AlertColor>("success");
   const [showProductForm, setShowProductForm] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filters, setFilters] = useState<any>({});
 
-  // Handle add product button click
+  const productNames = mockData.map(product => product.productName);
+
+  useEffect(() => {
+    let result = [...products];
+    
+    if (searchQuery) {
+      result = result.filter(product => 
+        product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.productCode.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    if (filters.category) {
+      result = result.filter(product => 
+        product.categoryType.toLowerCase().includes(filters.category.toLowerCase())
+      );
+    }
+    
+    if (filters.minPrice || filters.maxPrice) {
+      const min = filters.minPrice || 0;
+      const max = filters.maxPrice || Number.MAX_SAFE_INTEGER;
+      result = result.filter(product => 
+        product.sellingPrice >= min && product.sellingPrice <= max
+      );
+    }
+    
+    if (filters.averageRating) {
+      result = result.filter(product => 
+        (product.productRatingValue ?? 0) >= filters.averageRating
+      );
+    }
+    
+    if (filters.bestSelling) {
+      result = result.filter(product => (product.productRatingValue ?? 0) >= 4);
+    }
+
+    setFilteredProducts(result);
+  }, [products, searchQuery, filters]);
+
   const handleAddClick = () => {
     setEditMode(false);
     setCurrentProduct(null);
-    setShowProductForm(true); // Show ProductForm instead of table
+    setShowProductForm(true);
   };
 
-  // Handle edit product button click
   const handleEditClick = (product: Product) => {
     setEditMode(true);
     setCurrentProduct(product);
     setShowProductForm(true);
   };
 
-  // Handle delete product
   const handleDeleteClick = (id: number) => {
-    setProducts(products.filter((product) => product.productID !== id));
+    setProducts(products.filter(product => product.productID !== id));
     setSnackbarMessage("Product deleted successfully!");
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
   };
 
-  // Handle form submission: Ensure that the new product has a valid productID, createdDate, and updatedDate.
-  const handleSave = (productData: ProductInput) => {
+  const handleSave = (productData: Omit<Product, "productID" | "updatedDate"> & {
+      productID?: number;
+    }) => {
     const newProduct: Product = {
       ...productData,
       productOrigin: productData.productOrigin,
@@ -129,31 +173,45 @@ const ProductManagement = () => {
     };
 
     if (editMode && currentProduct) {
-      // Update existing product
-      setProducts(
-        products.map((product) =>
-          product.productID === currentProduct.productID ? newProduct : product
-        )
-      );
+      setProducts(products.map(product => 
+        product.productID === currentProduct.productID ? newProduct : product
+      ));
       setSnackbarMessage("Product updated successfully!");
     } else {
-      // Add new product
       setProducts([...products, newProduct]);
       setSnackbarMessage("Product added successfully!");
     }
 
     setSnackbarSeverity("success");
     setSnackbarOpen(true);
-    setShowProductForm(false); // Return to product table after saving
+    setShowProductForm(false);
   };
 
-  // Handle cancel action (return to table)
   const handleCancel = () => {
     setShowProductForm(false);
   };
 
-  // Handle snackbar close
-  const handleSnackbarClose = () => {
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleApplyFilters = (newFilters: any) => {
+    setFilters(newFilters);
+    setShowFilters(false);
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setFilters({});
+  };
+
+  const handleSnackbarClose = (
+    event: Event | SyntheticEvent<any, Event>, 
+    reason: SnackbarCloseReason
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
     setSnackbarOpen(false);
   };
 
@@ -190,11 +248,128 @@ const ProductManagement = () => {
             startIcon={<Add />}
             onClick={handleAddClick}
             style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}
-          >
-            Add Product
-          </Button>
 
-          {/* Products Table */}
+      {/* Updated Action Bar Layout */}
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center',
+        gap: 2, 
+        mb: 3,
+        flexWrap: 'wrap'
+      }}>
+        {/* Add Product Button - Left */}
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={handleAddClick}
+          style={{ 
+            backgroundColor: "#B45309", 
+            color: "#FFFFFF",
+            minWidth: '150px',
+            order: 1 // Ensures it stays on the left
+          }}
+        >
+          Add Product
+        </Button>
+
+        {/* Search Bar - Middle (shorter) */}
+        <Box sx={{ 
+          flexGrow: 1,
+          maxWidth: '400px', // Shorter width
+          order: 2 // Middle position
+        }}>
+          <AutoCompleteSearchBar 
+            data={productNames} 
+            onSearch={handleSearch} 
+          />
+        </Box>
+
+        {/* Filter Button - Right */}
+        <Button
+          variant="outlined"
+          startIcon={<FilterAlt />}
+          onClick={() => setShowFilters(true)}
+          style={{ 
+            backgroundColor: "#F8FAFC",
+            borderColor: "#CBD5E1",
+            color: "#1E293B",
+            order: 3, // Ensures it stays on the right
+            marginLeft: 'auto' // Pushes it to the right
+          }}
+        >
+          Filters
+        </Button>
+      </Box>
+
+      {/* Filter Chips */}
+      {(searchQuery || Object.keys(filters).length > 0) && (
+        <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+          {searchQuery && (
+            <Box
+              component="span"
+              sx={{
+                px: 2,
+                py: 1,
+                bgcolor: '#E2E8F0',
+                borderRadius: '16px',
+                fontSize: '0.875rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1
+              }}
+            >
+              Search: "{searchQuery}"
+              <IconButton size="small" onClick={() => setSearchQuery("")}>
+                <Delete fontSize="small" style={{ color: "#64748B" }} />
+              </IconButton>
+            </Box>
+          )}
+          {Object.entries(filters).map(([key, value]) => (
+            value !== undefined && (
+              <Box
+                key={key}
+                component="span"
+                sx={{
+                  px: 2,
+                  py: 1,
+                  bgcolor: '#E2E8F0',
+                  borderRadius: '16px',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}
+              >
+                {key}: {String(value)}
+                <IconButton 
+                  size="small" 
+                  onClick={() => setFilters((prev: typeof filters) => ({ ...prev, [key]: undefined }))}
+                >
+                  <Delete fontSize="small" style={{ color: "#64748B" }} />
+                </IconButton>
+              </Box>
+            )
+          ))}
+          <Button 
+            size="small" 
+            onClick={clearAllFilters}
+            style={{ color: "#3B82F6" }}
+
+          >
+            Clear all
+          </Button>
+        </Box>
+      )}
+
+      {showProductForm ? (
+        <ProductForm 
+          product={currentProduct} 
+          onSave={handleSave} 
+          onCancel={handleCancel} 
+        />
+      ) : (
+        <>
           <TableContainer
             component={Paper}
             style={{
@@ -205,34 +380,24 @@ const ProductManagement = () => {
             <Table>
               <TableHead>
                 <TableRow style={{ backgroundColor: "#F8FAFC" }}>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Product Code
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Product Name
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Category
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Selling Price
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Unit
-                  </TableCell>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
-                    Actions
-                  </TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Product Code</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Product Name</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Category</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Selling Price</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Unit</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Rating</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
+                {filteredProducts.map((product) => (
                   <TableRow key={product.productID}>
                     <TableCell>{product.productCode}</TableCell>
                     <TableCell>{product.productName}</TableCell>
                     <TableCell>{product.categoryType}</TableCell>
                     <TableCell>${product.sellingPrice.toFixed(2)}</TableCell>
                     <TableCell>{product.measuringUnitType}</TableCell>
+                    <TableCell>{product.productRatingValue}</TableCell>
                     <TableCell>
                       <IconButton
                         color="primary"
@@ -252,16 +417,55 @@ const ProductManagement = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
+          {filteredProducts.length === 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              p: 4,
+              mt: 2,
+              backgroundColor: '#F8FAFC',
+              borderRadius: 1
+            }}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                No products found
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                Try adjusting your search or filters
+              </Typography>
+              <Button 
+                variant="outlined" 
+                onClick={clearAllFilters}
+                startIcon={<FilterAlt />}
+              >
+                Clear filters
+              </Button>
+            </Box>
+          )}
         </>
       )}
+      <Drawer
+        anchor="right"
+        open={showFilters}
+        onClose={() => setShowFilters(false)}
+      >
+        <FilterSideBar 
+          onClose={() => setShowFilters(false)} 
+          setFilters={handleApplyFilters}
+        />
+      </Drawer>
 
-      {/* Snackbar for notifications */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
+      <Snackbar 
+        open={snackbarOpen} 
+        autoHideDuration={3000} 
         onClose={handleSnackbarClose}
       >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+        <Alert 
+          onClose={(event) => handleSnackbarClose(event, 'timeout')} 
+          severity={snackbarSeverity}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

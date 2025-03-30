@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { ImageUploader } from '@/components/AdminComponents/ImageUploader';
+import { useNavigate } from 'react-router-dom';
 
 // Event and Room types
 interface Room {
@@ -172,8 +173,14 @@ const PackageForm: React.FC<PackageFormProps> = ({ packageData, onSave, onCancel
     setSnackbarOpen(true);
   };
 
+  const navigate = useNavigate(); // Move this to the top level
+
   const handleCancel = () => {
-    onCancel?.();
+    if (onCancel) {
+      onCancel();
+    } else {
+      navigate('/admin/package-management');
+    }
   };
 
   const handleSnackbarClose = () => {
