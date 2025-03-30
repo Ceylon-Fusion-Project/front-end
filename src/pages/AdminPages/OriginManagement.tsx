@@ -19,15 +19,17 @@ import {
   TextField,
   InputAdornment,
   Autocomplete,
+  Grid,
 } from "@mui/material";
 import { Add, Edit, Delete, FilterAlt, Search, Close } from "@mui/icons-material";
 import { OriginForm } from "../../components/AdminComponents/OriginForm";
+import dynamic from "next/dynamic";
 
 // Define the Origin type
 interface Origin {
   originID?: number;
-  stateLocation: string;
-  stateMapLink: string;
+  estateLocation: string;
+  estateMapLink: string;
   partOfPlant: string;
   originDescription: string;
   factoryName: string;
@@ -43,8 +45,8 @@ interface Origin {
 const mockData: Origin[] = [
   {
     originID: 1,
-    stateLocation: "Kandy",
-    stateMapLink: "https://www.openstreetmap.org/#map=15/7.2906/80.6337",
+    estateLocation: "Kandy",
+    estateMapLink: "https://www.openstreetmap.org/#map=15/7.2906/80.6337",
     partOfPlant: "Bark",
     originDescription: "High-quality cinnamon from Kandy",
     factoryName: "Kandy Cinnamon Factory",
@@ -57,8 +59,8 @@ const mockData: Origin[] = [
   },
   {
     originID: 2,
-    stateLocation: "Colombo",
-    stateMapLink: "https://www.openstreetmap.org/#map=15/6.9271/79.8612",
+    estateLocation: "Colombo",
+    estateMapLink: "https://www.openstreetmap.org/#map=15/6.9271/79.8612",
     partOfPlant: "Leaves",
     originDescription: "Premium cinnamon leaves from Colombo",
     factoryName: "Colombo Cinnamon Leaves",
@@ -70,6 +72,11 @@ const mockData: Origin[] = [
     originCode: "COLOMBO002",
   },
 ];
+
+// Dynamic import for the Map component to avoid SSR issues
+const MapWithNoSSR = dynamic(() => import("../../components/AdminComponents/Map"), {
+  ssr: false,
+});
 
 const OriginManagement = () => {
   const [origins, setOrigins] = useState<Origin[]>(mockData);
@@ -89,7 +96,7 @@ const OriginManagement = () => {
     const suggestions = new Set<string>();
     
     origins.forEach(origin => {
-      suggestions.add(origin.stateLocation);
+      suggestions.add(origin.estateLocation);
       suggestions.add(origin.partOfPlant);
       suggestions.add(origin.factoryName);
       suggestions.add(origin.originCode);
@@ -106,7 +113,7 @@ const OriginManagement = () => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(origin => 
-        origin.stateLocation.toLowerCase().includes(query) ||
+        origin.estateLocation.toLowerCase().includes(query) ||
         origin.partOfPlant.toLowerCase().includes(query) ||
         origin.factoryName.toLowerCase().includes(query) ||
         origin.originCode.toLowerCase().includes(query) ||
@@ -211,6 +218,7 @@ const OriginManagement = () => {
           origin={currentOrigin}
           onSave={handleSave}
           onCancel={handleCancel}
+          editMode={editMode}
         />
       ) : (
         <>
@@ -253,7 +261,7 @@ const OriginManagement = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    placeholder="Search by state, plant part, factory..."
+                    placeholder="Search by estate, plant part, factory..."
                     variant="outlined"
                     size="small"
                     fullWidth
@@ -390,7 +398,7 @@ const OriginManagement = () => {
             <Table>
               <TableHead>
                 <TableRow style={{ backgroundColor: "#F8FAFC" }}>
-                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>State Location</TableCell>
+                  <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Estate Location</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Part of Plant</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Factory Name</TableCell>
                   <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>Origin Code</TableCell>
@@ -400,7 +408,7 @@ const OriginManagement = () => {
               <TableBody>
                 {filteredOrigins.map((origin) => (
                   <TableRow key={origin.originID}>
-                    <TableCell>{origin.stateLocation}</TableCell>
+                    <TableCell>{origin.estateLocation}</TableCell>
                     <TableCell>{origin.partOfPlant}</TableCell>
                     <TableCell>{origin.factoryName}</TableCell>
                     <TableCell>{origin.originCode}</TableCell>
@@ -467,17 +475,17 @@ const OriginManagement = () => {
             Filter Origins
           </Typography>
           
-          {/* State Location Filter */}
+          {/* Estate Location Filter */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
-              State Location
+              Estate Location
             </Typography>
             <TextField
               fullWidth
               size="small"
-              value={filters.stateLocation || ''}
-              onChange={(e) => setFilters({ ...filters, stateLocation: e.target.value })}
-              placeholder="Filter by state"
+              value={filters.estateLocation || ''}
+              onChange={(e) => setFilters({ ...filters, estateLocation: e.target.value })}
+              placeholder="Filter by estate"
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
