@@ -115,7 +115,7 @@ const Card: React.FC<CardProps> = ({
       if (response?.status === 200 || response?.status === 201) {
         NotificationService.success("Product added to cart successfully!");
       } else {
-        NotificationService.error("Unexpected response from server.");
+        //NotificationService.error("Unexpected response from server.");
         throw new Error("Unexpected response from server.");
       }
     } catch (error) {
@@ -136,23 +136,23 @@ const Card: React.FC<CardProps> = ({
     //   }
     // }
     // Handle Different Error Scenarios
-    if (!(error as any).response) {
-      const { status, data } = (error as any).response;
+    // if (!(error as any).response) {
+    //   const { status, data } = (error as any).response;
 
-      if (status === 401) {
-        NotificationService.error("Unauthorized! Please log in again.");
-      } else if (status === 403) {
-        NotificationService.error("Forbidden! You don’t have permission.");
-      } else if (status === 404) {
-        NotificationService.error("Product not found.");
-      } else if (status === 500) {
-        NotificationService.error("Server error! Please try again later.");
-      } else {
-        NotificationService.error(data?.message || "An unexpected error occurred.");
-      }
-    } else {
-      NotificationService.error("Network error! Please check your connection.");
-    }
+    //   if (status === 401) {
+    //     NotificationService.error("Unauthorized! Please log in again.");
+    //   } else if (status === 403) {
+    //     NotificationService.error("Forbidden! You don’t have permission.");
+    //   } else if (status === 404) {
+    //     NotificationService.error("Product not found.");
+    //   } else if (status === 500) {
+    //     NotificationService.error("Server error! Please try again later.");
+    //   } else {
+    //     NotificationService.error(data?.message || "An unexpected error occurred.");
+    //   }
+    // } else {
+    //   NotificationService.error("Network error! Please check your connection.");
+    // }
   }
   };
 
@@ -191,21 +191,21 @@ const Card: React.FC<CardProps> = ({
       if (response?.status === 200 || response?.status === 201) {
         NotificationService.success("Product removed from cart successfully!");
       }else{
-        NotificationService.error("Unexpected response from server.");
+        //NotificationService.error("Unexpected response from server.");
         throw new Error("Unexpected response from server.");
       }
     } catch (error){
       console.error("Error removing from cart:", error);
       setIsInCart(true);
-      if ((error as any).response) {
-        console.error(
-          "�� Axios Error Response:",(error as any).response?.data);
-        NotificationService.error(
-          `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
-        );
-      } else {
-        NotificationService.error("Network error. Please try again.");
-      }
+      // if ((error as any).response) {
+      //   console.error(
+      //     "�� Axios Error Response:",(error as any).response?.data);
+      //   NotificationService.error(
+      //     `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
+      //   );
+      // } else {
+      //   NotificationService.error("Network error. Please try again.");
+      // }
     }
   };
 
@@ -231,22 +231,22 @@ const Card: React.FC<CardProps> = ({
       if (response?.status === 200 || response?.status === 201){
         NotificationService.success("Product added to wishlist successfully!");
       }else {
-        NotificationService.error("Unexpected response from server.");
+        //NotificationService.error("Unexpected response from server.");
         throw new Error("Unexpected response from server.");
       } 
     } catch (error) {
       console.error("Error adding to wishlist", error);
       setIsWishlist(false);
 
-      if ((error as any).response) {
-        console.error(
-          "�� Axios Error Response:",(error as any).response?.data);
-        NotificationService.error(
-          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
-        );
-      } else {
-        NotificationService.error("Network error. Please try again.");
-      }
+      // if ((error as any).response) {
+      //   console.error(
+      //     "�� Axios Error Response:",(error as any).response?.data);
+      //   NotificationService.error(
+      //     `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+      //   );
+      // } else {
+      //   NotificationService.error("Network error. Please try again.");
+      // }
     }
   };
 
@@ -271,20 +271,20 @@ const Card: React.FC<CardProps> = ({
       if (response?.status === 200 || response?.status === 201){
         NotificationService.success("Product removed from wishlist successfully!");
       } else {
-        NotificationService.error("Unexpected response from server.");
+        //NotificationService.error("Unexpected response from server.");
         throw new Error("Unexpected response from server.");
       }
     } catch (error){
       console.error("Error removing from wishlist:", error);
       setIsWishlist(true);
-      if ((error as any).response) {
-        console.error("�� Axios Error Response:",(error as any).response?.data);
-        NotificationService.error(
-          `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
-        );
-      } else {
-        NotificationService.error("Network error. Please try again.");
-      }
+      // if ((error as any).response) {
+      //   console.error("�� Axios Error Response:",(error as any).response?.data);
+      //   NotificationService.error(
+      //     `Failed to remove item: ${(error as any).response?.data?.message || "Unknown error"}`
+      //   );
+      // } else {
+      //   NotificationService.error("Network error. Please try again.");
+      // }
     }
   };
 
