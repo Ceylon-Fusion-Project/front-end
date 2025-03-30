@@ -17,8 +17,8 @@ import {
   Box,
   Drawer,
   TextField,
-  Autocomplete,
   InputAdornment,
+  Autocomplete,
 } from "@mui/material";
 import { Add, Edit, Delete, FilterAlt, Search, Close } from "@mui/icons-material";
 import { OriginForm } from "../../components/AdminComponents/OriginForm";
@@ -84,32 +84,25 @@ const OriginManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<any>({});
 
-  // Generate search options based on origin data
-  const generateSearchOptions = () => {
-    const options: { label: string; category: string }[] = [];
+  // Generate search suggestions based on origin fields
+  const generateSearchSuggestions = () => {
+    const suggestions = new Set<string>();
     
     origins.forEach(origin => {
-      options.push(
-        { label: origin.stateLocation, category: "State Location" },
-        { label: origin.partOfPlant, category: "Part of Plant" },
-        { label: origin.factoryName, category: "Factory Name" },
-        { label: origin.originCode, category: "Origin Code" }
-      );
+      suggestions.add(origin.stateLocation);
+      suggestions.add(origin.partOfPlant);
+      suggestions.add(origin.factoryName);
+      suggestions.add(origin.originCode);
     });
     
-    // Remove duplicates
-    return options.filter((option, index, self) =>
-      index === self.findIndex((t) => (
-        t.label === option.label && t.category === option.category
-      ))
-    );
+    return Array.from(suggestions);
   };
 
   // Apply filters and search
   useEffect(() => {
     let result = [...origins];
     
-    // Apply search filter across multiple fields
+    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(origin => 
@@ -253,16 +246,17 @@ const OriginManagement = () => {
             }}>
               <Autocomplete
                 freeSolo
-                options={generateSearchOptions()}
-                groupBy={(option) => option.category}
-                getOptionLabel={(option) => typeof option === 'string' ? option : option.label}
-                inputValue={searchQuery}
-                onInputChange={(_, newValue) => handleSearch(newValue)}
+                options={generateSearchSuggestions()}
+                value={searchQuery}
+                onChange={(event, newValue) => handleSearch(newValue || "")}
+                onInputChange={(event, newInputValue) => handleSearch(newInputValue)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     placeholder="Search by state, plant part, factory..."
+                    variant="outlined"
                     size="small"
+                    fullWidth
                     InputProps={{
                       ...params.InputProps,
                       startAdornment: (
@@ -270,28 +264,37 @@ const OriginManagement = () => {
                           <Search color="action" />
                         </InputAdornment>
                       ),
-                      endAdornment: searchQuery ? (
-                        <IconButton
-                          size="small"
-                          onClick={() => handleSearch("")}
-                        >
-                          <Close fontSize="small" />
-                        </IconButton>
-                      ) : null,
-                    }}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
+                      endAdornment: (
+                        <>
+                          {searchQuery && (
+                            <IconButton
+                              size="small"
+                              onClick={() => handleSearch("")}
+                              edge="end"
+                            >
+                              <Close fontSize="small" />
+                            </IconButton>
+                          )}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                      sx: {
                         backgroundColor: '#FFFFFF',
-                        '& fieldset': {
+                        '& .MuiOutlinedInput-notchedOutline': {
                           borderColor: '#CBD5E1',
                         },
-                        '&:hover fieldset': {
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
                           borderColor: '#94A3B8',
                         },
                       }
                     }}
                   />
                 )}
+                sx={{
+                  '& .MuiAutocomplete-popupIndicator': {
+                    color: '#64748B',
+                  },
+                }}
               />
             </Box>
 
