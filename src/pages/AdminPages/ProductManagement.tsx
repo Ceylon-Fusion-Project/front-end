@@ -157,6 +157,9 @@ const ProductManagement = () => {
     setSnackbarOpen(false);
   };
 
+  console.debug(handleSave); // Prevent TS unused warning
+
+
   return (
     <Container maxWidth="lg" style={{ marginTop: "2rem" }}>
       <Typography
