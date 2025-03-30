@@ -1,5 +1,4 @@
-// OriginManagement.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -15,8 +14,13 @@ import {
   Snackbar,
   Alert,
   AlertColor,
+  Box,
+  Drawer,
+  TextField,
+  Autocomplete,
+  InputAdornment,
 } from "@mui/material";
-import { Add, Edit, Delete } from "@mui/icons-material";
+import { Add, Edit, Delete, FilterAlt, Search, Close } from "@mui/icons-material";
 import { OriginForm } from "../../components/AdminComponents/OriginForm";
 
 // Define the Origin type
@@ -51,16 +55,83 @@ const mockData: Origin[] = [
     updatedDate: "2024-01-01",
     originCode: "KANDY001",
   },
+  {
+    originID: 2,
+    stateLocation: "Colombo",
+    stateMapLink: "https://www.openstreetmap.org/#map=15/6.9271/79.8612",
+    partOfPlant: "Leaves",
+    originDescription: "Premium cinnamon leaves from Colombo",
+    factoryName: "Colombo Cinnamon Leaves",
+    factoryAddress: "456 Colombo Street, Colombo",
+    factoryMapLink: "https://www.openstreetmap.org/#map=15/6.9271/79.8612",
+    demoVideoLink: "https://youtube.com/colombo-cinnamon",
+    createdDate: "2024-02-01",
+    updatedDate: "2024-02-01",
+    originCode: "COLOMBO002",
+  },
 ];
 
 const OriginManagement = () => {
   const [origins, setOrigins] = useState<Origin[]>(mockData);
+  const [filteredOrigins, setFilteredOrigins] = useState<Origin[]>(mockData);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [currentOrigin, setCurrentOrigin] = useState<Origin | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
   const [showOriginForm, setShowOriginForm] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState<any>({});
+
+  // Generate search options based on origin data
+  const generateSearchOptions = () => {
+    const options: { label: string; category: string }[] = [];
+    
+    origins.forEach(origin => {
+      options.push(
+        { label: origin.stateLocation, category: "State Location" },
+        { label: origin.partOfPlant, category: "Part of Plant" },
+        { label: origin.factoryName, category: "Factory Name" },
+        { label: origin.originCode, category: "Origin Code" }
+      );
+    });
+    
+    // Remove duplicates
+    return options.filter((option, index, self) =>
+      index === self.findIndex((t) => (
+        t.label === option.label && t.category === option.category
+      ))
+    );
+  };
+
+  // Apply filters and search
+  useEffect(() => {
+    let result = [...origins];
+    
+    // Apply search filter across multiple fields
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(origin => 
+        origin.stateLocation.toLowerCase().includes(query) ||
+        origin.partOfPlant.toLowerCase().includes(query) ||
+        origin.factoryName.toLowerCase().includes(query) ||
+        origin.originCode.toLowerCase().includes(query) ||
+        origin.originDescription.toLowerCase().includes(query)
+      );
+    }
+    
+    // Apply all other filters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) {
+        result = result.filter(origin => 
+          String(origin[key as keyof Origin]).toLowerCase().includes(String(value).toLowerCase())
+        );
+      }
+    });
+
+    setFilteredOrigins(result);
+  }, [origins, searchQuery, filters]);
 
   const handleAddClick = () => {
     setEditMode(false);
@@ -81,39 +152,51 @@ const OriginManagement = () => {
     setSnackbarOpen(true);
   };
 
-// OriginManagement.tsx
-const handleSave = (originData: Origin) => {
-  const newOrigin: Origin = {
-    ...originData,
-    originID:
-      originData.originID !== undefined
-        ? originData.originID
-        : origins.length > 0
-        ? Math.max(...origins.map((o) => o.originID || 0)) + 1
-        : 1,
-    createdDate: originData.createdDate || new Date().toISOString().split("T")[0],
-    updatedDate: new Date().toISOString().split("T")[0],
+  const handleSave = (originData: Origin) => {
+    const newOrigin: Origin = {
+      ...originData,
+      originID:
+        originData.originID !== undefined
+          ? originData.originID
+          : origins.length > 0
+          ? Math.max(...origins.map((o) => o.originID || 0)) + 1
+          : 1,
+      createdDate: originData.createdDate || new Date().toISOString().split("T")[0],
+      updatedDate: new Date().toISOString().split("T")[0],
+    };
+
+    if (editMode && currentOrigin) {
+      setOrigins(
+        origins.map((origin) =>
+          origin.originID === currentOrigin.originID ? newOrigin : origin
+        )
+      );
+      setSnackbarMessage("Origin updated successfully!");
+    } else {
+      setOrigins([...origins, newOrigin]);
+      setSnackbarMessage("Origin added successfully!");
+    }
+
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
+    setShowOriginForm(false);
   };
-
-  if (editMode && currentOrigin) {
-    setOrigins(
-      origins.map((origin) =>
-        origin.originID === currentOrigin.originID ? newOrigin : origin
-      )
-    );
-    setSnackbarMessage("Origin updated successfully!");
-  } else {
-    setOrigins([...origins, newOrigin]);
-    setSnackbarMessage("Origin added successfully!");
-  }
-
-  setSnackbarSeverity("success");
-  setSnackbarOpen(true);
-  setShowOriginForm(false);
-};
 
   const handleCancel = () => {
     setShowOriginForm(false);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleApplyFilters = () => {
+    setShowFilters(false);
+  };
+
+  const clearAllFilters = () => {
+    setSearchQuery("");
+    setFilters({});
   };
 
   const handleSnackbarClose = () => {
@@ -138,15 +221,164 @@ const handleSave = (originData: Origin) => {
         />
       ) : (
         <>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Add />}
-            onClick={handleAddClick}
-            style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}
-          >
-            Add Origin
-          </Button>
+          {/* Search and Filter Bar */}
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center',
+            gap: 2, 
+            mb: 3,
+            flexWrap: 'wrap'
+          }}>
+            {/* Add Origin Button - Left */}
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Add />}
+              onClick={handleAddClick}
+              style={{ 
+                backgroundColor: "#B45309", 
+                color: "#FFFFFF",
+                minWidth: '150px',
+                order: 1
+              }}
+            >
+              Add Origin
+            </Button>
+
+            {/* Custom Search Bar - Middle */}
+            <Box sx={{ 
+              flexGrow: 1,
+              maxWidth: '400px',
+              order: 2
+            }}>
+              <Autocomplete
+                freeSolo
+                options={generateSearchOptions()}
+                groupBy={(option) => option.category}
+                getOptionLabel={(option) => typeof option === 'string' ? option : option.label}
+                inputValue={searchQuery}
+                onInputChange={(_, newValue) => handleSearch(newValue)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Search by state, plant part, factory..."
+                    size="small"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Search color="action" />
+                        </InputAdornment>
+                      ),
+                      endAdornment: searchQuery ? (
+                        <IconButton
+                          size="small"
+                          onClick={() => handleSearch("")}
+                        >
+                          <Close fontSize="small" />
+                        </IconButton>
+                      ) : null,
+                    }}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: '#FFFFFF',
+                        '& fieldset': {
+                          borderColor: '#CBD5E1',
+                        },
+                        '&:hover fieldset': {
+                          borderColor: '#94A3B8',
+                        },
+                      }
+                    }}
+                  />
+                )}
+              />
+            </Box>
+
+            {/* Filter Button - Right */}
+            <Button
+              variant="outlined"
+              startIcon={<FilterAlt />}
+              onClick={() => setShowFilters(true)}
+              sx={{ 
+                backgroundColor: "#F8FAFC",
+                borderColor: "#CBD5E1",
+                color: "#1E293B",
+                order: 3,
+                marginLeft: 'auto',
+                '&:hover': {
+                  backgroundColor: '#F1F5F9',
+                  borderColor: '#94A3B8'
+                }
+              }}
+            >
+              Filters
+            </Button>
+          </Box>
+
+          {/* Filter Chips */}
+          {(searchQuery || Object.keys(filters).length > 0) && (
+            <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+              {searchQuery && (
+                <Box
+                  component="span"
+                  sx={{
+                    px: 2,
+                    py: 1,
+                    bgcolor: '#E2E8F0',
+                    borderRadius: '16px',
+                    fontSize: '0.875rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1
+                  }}
+                >
+                  Search: "{searchQuery}"
+                  <IconButton size="small" onClick={() => setSearchQuery("")}>
+                    <Delete fontSize="small" style={{ color: "#64748B" }} />
+                  </IconButton>
+                </Box>
+              )}
+              {Object.entries(filters).map(([key, value]) => (
+                value !== undefined && (
+                  <Box
+                    key={key}
+                    component="span"
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      bgcolor: '#E2E8F0',
+                      borderRadius: '16px',
+                      fontSize: '0.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1
+                    }}
+                  >
+                    {key}: {String(value)}
+                    <IconButton 
+                      size="small" 
+                      onClick={() => setFilters((prev: typeof filters) => ({ ...prev, [key]: undefined }))}
+                    >
+                      <Delete fontSize="small" style={{ color: "#64748B" }} />
+                    </IconButton>
+                  </Box>
+                )
+              ))}
+              <Button 
+                size="small" 
+                onClick={clearAllFilters}
+                sx={{ 
+                  color: '#3B82F6',
+                  '&:hover': {
+                    backgroundColor: '#EFF6FF'
+                  }
+                }}
+              >
+                Clear all
+              </Button>
+            </Box>
+          )}
 
           <TableContainer
             component={Paper}
@@ -163,7 +395,7 @@ const handleSave = (originData: Origin) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {origins.map((origin) => (
+                {filteredOrigins.map((origin) => (
                   <TableRow key={origin.originID}>
                     <TableCell>{origin.stateLocation}</TableCell>
                     <TableCell>{origin.partOfPlant}</TableCell>
@@ -182,8 +414,186 @@ const handleSave = (originData: Origin) => {
               </TableBody>
             </Table>
           </TableContainer>
+
+          {/* Empty state */}
+          {filteredOrigins.length === 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              p: 4,
+              mt: 2,
+              backgroundColor: '#F8FAFC',
+              borderRadius: 1
+            }}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                No origins found
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
+                Try adjusting your search or filters
+              </Typography>
+              <Button 
+                variant="outlined" 
+                onClick={clearAllFilters}
+                startIcon={<FilterAlt />}
+                sx={{
+                  borderColor: '#CBD5E1',
+                  color: '#1E293B',
+                  '&:hover': {
+                    borderColor: '#94A3B8',
+                    backgroundColor: '#F1F5F9'
+                  }
+                }}
+              >
+                Clear filters
+              </Button>
+            </Box>
+          )}
         </>
       )}
+
+      {/* Filter Sidebar */}
+      <Drawer
+        anchor="right"
+        open={showFilters}
+        onClose={() => setShowFilters(false)}
+      >
+        <Box sx={{ width: 350, p: 3, backgroundColor: '#F8FAFC', height: '100%' }}>
+          <Typography variant="h6" gutterBottom sx={{ color: '#1E293B', mb: 3 }}>
+            Filter Origins
+          </Typography>
+          
+          {/* State Location Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              State Location
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              value={filters.stateLocation || ''}
+              onChange={(e) => setFilters({ ...filters, stateLocation: e.target.value })}
+              placeholder="Filter by state"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Part of Plant Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Part of Plant
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              value={filters.partOfPlant || ''}
+              onChange={(e) => setFilters({ ...filters, partOfPlant: e.target.value })}
+              placeholder="Filter by plant part"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Factory Name Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Factory Name
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              value={filters.factoryName || ''}
+              onChange={(e) => setFilters({ ...filters, factoryName: e.target.value })}
+              placeholder="Filter by factory name"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Origin Code Filter */}
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ color: '#64748B', mb: 1 }}>
+              Origin Code
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
+              value={filters.originCode || ''}
+              onChange={(e) => setFilters({ ...filters, originCode: e.target.value })}
+              placeholder="Filter by origin code"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#CBD5E1',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#94A3B8',
+                  },
+                }
+              }}
+            />
+          </Box>
+
+          {/* Action Buttons */}
+          <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => setFilters({})}
+              sx={{
+                color: '#64748B',
+                borderColor: '#CBD5E1',
+                '&:hover': {
+                  borderColor: '#94A3B8',
+                  backgroundColor: '#F1F5F9'
+                }
+              }}
+            >
+              Clear All
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleApplyFilters}
+              sx={{
+                backgroundColor: '#B45309',
+                color: '#FFFFFF',
+                '&:hover': {
+                  backgroundColor: '#92400E'
+                }
+              }}
+            >
+              Apply Filters
+            </Button>
+          </Box>
+        </Box>
+      </Drawer>
 
       <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
