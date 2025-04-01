@@ -13,7 +13,7 @@ interface CardProps {
   longDescription?: string;
   price: string;
   isFeatured?: boolean;
-  productID: number;
+  productID?: number;
   onClick: () => void;
 }
 
