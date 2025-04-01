@@ -19,8 +19,8 @@ const MapWithNoSSR = lazy(() => import("./Map"));
 
 interface Origin {
   originID?: number;
-  estateLocation: string;
-  estateMapLink: string;
+  stateLocation: string;
+  stateMapLink: string;
   partOfPlant: string;
   originDescription: string;
   factoryName: string;
@@ -52,8 +52,8 @@ interface OriginFormProps {
 
 export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
   const [formData, setFormData] = useState<Origin>({
-    estateLocation: origin?.estateLocation || "",
-    estateMapLink: origin?.estateMapLink || "",
+    stateLocation: origin?.stateLocation || "",
+    stateMapLink: origin?.stateMapLink || "",
     partOfPlant: origin?.partOfPlant || "",
     originDescription: origin?.originDescription || "",
     factoryName: origin?.factoryName || "",
@@ -72,9 +72,9 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.estateLocation)
+    if (!formData.stateLocation)
       newErrors.estateLocation = "Estate Location is required";
-    if (!formData.estateMapLink)
+    if (!formData.stateMapLink)
       newErrors.estateMapLink = "Estate Map Link is required";
     if (!formData.partOfPlant)
       newErrors.partOfPlant = "Part of Plant is required";
@@ -107,7 +107,7 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
     if (mapSelectionType === "estate") {
       setFormData((prev) => ({
         ...prev,
-        estateMapLink: url,
+        stateMapLink: url,
       }));
     } else {
       setFormData((prev) => ({
@@ -156,10 +156,10 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
             <Grid item xs={12} md={6}>
               <TextField
                 label="Estate Location"
-                name="estateLocation"
+                name="stateLocation"
                 fullWidth
                 margin="normal"
-                value={formData.estateLocation}
+                value={formData.stateLocation}
                 onChange={handleChange}
                 error={!!errors.estateLocation}
                 helperText={errors.estateLocation}
@@ -170,10 +170,10 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
             <Grid item xs={12} md={6}>
               <TextField
                 label="Estate Map Link"
-                name="estateMapLink"
+                name="stateMapLink"
                 fullWidth
                 margin="normal"
-                value={formData.estateMapLink}
+                value={formData.stateMapLink}
                 onChange={handleChange}
                 error={!!errors.estateMapLink}
                 helperText={errors.estateMapLink}
@@ -349,7 +349,7 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
                 onLocationSelect={handleMapSelection}
                 initialLocation={
                   mapSelectionType === "estate"
-                    ? parseMapLink(formData.estateMapLink)
+                    ? parseMapLink(formData.stateMapLink)
                     : parseMapLink(formData.factoryMapLink)
                 }
                 markerColor={
