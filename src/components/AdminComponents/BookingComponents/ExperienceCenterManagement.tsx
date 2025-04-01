@@ -531,7 +531,7 @@ import {
 } from '@mui/material';
 import { Add, Edit, Delete, Visibility, Place, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { ExperienceCenter, Event } from '../../../types/experienceCenterTypes';
+import { ExperienceCenter} from '../../../types/experienceCenterTypes';
 
 const MapWithNoSSR = lazy(() => import('../Map'));
 
