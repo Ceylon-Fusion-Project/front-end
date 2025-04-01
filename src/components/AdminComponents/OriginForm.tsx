@@ -58,8 +58,8 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.estateLocation) newErrors.estateLocation = "Estate Location is required";
-    if (!formData.estateMapLink) newErrors.estateMapLink = "Estate Map Link is required";
+    if (!formData.stateLocation) newErrors.estateLocation = "Estate Location is required";
+    if (!formData.stateMapLink) newErrors.estateMapLink = "Estate Map Link is required";
     if (!formData.partOfPlant) newErrors.partOfPlant = "Part of Plant is required";
     if (!formData.originDescription) newErrors.originDescription = "Origin Description is required";
     if (!formData.factoryName) newErrors.factoryName = "Factory Name is required";
