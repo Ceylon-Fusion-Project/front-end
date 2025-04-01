@@ -12,13 +12,13 @@ export const categoryTypes: CategoryType[] = [
 export const measuringUnitTypes: MeasuringUnitType[] = [
   { value: "GRAM", label: "Grams (g)" },
   { value: "KILO_GRAM", label: "Kilograms (kg)" },
-  { value: "OUNCES", label: "Ounces (oz)" },
-  { value: "POUNDS", label: "Pounds (lb)" },
+  //{ value: "OUNCES", label: "Ounces (oz)" },
+  //{ value: "POUNDS", label: "Pounds (lb)" },
   { value: "MILLI_LITER", label: "Milliliters (ml)" },
   { value: "LITER", label: "Liters (l)" },
-  { value: "PIECES", label: "Pieces (pcs)" },
-  { value: "STICKS", label: "Sticks" },
-  { value: "PACKETS", label: "Packets" },
+  //{ value: "PIECES", label: "Pieces (pcs)" },
+  //{ value: "STICKS", label: "Sticks" },
+  //{ value: "PACKETS", label: "Packets" },
   { value: "NUMBER", label: "Each"},
 ]
 
