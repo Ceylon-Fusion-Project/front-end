@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import {
   Grid,
   Typography,
@@ -6,18 +6,17 @@ import {
   Button,
   Box,
   Divider,
-  FormControlLabel,
-  Switch,
+ 
   Card,
   CardContent,
   CardHeader,
-  IconButton,
+  
 } from '@mui/material';
-import { ExpandMore, CloudDownload, Delete, Security, Notifications, Analytics } from '@mui/icons-material';
+import {  CloudDownload, Delete, Security, Analytics } from '@mui/icons-material';
 
 const AdminSettings = () => {
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [notificationPreferences, setNotificationPreferences] = useState({
+  const [] = useState(false);
+  const [] = useState({
     email: true,
     sms: false,
     push: true,

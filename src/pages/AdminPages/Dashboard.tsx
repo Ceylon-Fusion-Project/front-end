@@ -143,8 +143,7 @@ const Dashboard = () => {
     innerRadius,
     outerRadius,
     percent,
-    index,
-    name
+  
   }: {
     cx: number;
     cy: number;

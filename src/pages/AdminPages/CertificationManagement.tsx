@@ -205,10 +205,10 @@ const CertificationManagement = () => {
     setSearchQuery(query);
   };
 
-  const handleApplyFilters = (newFilters: any) => {
-    setFilters(newFilters);
-    setShowFilters(false);
-  };
+  // const handleApplyFilters = (newFilters: any) => {
+  //   setFilters(newFilters);
+  //   setShowFilters(false);
+  // };
 
   const clearAllFilters = () => {
     setSearchQuery("");
@@ -216,7 +216,7 @@ const CertificationManagement = () => {
   };
 
   const handleSnackbarClose = (
-    event?: SyntheticEvent | Event,
+    _event?: SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
     if (reason === "clickaway") {

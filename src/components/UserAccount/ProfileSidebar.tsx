@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { User, ShoppingBag, CalendarCheck, Settings, LayoutDashboard, X } from 'lucide-react';
+import { User, ShoppingBag, CalendarCheck, Settings,  X } from 'lucide-react';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, IconButton, useMediaQuery, useTheme } from '@mui/material';
 
 interface ProfileSidebarProps {

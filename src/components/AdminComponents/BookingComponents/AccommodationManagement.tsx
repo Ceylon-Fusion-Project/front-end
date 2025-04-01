@@ -442,7 +442,7 @@ import {
 } from '@mui/material';
 import { Add, Edit, Delete, Visibility, Place, Close } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { Accommodation, Room } from '../../../types/accommodation';
+import { Accommodation } from '../../../types/accommodation';
 
 const MapWithNoSSR = lazy(() => import('../Map'));
 
