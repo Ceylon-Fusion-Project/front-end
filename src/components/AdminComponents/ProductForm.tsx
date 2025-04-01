@@ -1,5 +1,5 @@
 // src/components/ProductForm.tsx
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -51,8 +51,14 @@ interface ProductFormProps {
 export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false); // loading state
-
   const idempotencyKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      // Reset key when component unmounts (form closes)
+      idempotencyKeyRef.current = null;
+    };
+  }, []);
 
   const defaultValues: Partial<FormValues> = {
     productCode: product?.productCode || "",
@@ -107,11 +113,14 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
     // idempotencyKey generate ONCE per delete
     setLoading(true);
     // Generate only once
+    // if (!idempotencyKeyRef.current) {
+    //   idempotencyKeyRef.current = uuidv4();
+    //   console.log("Generated idempotency key:", idempotencyKeyRef.current);
+    // } else {
+    //   console.log("Reusing idempotency key:", idempotencyKeyRef.current);
+    // }
     if (!idempotencyKeyRef.current) {
       idempotencyKeyRef.current = uuidv4();
-      console.log("Generated idempotency key:", idempotencyKeyRef.current);
-    } else {
-      console.log("Reusing idempotency key:", idempotencyKeyRef.current);
     }
 
     const usedKey = idempotencyKeyRef.current;
@@ -322,6 +331,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
               <button
                 type="submit"
                 className="bg-amber-700 hover:bg-amber-800 text-white px-4 py-2 rounded"
+                disabled={loading}
               >
                 Save Product
               </button>
