@@ -144,8 +144,10 @@ const MiddleArea: React.FC = () => {
                     {/* Product List */}
                     <ProductList 
                         searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
                         sortOption={sortOption}
                         filters={filters}
+                        setFilters={setFilters}
                         page={page}
                         setPage={setPage}
                         size={size}

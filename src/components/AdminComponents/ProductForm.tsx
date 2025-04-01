@@ -1,5 +1,5 @@
 // src/components/ProductForm.tsx
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,6 +9,7 @@ import { categoryTypes, measuringUnitTypes, origins } from "../../lib/data";
 import { saveProduct, updateProduct } from "@/services/productService";
 import LoadingOverlay from "../LoadingOverlay";
 import NotificationService from "@/utils/NotificationService";
+import { v4 as uuidv4 } from "uuid";
 //import { handleAxiosError } from "@/api/handleAxiosError";
 //import type { AxiosError } from "axios";
 
@@ -33,6 +34,7 @@ const formSchema = z.object({
   productImageURLs: z.array(z.string()).min(1, {
     message: "At least one product image is required.",
   }),
+  productActiveState: z.boolean(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;
@@ -50,6 +52,8 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false); // loading state
 
+  const idempotencyKeyRef = useRef<string | null>(null);
+
   const defaultValues: Partial<FormValues> = {
     productCode: product?.productCode || "",
     productName: product?.productName || "",
@@ -59,6 +63,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
     measuringUnitType: product?.measuringUnitType || "",
     productOrigin: product?.productOrigin || 0,
     productImageURLs: product?.productImageURLs || [],
+    productActiveState: product?.productActiveState || true,
   };
 
   const form = useForm<FormValues>({
@@ -98,10 +103,22 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
     //       alert("Failed to save product");
     //     });
     // }
+
+    // idempotencyKey generate ONCE per delete
     setLoading(true);
+    // Generate only once
+    if (!idempotencyKeyRef.current) {
+      idempotencyKeyRef.current = uuidv4();
+      console.log("Generated idempotency key:", idempotencyKeyRef.current);
+    } else {
+      console.log("Reusing idempotency key:", idempotencyKeyRef.current);
+    }
+
+    const usedKey = idempotencyKeyRef.current;
+
     const operation = product?.productCode
-      ? updateProduct(product.productID!, values)
-      : saveProduct(values);
+      ? updateProduct(product.productID!, values, usedKey)
+      : saveProduct(values, usedKey);
 
     operation
       .then(() => {
@@ -113,7 +130,7 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         onSave(values); // inform parent
       })
       .catch((error) => {
-        console.error("response Error123:"+error);
+        console.error("response Error123:" + error);
         // handleAxiosError(error); -
       })
       .finally(() => {
@@ -148,6 +165,18 @@ export function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-6"
           >
+            {/* Active Status Checkbox */}
+            <div>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  {...form.register("productActiveState")}
+                  className="w-4 h-4"
+                />
+                <span className="text-gray-700">Active Product</span>
+              </label>
+            </div>
+
             {/* Product Code */}
             <div>
               <label className="block font-semibold mb-1">Product Code</label>
