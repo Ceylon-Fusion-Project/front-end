@@ -24,11 +24,7 @@ import AutoCompleteSearchBar from "@/components/AutoCompletedSearchBar";
 import FilterSideBar from "@/components/FilterSideBar";
 import api from "@/api/axiosInstance";
 import axios from "axios";
-import {
-  saveProduct,
-  updateProduct,
-  deleteProduct,
-} from "@/services/productService";
+import { deleteProduct } from "@/services/productService";
 import { v4 as uuidv4 } from "uuid";
 
 export interface Product {
@@ -50,7 +46,7 @@ export interface Product {
 const ProductManagement = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const [_editMode, setEditMode] = useState<boolean>(false);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
@@ -63,6 +59,7 @@ const ProductManagement = () => {
   const [page, setPage] = useState<number>(0);
   const [pageSize] = useState<number>(8);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const productNames = products.map((product) => product.productName);
 
@@ -157,6 +154,9 @@ const ProductManagement = () => {
     );
     if (!confirmDelete) return;
 
+    if (deletingId === id) return; // prevent double click
+    setDeletingId(id);
+
     try {
       // idempotencyKey generate ONCE per delete
       const idempotencyKey = uuidv4();
@@ -170,6 +170,8 @@ const ProductManagement = () => {
       setSnackbarMessage("Failed to delete product.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -245,11 +247,9 @@ const ProductManagement = () => {
   // };
 
   function handleSave() {
-    setShowProductForm(false);     // close the form
-    fetchProducts();               // reload product list
+    setShowProductForm(false); // close the form
+    fetchProducts(); // reload product list
   }
-
-
 
   const handleCancel = () => {
     setShowProductForm(false);
@@ -457,6 +457,7 @@ const ProductManagement = () => {
                       <IconButton
                         color="secondary"
                         onClick={() => handleDeleteClick(product.productID)}
+                        disabled={deletingId === product.productID}
                       >
                         <Delete style={{ color: "#EF4444" }} />
                       </IconButton>
