@@ -18,12 +18,14 @@ const FeaturedPackages = () => {
       title: "Nature Retreat",
       description: "Experience the beauty of cinnamon plantations.",
       price: "$200",
+      
     },
     {
       image: EcoFriendlyLodge,
       title: "Eco-Friendly Lodge",
       description: "Stay in our sustainable lodges.",
       price: "$150",
+      
     },
     {
       image: CinnamonTour,

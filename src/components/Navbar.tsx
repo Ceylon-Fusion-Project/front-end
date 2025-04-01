@@ -88,16 +88,17 @@ const Navbar = () => {
 
           {/* Authentication Links - Desktop */}
           <div className="hidden md:flex space-x-6">
+
             {!isLoggedIn ? (
               <>
                 <a
-                  href="http://localhost:3001/api/v1/auth/login"
+                  href="https://localhost:3001/api/v1/auth/login"
                   className="text-gray-800 hover:text-gray-600 px-3 py-2"
                 >
                   Login
                 </a>
                 <a
-                  href="http://localhost:3001/api/v1/auth/signup"
+                  href="https://localhost:3001/api/v1/auth/signup"
                   className="text-gray-800 hover:text-gray-600 px-6 py-2"
                 >
                   Sign Up
@@ -118,6 +119,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md absolute top-16 left-0 w-full px-4 py-2">
+ 
           <Link to="/" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
             Home
           </Link>
@@ -127,23 +129,30 @@ const Navbar = () => {
           <Link to="/booking/booking-page" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
             Booking
           </Link>
-          <Link to="/about" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/about"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             About
           </Link>
-          <Link to="/contact" className="block text-gray-800 hover:text-gray-600 px-3 py-2">
+          <Link
+            to="/contact"
+            className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+          >
             Contact
           </Link>
+
 
           {!isLoggedIn ? (
             <>
               <a
-                href="http://localhost:3001/api/v1/auth/login"
+                href="https://localhost:3001/api/v1/auth/login"
                 className="block text-gray-800 hover:text-gray-600 px-3 py-2"
               >
                 Login
               </a>
               <a
-                href="http://localhost:3001/api/v1/auth/signup"
+                href="https://localhost:3001/api/v1/auth/signup"
                 className="block text-gray-800 hover:text-gray-600 px-3 py-2"
               >
                 Sign Up

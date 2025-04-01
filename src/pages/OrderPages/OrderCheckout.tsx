@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import OrderSummary from "../components/OrderCheckoutComponents/OrderSummary";
-import ShippingInfoForm from "../components/OrderCheckoutComponents/ShippingInfo";
-import PlaceOrderButton from "../components/OrderCheckoutComponents/PlaceOrderButton";
-import Navbar from "../components/Navbar";
-import Footer from "../components/footer";
+import OrderSummary from "../../components/OrderCheckoutComponents/OrderSummary";
+import ShippingInfoForm from "../../components/OrderCheckoutComponents/ShippingInfo";
+import PlaceOrderButton from "../../components/OrderCheckoutComponents/PlaceOrderButton";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/footer";
 
 interface Item {
   id: number;

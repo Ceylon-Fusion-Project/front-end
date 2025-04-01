@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '@/components/Navbar'
-import Banner from '../../components/BookingComponents/Banner'
+import HeroBanner from '../../components/BookingComponents/HeroBanner'
+import Footer from '@/components/footer'
 
 const BookingPage : React.FC = () => {
   return (
@@ -13,7 +14,12 @@ const BookingPage : React.FC = () => {
 
         {/* Banner */}
         <section className="h-screen snap-start">
-          <Banner />
+          <HeroBanner />
+        </section>
+
+        {/* Footer */}
+        <section className="snap-start">
+          <Footer />
         </section>
         
     </div>

@@ -96,6 +96,11 @@ interface AutoCompleteSearchBarProps {
   onSearch: (query: string) => void;
   className?: string;
 }
+interface AutoCompleteSearchBarProps {
+  data: string[];
+  onSearch: (query: string) => void;
+  placeholder?: string; // Added placeholder property
+}
 
 const AutoCompleteSearchBar: React.FC<AutoCompleteSearchBarProps> = ({
   data,
