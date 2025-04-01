@@ -27,49 +27,55 @@ const MapComponent = ({
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapRef.current);
 
+      // Create custom icon using Place icon
+      const customIcon = L.divIcon({
+        className: "custom-marker",
+        html: `
+          <div style="
+            color: ${markerColor};
+            font-size: 24px;
+            transform: translate(-12px, -24px);
+          ">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+          </div>
+        `,
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+      });
+
       // Add initial marker if location provided
       if (initialLocation) {
-        const customIcon = L.divIcon({
-          className: "custom-marker",
-          html: `<div style="background-color: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
-          iconSize: [24, 24],
-          iconAnchor: [12, 12],
-        });
+        markerRef.current = L.marker([initialLocation.lat, initialLocation.lng], { 
+          icon: customIcon,
+          draggable: true 
+        }).addTo(mapRef.current);
 
-        markerRef.current = L.marker([initialLocation.lat, initialLocation.lng], { icon: customIcon })
-          .addTo(mapRef.current)
-          .bindPopup(`Selected Location: ${initialLocation.lat.toFixed(4)}, ${initialLocation.lng.toFixed(4)}`)
-          .openPopup();
+        // Set view without animation
+        mapRef.current.setView([initialLocation.lat, initialLocation.lng], 15, { animate: false });
+      } else {
+        // Add default marker at center if no initial location
+        markerRef.current = L.marker(mapRef.current.getCenter(), { 
+          icon: customIcon,
+          draggable: true 
+        }).addTo(mapRef.current);
       }
 
-      // Add click event
-      mapRef.current.on("click", (e) => {
-        const { lat, lng } = e.latlng;
+      // Handle marker drag end
+      markerRef.current.on('dragend', function(e) {
+        const marker = e.target;
+        const position = marker.getLatLng();
+        onLocationSelect(position.lat, position.lng);
         
-        // Remove previous marker if exists
-        if (markerRef.current && mapRef.current) {
-          mapRef.current.removeLayer(markerRef.current);
-        }
-
-        // Create custom icon
-        const customIcon = L.divIcon({
-          className: "custom-marker",
-          html: `<div style="background-color: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>`,
-          iconSize: [24, 24],
-          iconAnchor: [12, 12],
-        });
-
-        // Add new marker
+        // Update view without animation
         if (mapRef.current) {
-          markerRef.current = L.marker([lat, lng], { icon: customIcon })
-            .addTo(mapRef.current)
-            .bindPopup(`Selected Location: ${lat.toFixed(4)}, ${lng.toFixed(4)}`)
-            .openPopup();
-
-          // Call the callback with the selected location
-          onLocationSelect(lat, lng);
+          mapRef.current.setView(position, 15, { animate: false });
         }
       });
+
+      // Disable map click handler since we're using draggable marker
+      mapRef.current.off('click');
     }
 
     return () => {
