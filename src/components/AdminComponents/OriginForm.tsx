@@ -11,7 +11,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-//import dynamic from "next/dynamic";
 import { Close, Place } from "@mui/icons-material";
 import { lazy, Suspense } from "react";
 
@@ -36,19 +35,8 @@ interface OriginFormProps {
   origin: Origin | null;
   onSave: (originData: Origin) => void;
   onCancel: () => void;
+  editMode?: boolean;
 }
-
-interface OriginFormProps {
-  origin: Origin | null;
-  onSave: (originData: Origin) => void;
-  onCancel: () => void;
-  editMode?: boolean; // Make it optional since we can infer it from 'origin'
-}
-
-// const MapWithNoSSR = dynamic(() => import("./Map"), {
-//   ssr: false,
-//   loading: () => <div style={{ height: "500px", display: "flex", alignItems: "center", justifyContent: "center" }}>Loading map...</div>
-// });
 
 export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
   const [formData, setFormData] = useState<Origin>({
@@ -66,26 +54,17 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [mapDialogOpen, setMapDialogOpen] = useState(false);
-  const [mapSelectionType, setMapSelectionType] = useState<
-    "estate" | "factory"
-  >("estate");
+  const [mapSelectionType, setMapSelectionType] = useState<"estate" | "factory">("estate");
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.stateLocation)
-      newErrors.estateLocation = "Estate Location is required";
-    if (!formData.stateMapLink)
-      newErrors.estateMapLink = "Estate Map Link is required";
-    if (!formData.partOfPlant)
-      newErrors.partOfPlant = "Part of Plant is required";
-    if (!formData.originDescription)
-      newErrors.originDescription = "Origin Description is required";
-    if (!formData.factoryName)
-      newErrors.factoryName = "Factory Name is required";
-    if (!formData.factoryAddress)
-      newErrors.factoryAddress = "Factory Address is required";
-    if (!formData.factoryMapLink)
-      newErrors.factoryMapLink = "Factory Map Link is required";
+    if (!formData.estateLocation) newErrors.estateLocation = "Estate Location is required";
+    if (!formData.estateMapLink) newErrors.estateMapLink = "Estate Map Link is required";
+    if (!formData.partOfPlant) newErrors.partOfPlant = "Part of Plant is required";
+    if (!formData.originDescription) newErrors.originDescription = "Origin Description is required";
+    if (!formData.factoryName) newErrors.factoryName = "Factory Name is required";
+    if (!formData.factoryAddress) newErrors.factoryAddress = "Factory Address is required";
+    if (!formData.factoryMapLink) newErrors.factoryMapLink = "Factory Map Link is required";
     if (!formData.originCode) newErrors.originCode = "Origin Code is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -115,7 +94,6 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
         factoryMapLink: url,
       }));
     }
-    setMapDialogOpen(false);
   };
 
   const openMapDialog = (type: "estate" | "factory") => {
@@ -134,14 +112,8 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
   return (
     <>
       <Dialog open onClose={onCancel} maxWidth="md" fullWidth>
-        <DialogTitle
-          style={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}
-        >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+        <DialogTitle style={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">
               {origin ? "Edit Origin" : "Add Origin"}
             </Typography>
@@ -330,21 +302,27 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle
-          sx={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}
-        >
-          Select {mapSelectionType === "estate" ? "Estate" : "Factory"} Location
-          on Map
+        <DialogTitle sx={{ 
+          fontFamily: "Poppins, sans-serif", 
+          color: "#1E293B",
+          paddingBottom: "8px"
+        }}>
+          <Box display="flex" alignItems="center">
+            <Place sx={{ 
+              color: mapSelectionType === "estate" ? "#92400E" : "#B45309",
+              marginRight: "8px"
+            }} />
+            <Typography variant="h6">
+              {mapSelectionType === "estate" ? "Estate" : "Factory"} Location
+            </Typography>
+          </Box>
+          <Typography variant="body2" color="textSecondary">
+            Drag the place marker to select location
+          </Typography>
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ height: "500px", mt: 2 }}>
-            <Suspense
-              fallback={
-                <div style={{ textAlign: "center", paddingTop: "200px" }}>
-                  Loading map...
-                </div>
-              }
-            >
+          <Box sx={{ height: "500px", mt: 1 }}>
+            <Suspense fallback={<div style={{ textAlign: "center", paddingTop: "200px" }}>Loading map...</div>}>
               <MapWithNoSSR
                 onLocationSelect={handleMapSelection}
                 initialLocation={
@@ -369,7 +347,7 @@ export const OriginForm = ({ origin, onCancel, onSave }: OriginFormProps) => {
               },
             }}
           >
-            Cancel
+            Done
           </Button>
         </DialogActions>
       </Dialog>
