@@ -23,7 +23,8 @@ import {
 } from "@mui/material";
 import { Add, Edit, Delete, FilterAlt, Search, Close } from "@mui/icons-material";
 import { OriginForm } from "../../components/AdminComponents/OriginForm";
-import dynamic from "next/dynamic";
+//import dynamic from "next/dynamic"; 
+import React, { lazy, Suspense } from "react";
 
 // Define the Origin type
 interface Origin {
@@ -74,9 +75,10 @@ const mockData: Origin[] = [
 ];
 
 // Dynamic import for the Map component to avoid SSR issues
-const MapWithNoSSR = dynamic(() => import("../../components/AdminComponents/Map"), {
-  ssr: false,
-});
+// const MapWithNoSSR = dynamic(() => import("../../components/AdminComponents/Map"), {
+//   ssr: false,
+// });
+const MapWithNoSSR = lazy(() => import("../../components/AdminComponents/Map"));
 
 const OriginManagement = () => {
   const [origins, setOrigins] = useState<Origin[]>(mockData);
