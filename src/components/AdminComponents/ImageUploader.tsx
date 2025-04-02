@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import api from "@/api/axiosInstance";
 
 interface ImageUploaderProps {
   value: string[];
@@ -43,13 +44,40 @@ export function ImageUploader({ value, onChange }: ImageUploaderProps) {
     }
   };
 
-  const handleFiles = (files: FileList) => {
+  // const handleFiles = (files: FileList) => {
+  //   const newUrls = [...value];
+
+  //   Array.from(files).forEach((file) => {
+  //     const objectUrl = URL.createObjectURL(file);
+  //     newUrls.push(objectUrl);
+  //   });
+
+  //   onChange(newUrls);
+  // };
+  const handleFiles = async (files: FileList) => {
     const newUrls = [...value];
 
-    Array.from(files).forEach((file) => {
-      const objectUrl = URL.createObjectURL(file);
-      newUrls.push(objectUrl);
-    });
+    for (const file of Array.from(files)) {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", "image");
+
+        const response = await api.post(
+          "/upload/product",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        const imageUrl = "http://localhost:8080" + response.data.data; // adjust if needed
+        newUrls.push(imageUrl);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        // Optional: show toast or error UI here
+      }
+    }
 
     onChange(newUrls);
   };
