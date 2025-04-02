@@ -47,45 +47,6 @@ export interface Certification {
   certURL: string;
 }
 
-// const mockData: Certification[] = [
-//   {
-//     certificationID: 1,
-//     productID: 101,
-//     certificationName: "Organic Certification",
-//     issuer: "Certified Org",
-//     issuedDate: "2024-03-01",
-//     expiryDate: "2025-03-01",
-//     certActiveState: true,
-//     createdDate: "2024-01-01",
-//     updatedDate: "2024-01-01",
-//     certURL: "cert1.pdf",
-//   },
-//   {
-//     certificationID: 2,
-//     productID: 102,
-//     certificationName: "Fair Trade",
-//     issuer: "Fair Trade Intl",
-//     issuedDate: "2024-02-15",
-//     expiryDate: "2025-02-15",
-//     certActiveState: true,
-//     createdDate: "2024-01-01",
-//     updatedDate: "2024-01-01",
-//     certURL: "cert2.pdf",
-//   },
-//   {
-//     certificationID: 3,
-//     productID: 103,
-//     certificationName: "Expired Certification",
-//     issuer: "Test Org",
-//     issuedDate: "2023-01-01",
-//     expiryDate: "2023-12-31",
-//     certActiveState: false,
-//     createdDate: "2023-01-01",
-//     updatedDate: "2023-01-01",
-//     certURL: "cert3.pdf",
-//   },
-// ];
-
 const CertificationManagement = () => {
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [filteredCertifications, setFilteredCertifications] = useState<
@@ -219,50 +180,6 @@ const CertificationManagement = () => {
     }
   };
 
-  // const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const formData = new FormData(event.target as HTMLFormElement);
-  //   const newCertification: Certification = {
-  //     certificationID: currentCertification
-  //       ? currentCertification.certificationID
-  //       : certifications.length + 1,
-  //     productID: parseInt(formData.get("productID") as string),
-  //     certificationName: formData.get("certificationName") as string,
-  //     issuer: formData.get("issuer") as string,
-  //     issuedDate: formData.get("issuedDate") as string,
-  //     expiryDate: formData.get("expiryDate") as string,
-  //     certActiveState:
-  //       new Date(formData.get("expiryDate") as string) >= new Date(),
-  //     createdDate:
-  //       currentCertification?.createdDate ||
-  //       new Date().toISOString().split("T")[0],
-  //     updatedDate: new Date().toISOString().split("T")[0],
-  //     certURL:
-  //       file.length > 0
-  //         ? URL.createObjectURL(file[0])
-  //         : currentCertification?.certURL || "",
-  //   };
-
-  //   if (currentCertification) {
-  //     setCertifications(
-  //       certifications.map((cert) =>
-  //         cert.certificationID === currentCertification.certificationID
-  //           ? newCertification
-  //           : cert
-  //       )
-  //     );
-  //     setSnackbarMessage("Certification updated successfully!");
-  //   } else {
-  //     setCertifications([...certifications, newCertification]);
-  //     setSnackbarMessage("Certification added successfully!");
-  //   }
-
-  //   setSnackbarSeverity("success");
-  //   setSnackbarOpen(true);
-  //   setOpenDialog(false);
-  //   setFile([]);
-  // };
-
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setActionLoading(true);
@@ -280,7 +197,7 @@ const CertificationManagement = () => {
         certURL: currentCertification?.certURL || "", // will set after upload
       };
 
-      // ✅ Upload file first (if available)
+      // Upload file first (if available)
       if (file.length > 0) {
         const uploadForm = new FormData();
         uploadForm.append("file", file[0]);

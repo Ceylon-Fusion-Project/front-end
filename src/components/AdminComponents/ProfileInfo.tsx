@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {
   Box, Card, CardContent, Typography, Button, TextField, Avatar, Grid, Snackbar, Alert,
-  Accordion, AccordionSummary, AccordionDetails, Switch, FormControlLabel, Divider
+ 
 } from '@mui/material';
-import { Person, Edit, ExpandMore, Lock, Security, Notifications, Delete, CloudDownload } from '@mui/icons-material';
+import { Person, Edit } from '@mui/icons-material';
 import ReactCrop, { Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useDropzone } from 'react-dropzone';
@@ -14,7 +14,7 @@ const ProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>({ unit: '%', width: 30, height: 30, x: 0, y: 0 });
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   // Mock user data - would come from API

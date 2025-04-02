@@ -1,4 +1,4 @@
-import React from "react";
+
 
 import { motion } from "framer-motion"; // For animations
 import { FaLeaf, FaHandsHelping, FaUsers } from "react-icons/fa"; // Modern icons

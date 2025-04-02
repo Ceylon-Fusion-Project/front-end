@@ -112,7 +112,7 @@
 // }
 
 // src/components/ProductPreview.tsx
-import React from "react";
+
 import { ArrowLeft } from "lucide-react";
 import { categoryTypes, measuringUnitTypes, origins } from "../../lib/data";
 
