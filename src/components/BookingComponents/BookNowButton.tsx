@@ -24,10 +24,8 @@ const ShopNowButton: React.FC<ShopNowButtonProps> = ({
   return (
     <button
       onClick={handleClick}
-      className="px-8 py-3 text-lg font-semibold text-white transition-all duration-300 rounded-lg shadow-md bg-accent hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
+      className="px-8 py-3 text-lg font-semibold text-[#bbddd3] transition-all duration-300 rounded-lg shadow-md bg-[#22443a] hover:bg-[#1a332b] hover:scale-105 hover:shadow-lg "
       style={{
-            backgroundColor: "#a68f83",
-            color: theme.colors.textPrimary,
             fontFamily: theme.fonts.sans[0],
           }}
     >

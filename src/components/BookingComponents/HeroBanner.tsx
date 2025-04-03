@@ -105,7 +105,8 @@ const HeroBanner: React.FC = () => {
             style={{
               imageRendering: 'crisp-edges',
               transform: 'translateZ(0)',
-              backfaceVisibility: 'hidden'
+              backfaceVisibility: 'hidden',
+              filter: 'blur(1.5px)'
             }}
           />
           <div className="absolute inset-0 bg-black/40"></div>
@@ -123,28 +124,28 @@ const HeroBanner: React.FC = () => {
       {selectedType && (
         <div className="absolute z-30 flex items-center gap-4 mb-16 bottom-20 right-12">
           <button
-            className="flex items-center gap-2 px-6 py-3 text-base font-medium text-white transition-all bg-black shadow-lg rounded-xl hover:bg-gray-800"
+            className="flex items-center gap-2 px-6 py-3 text-base font-medium text-white transition-all bg-[#11221d] shadow-lg rounded-xl hover:bg-[#22443a]"
           >
             {selectedType === 'accommodation' ? (
               <>
-                <FaBed className="w-5 h-5 text-white" />
+                <FaBed className="w-5 h-5 text-[#ddeee9]" />
                 Find Rooms
                 <span className="relative group">
-                  <LaunchIcon className="w-5 h-5 text-white" />
+                  <LaunchIcon className="w-5 h-5 text-[#ddeee9]" />
                   {/* Tooltip */}
-                  <span className="absolute hidden px-2 py-1 mb-2 text-xs text-white bg-black rounded bottom-full group-hover:block bg-opacity-90">
+                  <span className="absolute hidden px-2 py-1 mb-2 text-xs text-[#ddeee9] bg-black rounded bottom-full group-hover:block bg-opacity-90">
                     Launch
                   </span>
                 </span>
               </>
             ) : (
               <>
-                <FaCalendarAlt className="w-5 h-5 text-white" />
+                <FaCalendarAlt className="w-5 h-5 text-[#ddeee9]" />
                 Find Events
                 <span className="relative group">
-                  <LaunchIcon className="w-5 h-5 text-white" />
+                  <LaunchIcon className="w-5 h-5 text-[#ddeee9]" />
                   {/* Tooltip */}
-                  <span className="absolute hidden px-2 py-1 mb-2 text-xs text-white bg-black rounded bottom-full group-hover:block bg-opacity-90">
+                  <span className="absolute hidden px-2 py-1 mb-2 text-xs text-[#ddeee9] bg-black rounded bottom-full group-hover:block bg-opacity-90">
                     Launch
                   </span>
                 </span>
