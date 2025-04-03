@@ -35,7 +35,7 @@ const CartItem: React.FC<CartItemProps> = ({
 
     try {
       const requestBody = {
-        userId: 3,
+        userId,
         productId: item.productId,
       };
       const response = await api.post("/cart/remove-item-from-cart-byCard",

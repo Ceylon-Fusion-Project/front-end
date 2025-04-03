@@ -14,18 +14,17 @@ interface CartItemType {
 }
 
 const Cart: React.FC = () => {
+const userId = 3; // ✅ static assignment for testing purposes
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await api.get("/aggregated-cart/merged-cart-details", {
-          params: { userId: 3 },
+          params: { userId },
         });
         setCart(response.data.cart);
-        setUserId(response.data.userId);
       } catch (error: any) {
         NotificationService.error("Failed to load cart items.");
       } finally {
