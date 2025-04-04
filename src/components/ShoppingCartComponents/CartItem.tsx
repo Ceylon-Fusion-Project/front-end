@@ -1,6 +1,8 @@
 import api from "@/api/axiosInstance";
 //import { v4 as uuidv4 } from "uuid";
 import NotificationService from "@/utils/NotificationService";
+import { debounce } from "lodash";   
+import { useCallback } from "react";
 
 interface CartItemProps {
   item: {
@@ -23,8 +25,40 @@ const CartItem: React.FC<CartItemProps> = ({
   updateQuantity,
   userId,
 }) => {
-  const handleQuantityChange = (newQuantity: number) => {
-    updateQuantity(item.id, Math.max(newQuantity, 1));
+  // ✅ Debounced backend call
+  const sendQuantityUpdate = useCallback(
+    debounce(async (type: "increment" | "decrement") => {
+      try {
+        const endpoint =
+          type === "increment"
+            ? "/cart/increase-cart-count"
+            : "/cart/decrease-cart-count";
+        const response = await api.post(endpoint, {
+          userId,
+          productId: item.productId,
+        });
+
+        if (response?.status === 200) {
+          //NotificationService.success(`Quantity ${type}ed successfully!`);
+        } else {
+          throw new Error("Unexpected response");
+        }
+      } catch (error) {
+        console.error(`Error during ${type}:`, error);
+        NotificationService.error(`Failed to ${type} quantity.`);
+      }
+    }, 400), // 400ms debounce
+    [userId, item.productId]
+  );
+
+  // const handleQuantityChange = (newQuantity: number) => {
+  //   updateQuantity(item.id, Math.max(newQuantity, 1));
+  // };
+  // ⬆️⬇️ Call this on button clicks
+  const handleQuantityChange = (newQuantity: number, type: "increment" | "decrement") => {
+    if (newQuantity < 1) return;
+    updateQuantity(item.id, newQuantity);
+    sendQuantityUpdate(type);
   };
 
   const handleRemoveItem = async () => {
@@ -35,13 +69,14 @@ const CartItem: React.FC<CartItemProps> = ({
 
     try {
       const requestBody = {
-        userId: 3,
+        userId,
         productId: item.productId,
       };
-      const response = await api.post("/cart/remove-item-from-cart-byCard",
-        requestBody,
-    );
-  
+      const response = await api.post(
+        "/cart/remove-item-from-cart-byCard",
+        requestBody
+      );
+
       if (response?.status === 200 || response?.status === 201) {
         NotificationService.success("Product removed from cart successfully!");
         removeItem(item.id);
@@ -74,14 +109,14 @@ const CartItem: React.FC<CartItemProps> = ({
       <div className="flex items-center gap-2">
         <button
           className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 transition"
-          onClick={() => handleQuantityChange(quantity - 1)}
+          onClick={() => handleQuantityChange(quantity - 1, "decrement")}
         >
           -
         </button>
         <span className="w-6 text-center">{quantity}</span>
         <button
           className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300 transition"
-          onClick={() => handleQuantityChange(quantity + 1)}
+          onClick={() => handleQuantityChange(quantity + 1, "increment")}
         >
           +
         </button>
