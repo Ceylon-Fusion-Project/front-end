@@ -91,7 +91,7 @@ const Card: React.FC<CardProps> = ({
 
     //Construct Request Body Properly
     const requestBody = {
-      userId:5, // Dynamically passed user ID
+      userId:3, // Dynamically passed user ID
       cartItem: {
         productId:productID,
         cartItemQuantity: 1,
@@ -170,7 +170,7 @@ const Card: React.FC<CardProps> = ({
     //console.log("🗑️ Using Remove Idempotency Key:", removeFromCartKey);
 
     const requestBody = {
-      userId:5,
+      userId:3,
       productId:productID,
     };
 
@@ -219,7 +219,7 @@ const Card: React.FC<CardProps> = ({
     setIsWishlist(true);
 
     const requestBody = {
-      userId:5,
+      userId:3,
       productId:productID,
     };
 
@@ -259,7 +259,7 @@ const Card: React.FC<CardProps> = ({
     setIsWishlist(false);
 
     const requestBody = {
-      userId:5,
+      userId:3,
       productId: productID,
     };
      
