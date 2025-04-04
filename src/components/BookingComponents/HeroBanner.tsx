@@ -93,7 +93,8 @@ const HeroBanner: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full min-h-screen">
+      {/* Background Image */}
       <div className="absolute inset-0 w-full h-full overflow-hidden">
         <div className="relative w-full h-full">
           <img
@@ -112,27 +113,27 @@ const HeroBanner: React.FC = () => {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
       </div>
-      
+
+      {/* Reset Button */}
       <button
         onClick={resetToDefault}
-        className="absolute z-30 px-4 py-2 text-sm font-medium text-white transition-all transform -translate-x-1/2 bg-black rounded-lg top-4 left-1/2 bg-opacity-70 hover:bg-opacity-100 hover:scale-105"
+        className="absolute z-30 px-3 py-1 text-xs font-medium text-white transition-all transform -translate-x-1/2 bg-black rounded-lg sm:px-4 sm:py-2 sm:text-sm top-4 left-1/2 bg-opacity-70 hover:bg-opacity-100 hover:scale-105"
       >
         Reset to Default
       </button>
 
-      {/* Updated button with FiShare as a launch icon, with tooltip */}
+      {/* Find Rooms/Events Button */}
       {selectedType && (
-        <div className="absolute z-30 flex items-center gap-4 mb-16 bottom-20 right-12">
+        <div className="absolute z-30 flex items-center gap-2 mb-8 sm:gap-4 sm:mb-16 bottom-12 sm:bottom-20 right-4 sm:right-12">
           <button
-            className="flex items-center gap-2 px-6 py-3 text-base font-medium text-white transition-all bg-[#11221d] shadow-lg rounded-xl hover:bg-[#22443a]"
+            className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white transition-all bg-[#11221d] shadow-lg rounded-xl hover:bg-[#22443a]"
           >
             {selectedType === 'accommodation' ? (
               <>
-                <FaBed className="w-5 h-5 text-[#ddeee9]" />
+                <FaBed className="w-4 h-4 sm:w-5 sm:h-5 text-[#ddeee9]" />
                 Find Rooms
                 <span className="relative group">
-                  <LaunchIcon className="w-5 h-5 text-[#ddeee9]" />
-                  {/* Tooltip */}
+                  <LaunchIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#ddeee9]" />
                   <span className="absolute hidden px-2 py-1 mb-2 text-xs text-[#ddeee9] bg-black rounded bottom-full group-hover:block bg-opacity-90">
                     Launch
                   </span>
@@ -140,11 +141,10 @@ const HeroBanner: React.FC = () => {
               </>
             ) : (
               <>
-                <FaCalendarAlt className="w-5 h-5 text-[#ddeee9]" />
+                <FaCalendarAlt className="w-4 h-4 sm:w-5 sm:h-5 text-[#ddeee9]" />
                 Find Events
                 <span className="relative group">
-                  <LaunchIcon className="w-5 h-5 text-[#ddeee9]" />
-                  {/* Tooltip */}
+                  <LaunchIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[#ddeee9]" />
                   <span className="absolute hidden px-2 py-1 mb-2 text-xs text-[#ddeee9] bg-black rounded bottom-full group-hover:block bg-opacity-90">
                     Launch
                   </span>
@@ -154,28 +154,29 @@ const HeroBanner: React.FC = () => {
           </button>
         </div>
       )}
-      
-      <div className="relative z-10 flex flex-col w-full h-full">
-        <div className="w-full px-4 pt-20 pb-4">
+
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col w-full min-h-screen">
+        <div className="w-full px-2 pt-16 pb-4 sm:px-4 sm:pt-20">
           <div className="relative mx-auto max-w-7xl">
             {allCards.length > cardsPerPage && (
               <>
                 <button 
                   onClick={goToPreviousCards}
-                  className="absolute left-0 z-20 flex items-center justify-center w-10 h-10 -ml-4 transition-all -translate-y-1/2 bg-white rounded-full shadow-md top-1/2 hover:bg-gray-100 hover:scale-110"
+                  className="absolute left-0 z-20 flex items-center justify-center w-8 h-8 -ml-2 transition-all -translate-y-1/2 bg-white rounded-full shadow-md sm:w-10 sm:h-10 sm:-ml-4 top-1/2 hover:bg-gray-100 hover:scale-110"
                 >
-                  <FiChevronLeft className="w-6 h-6 text-gray-700" />
+                  <FiChevronLeft className="w-5 h-5 text-gray-700 sm:w-6 sm:h-6" />
                 </button>
                 <button 
                   onClick={goToNextCards}
-                  className="absolute right-0 z-20 flex items-center justify-center w-10 h-10 -mr-4 transition-all -translate-y-1/2 bg-white rounded-full shadow-md top-1/2 hover:bg-gray-100 hover:scale-110"
+                  className="absolute right-0 z-20 flex items-center justify-center w-8 h-8 -mr-2 transition-all -translate-y-1/2 bg-white rounded-full shadow-md sm:w-10 sm:h-10 sm:-mr-4 top-1/2 hover:bg-gray-100 hover:scale-110"
                 >
-                  <FiChevronRight className="w-6 h-6 text-gray-700" />
+                  <FiChevronRight className="w-5 h-5 text-gray-700 sm:w-6 sm:h-6" />
                 </button>
               </>
             )}
             
-            <div className="grid grid-cols-2 gap-3 px-4 sm:grid-cols-3 md:grid-cols-6">
+            <div className="grid grid-cols-2 gap-2 px-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 sm:px-4">
               {displayCards.map((card, index) => (
                 card ? (
                   <div 
@@ -183,7 +184,7 @@ const HeroBanner: React.FC = () => {
                     className="relative overflow-hidden transition-all duration-300 rounded-lg shadow-md cursor-pointer hover:scale-105"
                     onClick={() => handleCardClick(card.image, card.type, card.name)}
                   >
-                    <div className="relative h-28 sm:h-32">
+                    <div className="relative h-24 sm:h-28 md:h-32">
                       <img 
                         src={card.image} 
                         alt={card.name}
@@ -194,11 +195,11 @@ const HeroBanner: React.FC = () => {
                       <div className="absolute inset-0 bg-black/40"></div>
                       {selectedCard === card.name && (
                         <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                          <FaCheckCircle className="w-8 h-8 text-green-500" />
+                          <FaCheckCircle className="w-6 h-6 text-green-500 sm:w-8 sm:h-8" />
                         </div>
                       )}
-                      <div className="absolute inset-0 flex items-end p-2 sm:p-3">
-                        <h3 className="w-full text-sm font-bold text-center text-white truncate drop-shadow-md sm:text-base">
+                      <div className="absolute inset-0 flex items-end p-1 sm:p-2 md:p-3">
+                        <h3 className="w-full text-xs font-bold text-center text-white truncate sm:text-sm md:text-base drop-shadow-md">
                           {card.name}
                         </h3>
                       </div>
@@ -216,19 +217,21 @@ const HeroBanner: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center flex-grow px-4 text-center text-white">
-          <h1 className="mb-4 text-3xl font-bold md:text-5xl">
+        {/* Centered Hero Text */}
+        <div className="flex flex-col items-center justify-center flex-1 px-4 text-center text-white min-h-[50vh]">
+          <h1 className="mb-2 text-2xl font-bold sm:mb-4 sm:text-3xl md:text-4xl lg:text-5xl">
             Book Your Dream Getaway
           </h1>
-          <p className="mb-6 text-lg font-medium md:text-2xl">
+          <p className="mb-4 text-base font-medium sm:mb-6 sm:text-lg md:text-xl lg:text-2xl">
             Your dream stay, just a click away!
           </p>
-          <div className="flex flex-col gap-4 mt-2 sm:flex-row">
+          <div className="flex flex-col gap-3 mt-2 sm:flex-row sm:gap-4">
             <BookNowButton scrollToId="booking-section" />
           </div>
         </div>
       </div>
 
+      {/* Bottom SVG */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" className="w-full">
           <path

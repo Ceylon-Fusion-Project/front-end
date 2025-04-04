@@ -95,7 +95,7 @@ const Card: React.FC<CardProps> = ({
           className="mb-2 font-bold"
           style={{
             color: "#22443a",
-            fontFamily: theme.fonts.serif[0],
+            fontFamily: theme.fonts.sans[0],
           }}
         >
           {title}
