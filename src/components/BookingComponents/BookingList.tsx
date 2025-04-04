@@ -28,6 +28,9 @@ import Event06 from "../../assets/events/spatreat_01.jpg";
 import Event07 from "../../assets/events/sunset_01.jpg";
 import Event08 from "../../assets/events/tour_01.jpg";
 import Event09 from "../../assets/events/yogasession_01.jpg";
+import PackageHeader from "./PackageHeader";
+import AccommodationHeader from "./AccommodationHeader";
+import ExperienceHeader from "./ExperienceHeader";
 
 // Mock data with fixed image property
 const mockData = {
@@ -319,87 +322,87 @@ const BookingList: React.FC<BookingListProps> = ({
   const { paginatedData: paginatedRooms, totalPages: roomPages, totalItems: totalRooms } = paginate(rooms, roomPage);
   const { paginatedData: paginatedEvents, totalPages: eventPages, totalItems: totalEvents } = paginate(events, eventPage);
 
-  const renderSection = (title: string, data: any[], currentPage: number, setCurrentPage: (page: number) => void, totalPages: number, totalItems: number) => (
-    <div className="mb-8">
-      <h2 
-        className="mb-4 text-3xl font-bold"
-        style={{ fontFamily: theme.fonts.sans[0] }}
-      >
-        {title}
-      </h2>
-      
-      {data.length > 0 ? (
-        <>
-          <div className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
-            {data.map((item, index) => {
-              const CardComponent = viewMode === "grid" ? Card : ListCard;
-              return (
-                <CardComponent
-                  key={`${item.type}-${index}`}
-                  image={item.image || "default.jpg"}
-                  title={
-                    item.type === "package" ? item.packageName :
-                    item.type === "room" ? `${item.roomType} Room ${item.roomNumber}` :
-                    item.eventName
-                  }
-                  description={
-                    item.type === "package" ? item.description :
-                    item.type === "room" ? `Beds: ${item.beds}, ${item.isAvailable ? "Available" : "Not Available"}` :
-                    item.eventDescription
-                  }
-                  price={`$${item.type === "package" ? item.pricePerDay : item.type === "room" ? item.pricePerNight : item.pricePerEvent}`}
-                  onClick={() => console.log("Quick Buy:", item)}
-                  isFeatured={false} // Force all cards to be normal (no Quick Buy button)
-                  packageID={item.type === "package" ? item.packageId : undefined}
-                  packageDetails={item.type === "package" ? { rooms: item.rooms, events: item.events } : undefined}
-                />
-              );
-            })}
-          </div>
-          
-          {totalItems > size && (
-            <div className="flex items-center justify-center gap-4 mt-6">
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 0}
-                className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
-              >
-                Previous
-              </button>
-              <span>{currentPage + 1} of {totalPages}</span>
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage >= totalPages - 1}
-                className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
-              >
-                Next
-              </button>
+  const renderSection = (title: string, data: any[], currentPage: number, setCurrentPage: (page: number) => void, totalPages: number, totalItems: number, sectionId?: string) => {
+    return (
+      <div className="mt-20 mb-8">
+        {/* Use specific header components based on title */}
+        {title === "Packages" && <PackageHeader />}
+        {title === "Accommodations" && <AccommodationHeader />}
+        {title === "Experiences" && <ExperienceHeader />}
+        
+        {data.length > 0 ? (
+          <>
+            <div className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`} id={sectionId}>
+              {data.map((item, index) => {
+                const CardComponent = viewMode === "grid" ? Card : ListCard;
+                return (
+                  <CardComponent
+                    key={`${item.type}-${index}`}
+                    image={item.image || "default.jpg"}
+                    title={
+                      item.type === "package" ? item.packageName :
+                      item.type === "room" ? `${item.roomType} Room ${item.roomNumber}` :
+                      item.eventName
+                    }
+                    description={
+                      item.type === "package" ? item.description :
+                      item.type === "room" ? `Beds: ${item.beds}, ${item.isAvailable ? "Available" : "Not Available"}` :
+                      item.eventDescription
+                    }
+                    price={`$${item.type === "package" ? item.pricePerDay : item.type === "room" ? item.pricePerNight : item.pricePerEvent}`}
+                    onClick={() => console.log("Quick Buy:", item)}
+                    isFeatured={false} // Force all cards to be normal (no Quick Buy button)
+                    packageID={item.type === "package" ? item.packageId : undefined}
+                    packageDetails={item.type === "package" ? { rooms: item.rooms, events: item.events } : undefined}
+                  />
+                );
+              })}
             </div>
-          )}
-        </>
-      ) : (
-        <p className="text-center text-gray-500">No {title.toLowerCase()} match your criteria.</p>
-      )}
-    </div>
-  );
+            
+            {totalItems > size && (
+              <div className="flex items-center justify-center gap-4 mt-6">
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 0}
+                  className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
+                >
+                  Previous
+                </button>
+                <span>{currentPage + 1} of {totalPages}</span>
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage >= totalPages - 1}
+                  className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="text-center text-gray-500">No {title.toLowerCase()} match your criteria.</p>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col w-full">
       {category === "all" ? (
         <>
-          {renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages)}
-          {renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms)}
-          {renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents)}
+          {renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages, "package-list")}
+          {renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms, "accommodation-list")}
+          {renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents, "experience-list")}
           {(totalPackages === 0 && totalRooms === 0 && totalEvents === 0) && (
             <p className="text-center text-gray-500">No items match your criteria.</p>
           )}
         </>
       ) : category === "packages" ? (
-        renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages)
+        renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages, "package-list")
       ) : category === "accommodations" ? (
-        renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms)
+        renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms, "accommodation-list")
       ) : category === "experiences" ? (
-        renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents)
+        renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents, "experience-list")
       ) : null}
     </div>
   );
