@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { Box, Typography, Card, CardContent, Tabs, Tab } from "@mui/material"
 import NotificationSettings from "@/components/UserAccount/Settings/NotificationSettings"
-import SecuritySettings from "@/components/UserAccount/Settings/SecuritySettings"
+// import SecuritySettings from "@/components/UserAccount/Settings/SecuritySettings"
 import PreferenceSettings from "@/components/UserAccount/Settings/PreferenceSettings"
 import PaymentSettings from "@/components/UserAccount/Settings/PaymentSettings"
 
@@ -72,7 +72,7 @@ const SettingsPage = () => {
               }}
             >
               <Tab label="Notifications" {...a11yProps(0)} />
-              <Tab label="Security" {...a11yProps(1)} />
+              {/* <Tab label="Security" {...a11yProps(1)} /> */}
               <Tab label="Preferences" {...a11yProps(2)} />
               <Tab label="Payment Methods" {...a11yProps(3)} />
             </Tabs>
@@ -82,9 +82,9 @@ const SettingsPage = () => {
             <NotificationSettings />
           </TabPanel>
 
-          <TabPanel value={activeTab} index={1}>
+          {/* <TabPanel value={activeTab} index={1}>
             <SecuritySettings />
-          </TabPanel>
+          </TabPanel> */}
 
           <TabPanel value={activeTab} index={2}>
             <PreferenceSettings />
