@@ -42,7 +42,7 @@ const AccommodationHeader = () => {
   }, []);
   
   return (
-    <div className="relative h-screen max-w-6xl p-6 mx-auto bg-white">
+    <div className="relative max-w-6xl p-6 mx-auto mb-24 bg-white">
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Left image section */}
         <div className="relative w-full mt-24 md:w-1/2" ref={imageRef}>
