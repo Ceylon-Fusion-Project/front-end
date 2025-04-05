@@ -154,30 +154,6 @@ const Wishlist: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
-        // <motion.div
-        //   initial={{ opacity: 0 }}
-        //   animate={{ opacity: 1 }}
-        //   className="flex gap-6 overflow-x-auto px-6 py-4 w-full max-w-[95%] mx-auto hide-scrollbar"
-        // >
-        //   {items.map((item, index) => (
-        //     <motion.div
-        //       key={item.productId}
-        //       initial={{ opacity: 0, y: 20 }}
-        //       animate={{ opacity: 1, y: 0 }}
-        //       transition={{ delay: index * 0.1 }}
-        //       className="min-w-[260px] max-w-[260px] flex-shrink-0"
-        //     >
-        //       <WishlistItem
-        //         id={item.productId}
-        //         name={item.name}
-        //         price={item.price}
-        //         image={item.image}
-        //         onRemove={handleRemove}
-        //         onAddToCart={handleAddToCart}
-        //       />
-        //     </motion.div>
-        //   ))}
-        // </motion.div>
       )}
     </div>
   );
