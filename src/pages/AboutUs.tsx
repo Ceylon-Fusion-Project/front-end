@@ -1,6 +1,5 @@
-// src/pages/AboutUs.tsx
 import { Box, Container, Typography, Paper } from "@mui/material";
-import teaBg from "../assets/images/cinnamon-bg.jpg";
+import cinnamonBg from "../assets/images/cinnamon-bg.jpg";
 import NavBar from "../components/Navbar";
 import Footer from "../components/footer";
 
@@ -10,7 +9,7 @@ export default function AboutUs() {
       <NavBar />
       <Box
         sx={{
-          backgroundImage: `url(${teaBg})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${cinnamonBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           py: { xs: 8, md: 12 },
@@ -20,62 +19,128 @@ export default function AboutUs() {
       >
         <Container maxWidth="md">
           <Paper
-            elevation={6}
+            elevation={0}
             sx={{
               p: { xs: 3, md: 5 },
-              backgroundColor: "rgba(255, 253, 250, 0.6)", // Pearl transparent
+              backgroundColor: "rgba(255, 253, 250, 0.75)",
               borderRadius: 4,
-              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
-              backdropFilter: "blur(6px)",
-              color: "#4E342E",
+              backdropFilter: "blur(3px)",
+              border: "1px solid rgba(255, 255, 255, 0.3)"
             }}
           >
             <Typography
-              variant="h4"
+              variant="h3"
               gutterBottom
               textAlign="center"
-              fontWeight="bold"
-              color="#5D4037"
+              fontWeight={700}
+              sx={{
+                color: "#5D4037",
+                fontFamily: "'Playfair Display', serif",
+                mb: 4,
+                letterSpacing: 1,
+                textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}
             >
-              About Ceylon Fusion
+              Who we are
             </Typography>
 
-            <Typography variant="body1" paragraph sx={{ mt: 2, fontSize: "1.1rem" }}>
-              Welcome to Ceylon Fusion — where tradition meets taste. We are passionate about
-              bringing the rich heritage of Sri Lankan tea to the world, infused with a modern twist.
-              Our story began with a deep love for Ceylon’s finest brews and a mission to share this
-              experience beyond borders.
+            <Typography
+              variant="body1"
+              paragraph
+              sx={{
+                fontSize: "1.1rem",
+                lineHeight: 1.8,
+                color: "#3E2723",
+                textAlign: "center",
+                '& strong': {
+                  color: "#8D6E63",
+                  fontWeight: 600
+                }
+              }}
+            >
+              <strong>Direct from Sri Lanka's cinnamon estates</strong> to your hands - authentic products and immersive experiences that connect you to the source.
             </Typography>
 
-            <Typography variant="h6" fontWeight="bold" sx={{ mt: 4 }}>
-              🌿 Our Vision
-            </Typography>
-            <Typography variant="body1" paragraph>
-              To be the global ambassador of premium, sustainable, and authentic Ceylon tea experiences.
+            <Box sx={{ 
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+              gap: 3,
+              my: 5
+            }}>
+              <Box sx={{ p: 3, backgroundColor: 'rgba(255, 253, 250, 0.6)', borderRadius: 3 }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: "#5D4037",
+                    mb: 2,
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ✦ Premium Cinnamon Products
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#4E342E", textAlign: 'center' }}>
+                  Hand-harvested quills, oils, and specialty goods shipped directly from family-owned estates
+                </Typography>
+              </Box>
+
+              <Box sx={{ p: 3, backgroundColor: 'rgba(255, 253, 250, 0.6)', borderRadius: 3 }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    color: "#5D4037",
+                    mb: 2,
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  ✦ Estate Experiences
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#4E342E", textAlign: 'center' }}>
+                  Book private tours, harvesting workshops, and cinnamon-infused meals at working plantations
+                </Typography>
+              </Box>
+            </Box>
+
+            <Typography
+              variant="body1"
+              paragraph
+              sx={{
+                fontSize: "1.1rem",
+                lineHeight: 1.8,
+                color: "#3E2723",
+                textAlign: "center",
+                mt: 4,
+                px: 2,
+                '& strong': {
+                  color: "#5D4037",
+                  fontWeight: 600
+                }
+              }}
+            >
+              Our partner estates in <strong>Southern Sri Lanka</strong> open their doors to travelers seeking authentic connections with cinnamon cultivation traditions dating back centuries.
             </Typography>
 
-            <Typography variant="h6" fontWeight="bold" sx={{ mt: 4 }}>
-              🤝 Our Values
-            </Typography>
-            <ul style={{ paddingLeft: "1.5rem", lineHeight: 1.8 }}>
-              <li><strong>Authenticity:</strong> Honoring Sri Lanka’s tea heritage.</li>
-              <li><strong>Quality:</strong> Only the finest handpicked leaves go into our blends.</li>
-              <li><strong>Sustainability:</strong> We work closely with local farmers and eco-conscious suppliers.</li>
-              <li><strong>Innovation:</strong> Infusing tradition with creative flavors and experiences.</li>
-            </ul>
-
-            <Typography variant="h6" fontWeight="bold" sx={{ mt: 4 }}>
-              🏆 Why Choose Us?
-            </Typography>
-            <Typography variant="body1" paragraph>
-              Ceylon Fusion stands out not just for its premium teas, but for the journey it offers
-              — a journey of aroma, culture, and care. With award-winning blends, ethical sourcing,
-              and a passion for excellence, we’re more than just a tea brand — we’re a lifestyle.
-            </Typography>
-
-            <Typography variant="body2" textAlign="center" sx={{ mt: 6, fontStyle: "italic" }}>
-              “Brewed with love, served with soul — that’s the Ceylon Fusion promise.”
-            </Typography>
+            <Box sx={{ 
+              p: 3, 
+              mt: 4, 
+              backgroundColor: 'rgba(94, 53, 30, 0.08)', 
+              borderRadius: 3,
+              borderLeft: '4px solid #8D6E63'
+            }}>
+              <Typography variant="body2" sx={{ 
+                color: "#5D4037", 
+                fontStyle: 'italic',
+                textAlign: 'center',
+                fontSize: '1rem'
+              }}>
+                "Walk through fragrant cinnamon groves, meet the families who cultivate them, and take home the purest cinnamon you'll ever taste."
+              </Typography>
+            </Box>
           </Paper>
         </Container>
       </Box>
