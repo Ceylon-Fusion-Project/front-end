@@ -1,5 +1,5 @@
 // src/pages/AboutUs.tsx
-import { Box, Container, Typography, Paper, Grid } from "@mui/material";
+import { Box, Container, Typography, Paper } from "@mui/material";
 import teaBg from "../assets/images/cinnamon-bg.jpg";
 import NavBar from "../components/Navbar";
 import Footer from "../components/footer";
