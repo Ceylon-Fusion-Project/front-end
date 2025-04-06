@@ -162,12 +162,12 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <MenuItem onClick={() => navigate("/admin/profile")}>
-                My Profile
+              <MenuItem onClick={() => navigate("/profile")}>
+                My Personal Profile
               </MenuItem>{" "}
               {/* Use navigate */}
               <MenuItem onClick={() => navigate("/admin/profilesettings")}>
-                Account Settings
+                Analytics & Reports
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
