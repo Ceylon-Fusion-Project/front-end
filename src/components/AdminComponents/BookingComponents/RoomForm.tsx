@@ -1,75 +1,136 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { ImageUploader } from "../ImageUploader";
 import { RoomPreview } from "./RoomPreview";
 import { accommodations } from "../../../lib/data";
-import { Room, RoomType } from "./RoomManagement";
+//import { Room, RoomType } from "./RoomManagement";
+import { getAvailableAccommodations } from "@/services/Booking-Service/accommodationService";
+
+// In RoomForm.tsx
+export enum LocalRoomType {
+  FAMILY = "FAMILY",
+  STANDARD = "STANDARD",
+  DELUXE = "DELUXE",
+}
+
+export interface Room {
+  roomId: number;
+  roomCode: string;
+  roomNumber: number;
+  roomType: LocalRoomType;
+  roomImageURLs: string[];
+  beds: number;
+  pricePerNight: number;
+  createdAt?: string;
+  updatedAt?: string;
+  accommodationId: number;
+}
+
+// Then use LocalRoomType in your schema:
+const formSchema = z.object({
+  roomCode: z
+    .string()
+    .min(2, { message: "Room code must be at least 2 characters." }),
+  roomNumber: z.coerce
+    .number()
+    .positive({ message: "Room number must be a positive number." }),
+  roomType: z.nativeEnum(LocalRoomType),
+  beds: z.coerce
+    .number()
+    .positive({ message: "Number of beds must be a positive number." }),
+  pricePerNight: z.coerce
+    .number()
+    .positive({ message: "Price per night must be a positive number." }),
+  isAvailable: z.boolean().optional(),
+  roomImageURLs: z
+    .array(z.string())
+    .min(1, { message: "At least one room image is required." }),
+  accommodationId: z.coerce
+    .number()
+    .min(1, { message: "Please select an accommodation." }),
+});
 
 interface RoomFormProps {
-  room: Room | null;
-  onSave: (roomData: Omit<Room, "roomId" | "createdAt" | "updatedAt"> & {
-    roomId?: number;
-    createdAt?: string;
-    updatedAt?: string;
-  }) => void;
+  // room: Room | null;
+  room: (FormValues & { roomId?: number }) | null;
+  onSave: (
+    roomData: Omit<Room, "roomId" | "createdAt" | "updatedAt"> & {
+      roomId?: number;
+      createdAt?: string;
+      updatedAt?: string;
+    }
+  ) => void;
   onCancel: () => void;
 }
 
-const formSchema = z.object({
-  roomCode: z.string().min(2, {
-    message: "Room code must be at least 2 characters.",
-  }),
-  roomNumber: z.coerce.number().positive({
-    message: "Room number must be a positive number.",
-  }),
-  roomType: z.nativeEnum(RoomType),
-  beds: z.coerce.number().positive({
-    message: "Number of beds must be a positive number.",
-  }),
-  pricePerNight: z.coerce.number().positive({
-    message: "Price per night must be a positive number.",
-  }),
-  isAvailable: z.boolean().optional(),
-  roomImageURLs: z.array(z.string()).min(1, {
-    message: "At least one room image is required.",
-  }),
-  accommodationId: z.coerce.number().min(1, {
-    message: "Please select an accommodation.",
-  }),
-});
+// const formSchema = z.object({
+//   roomCode: z.string().min(2, {
+//     message: "Room code must be at least 2 characters.",
+//   }),
+//   roomNumber: z.coerce.number().positive({
+//     message: "Room number must be a positive number.",
+//   }),
+//   roomType: z.nativeEnum(RoomType),
+//   beds: z.coerce.number().positive({
+//     message: "Number of beds must be a positive number.",
+//   }),
+//   pricePerNight: z.coerce.number().positive({
+//     message: "Price per night must be a positive number.",
+//   }),
+//   isAvailable: z.boolean().optional(),
+//   roomImageURLs: z.array(z.string()).min(1, {
+//     message: "At least one room image is required.",
+//   }),
+//   accommodationId: z.coerce.number().min(1, {
+//     message: "Please select an accommodation.",
+//   }),
+// });
 
-type FormValues = z.infer<typeof formSchema>;
+export type FormValues = z.infer<typeof formSchema>;
 
 export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
   const [showPreview, setShowPreview] = useState(false);
+  const [availableAccommodations, setAvailableAccommodations] = useState<
+  {
+    accommodationId: number;
+    accommodationName: string;
+  }[]
+>([]);
 
-  const defaultValues: Partial<FormValues> = {
-    roomCode: room?.roomCode || "",
-    roomNumber: room?.roomNumber || 0,
-    roomType: room?.roomType || RoomType.SINGLE,
-    beds: room?.beds || 0,
-    pricePerNight: room?.pricePerNight || 0,
-    roomImageURLs: room?.roomImageURLs || [],
-    accommodationId: room?.accommodationId || 0,
+  const defaultValues: Partial<FormValues & { roomId?: number }> = {
+    roomCode: room?.roomCode || "XX",
+    roomNumber: room?.roomNumber || 1,
+    roomType: room?.roomType || LocalRoomType.STANDARD,
+    beds: room?.beds || 1,
+    pricePerNight: room?.pricePerNight || 1,
+    roomImageURLs: room?.roomImageURLs || ["img1"],
+    accommodationId: room?.accommodationId || 1,
     isAvailable: true,
+    roomId: room?.roomId,
   };
-
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
 
-  const formValues = form.watch();
+  useEffect(() => {
+    getAvailableAccommodations().then((res) => {
+      // ✅ safely access deeply nested accommodation list
+      const accommodationList = res?.data?.data || [];
+      setAvailableAccommodations(accommodationList);
+    });
+  }, []);
 
+  const formValues = form.watch();
   function onSubmit(values: FormValues) {
+    console.log("Form is submitting with values:", values);
     onSave({
       ...values,
       roomId: room?.roomId,
     });
   }
-
   return (
     <div className="p-6 bg-white border rounded-lg shadow-md border-amber-100">
       <div className="flex items-center justify-between mb-6">
@@ -91,11 +152,15 @@ export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
           </button>
         </div>
       </div>
-
       {showPreview ? (
         <RoomPreview room={formValues} onBack={() => setShowPreview(false)} />
       ) : (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit, (errors) => {
+            console.log("Validation errors:", errors);
+          })}
+          className="space-y-6"
+        >
           {/* Room Code */}
           <div>
             <label className="block mb-1 font-semibold">Room Code</label>
@@ -130,7 +195,7 @@ export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
               className="w-full px-3 py-2 border rounded"
               {...form.register("roomType")}
             >
-              {Object.values(RoomType).map((type) => (
+              {Object.values(LocalRoomType).map((type) => (
                 <option key={type} value={type}>
                   {type}
                 </option>
@@ -171,7 +236,7 @@ export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
           {/* Accommodation */}
           <div>
             <label className="block mb-1 font-semibold">Accommodation</label>
-            <select
+            {/* <select
               className="w-full px-3 py-2 border rounded"
               {...form.register("accommodationId", { valueAsNumber: true })}
             >
@@ -181,7 +246,19 @@ export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
                   {acc.name}
                 </option>
               ))}
+            </select> */}
+            <select
+              className="w-full px-3 py-2 border rounded"
+              {...form.register("accommodationId", { valueAsNumber: true })}
+            >
+              <option value={0}>Select accommodation</option>
+              {availableAccommodations.map((acc) => (
+                <option key={acc.accommodationId} value={acc.accommodationId}>
+                  {acc.accommodationName}
+                </option>
+              ))}
             </select>
+
             <p className="mt-1 text-sm text-red-600">
               {form.formState.errors.accommodationId?.message}
             </p>
@@ -214,6 +291,11 @@ export function RoomForm({ room, onSave, onCancel }: RoomFormProps) {
             >
               {room ? "Update Room" : "Save Room"}
             </button>
+            {Object.keys(form.formState.errors).length > 0 && (
+              <pre className="text-red-500 text-sm mt-4">
+                {JSON.stringify(form.formState.errors, null, 2)}
+              </pre>
+            )}
           </div>
         </form>
       )}
