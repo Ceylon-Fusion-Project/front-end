@@ -5,7 +5,7 @@ import AdminRoutes from './AdminRoutes';
 import BookingRoutes from './BookingRoutes';
 import OrderRoutes from './OrderRoutes';
 import ProfileRoutes from './ProfileRoutes';
-// import AboutUs from '@/pages/AboutUs';
+import AboutUs from '@/pages/AboutUs';
 import ContactUs from '@/pages/ContactUs';
 // import FeatureXRoutes from "./FeatureXRoutes"; // Example: Other feature routes
 // import NotFoundPage from "../pages/NotFoundPage"; // Optional 404 Page
@@ -32,7 +32,7 @@ export default function AppRoutes() {
             {/* UserAccount Realated routes */}
             <Route path="/profile/*" element={<ProfileRoutes />} />
 
-            {/* <Route path="/about" element={<AboutUs/>} /> */}
+            <Route path="/about" element={<AboutUs/>} />
             <Route path="/contact" element={<ContactUs/>} />
             
         </Routes>
