@@ -94,3 +94,12 @@ export const getAccommodationsByFilter = async (params: FilterParams) => {
     });
     return response.data;
   };
+
+// GET ONLY AVAILABLE ACCOMMODATIONS
+export const getAvailableAccommodations = async () => {
+    const response = await api.get("/accommodation/get-entire-accommodations", {
+      withCredentials: true,
+    });
+    return response.data;
+  };
+  
