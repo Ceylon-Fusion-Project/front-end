@@ -13,8 +13,22 @@ export interface Room {
     accommodationCode: string;
     accommodationName: string;
     accommodationType: string;
-    description: string;
+    accommodationDescription: string;
     location: string;
-    locationMapLink: string;
+    accommodationMapLink: string;
+    accDemoVideoLink: string; 
+    isAvailable: boolean;
     rooms: Room[];
   }
+
+  export interface AccommodationFormValues {
+    accommodationCode: string;
+    accommodationName: string;
+    accommodationType: string;
+    accommodationDescription: string;
+    location: string;
+    accommodationMapLink: string;
+    accDemoVideoLink: string; // Optional if not always required
+    isAvailable: boolean; // Optional for now
+  }
+  
