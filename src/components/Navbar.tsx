@@ -5,6 +5,7 @@ import api from "../api/axiosInstance"; // Import axios instance
 import NotificationService from "@/utils/NotificationService";
 import userConfirmation from "@/utils/useConfirmation";
 import { ShoppingCart, Heart, LogOut, User } from "lucide-react";
+import type { CustomAxiosRequestConfig } from "@/api/customAxios";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +16,10 @@ const Navbar = () => {
   // Function to check authentication status
   const checkAuthStatus = async () => {
     try {
-      const response = await api.get("/auth/check");
+      const config: CustomAxiosRequestConfig = {
+        suppressGlobalError: true,
+      };// Suppress global error
+      const response = await api.get("/auth/check", config);
       setIsLoggedIn(response.data.authenticated);
     } catch (error) {
       setIsLoggedIn(false);
@@ -33,13 +37,18 @@ const Navbar = () => {
       message: "Are you sure you want to logout?",
       onConfirm: async () => {
         try {
-          await api.get("/auth/logout");
+          const config: CustomAxiosRequestConfig = {
+            suppressGlobalError: true,
+          };
+          await api.get("/auth/logout", config); // Suppress global error
           setIsLoggedIn(false);
           NotificationService.success("You have been logged out.");
           navigate("/");
+          window.location.reload();
         } catch (error) {
+          window.location.reload();
           console.error("Logout failed:", error);
-          NotificationService.error("Logout failed. Try again.");
+          //NotificationService.error("Logout failed. Try again.");
         }
       },
       onCancel: () => NotificationService.info("Logout canceled."),
