@@ -93,8 +93,11 @@ const formSchema = z.object({
     .min(5, { message: "Address must be at least 5 characters" }),
   phoneNumber: z
     .string()
-    .min(10, { message: "Please enter a valid phone number" }),
- // currency: z.string().min(1, { message: "Please select a currency" }),
+    .regex(/^\+?\d+$/, {
+      message: "Phone number must contain only digits and may start with +",
+    })
+    .min(10, { message: "Phone number must be at least 10 digits" }),
+  // currency: z.string().min(1, { message: "Please select a currency" }),
   city: z.string().min(1, { message: "City is required" }),
   state: z.string().min(1, { message: "State/Province is required" }),
   zipCode: z.string().min(1, { message: "Zip/Postal code is required" }),
@@ -109,7 +112,7 @@ const RegistrationCompletePage: React.FC = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const idempotencyKeyRef = React.useRef<string>(uuidv4());
- 
+
   const regenerateIdempotencyKey = () => {
     idempotencyKeyRef.current = uuidv4();
   };
@@ -123,7 +126,7 @@ const RegistrationCompletePage: React.FC = () => {
       country: "",
       address: "",
       phoneNumber: "",
-      city: "", 
+      city: "",
       state: "",
       zipCode: "",
       preferredCategories: [],
@@ -168,27 +171,27 @@ const RegistrationCompletePage: React.FC = () => {
     console.log("In submission");
 
     try {
-        const response = await api.post("/user/complete-profile", data);
+      const response = await api.post("/user/complete-profile", data);
 
-    //   if (response.status >= 200 && response.status < 300) {
-    //     NotificationService.success("Registration completed successfully!");
-    //     setTimeout(() => {
-    //       navigate(response.data.redirectTo || "/");
-    //     }, 1500);
-    //   } else {
-    //     NotificationService.error("Something went wrong. Please try again.");
-    //     navigate(response.data.redirectTo || "/");
-    //     regenerateIdempotencyKey();
-    //   }
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    //   NotificationService.error(
-    //     "Error completing registration. Please try again."
-    //   );
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
-    if (response.status >= 200 && response.status < 300) {
+      //   if (response.status >= 200 && response.status < 300) {
+      //     NotificationService.success("Registration completed successfully!");
+      //     setTimeout(() => {
+      //       navigate(response.data.redirectTo || "/");
+      //     }, 1500);
+      //   } else {
+      //     NotificationService.error("Something went wrong. Please try again.");
+      //     navigate(response.data.redirectTo || "/");
+      //     regenerateIdempotencyKey();
+      //   }
+      // } catch (error) {
+      //   console.error("Error submitting form:", error);
+      //   NotificationService.error(
+      //     "Error completing registration. Please try again."
+      //   );
+      // } finally {
+      //   setIsSubmitting(false);
+      // }
+      if (response.status >= 200 && response.status < 300) {
         NotificationService.success("Registration completed successfully!");
         setTimeout(() => {
           navigate(response.data.redirectTo || "/");
@@ -199,13 +202,17 @@ const RegistrationCompletePage: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Error submitting form:", error);
-  
+
       if (error?.response?.status === 409) {
-        NotificationService.error("Request was already processed. Please refresh the page or try again.");
+        NotificationService.error(
+          "Request was already processed. Please refresh the page or try again."
+        );
       } else {
-        NotificationService.error("Error completing registration. Please try again.");
+        NotificationService.error(
+          "Error completing registration. Please try again."
+        );
       }
-  
+
       regenerateIdempotencyKey(); // 🔁 regenerate on failure
     } finally {
       setIsSubmitting(false);
@@ -336,7 +343,7 @@ const RegistrationCompletePage: React.FC = () => {
                   /> */}
 
                   {/* Phone Number */}
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="phoneNumber"
                     render={({ field }) => (
@@ -348,8 +355,35 @@ const RegistrationCompletePage: React.FC = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="+94771234567"
+                            {...field}
+                            onChange={(e) => {
+                              let value = e.target.value;
 
+                              // Allow only leading + and digits
+                              if (value.startsWith("+")) {
+                                value = "+" + value.slice(1).replace(/\D/g, "");
+                              } else {
+                                value = value.replace(/\D/g, "");
+                              }
+
+                              field.onChange(value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   {/* Address */}
                   <FormField
                     control={form.control}
