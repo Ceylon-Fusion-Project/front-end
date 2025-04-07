@@ -1,7 +1,7 @@
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import GrassIcon from '@mui/icons-material/Grass';
-import image01 from '../../assets/events/tour_01.jpg';
-import image02 from '../../assets/events/market_01.jpg';
+import image01 from '../../assets/events/event60.jpg';
+import image02 from '../../assets/events/event90.jpg';
 import { theme } from '@/styles/theme';
 import { useEffect, useState, useRef } from 'react';
 
