@@ -543,7 +543,7 @@ export const mockData: ExperienceCenter[] = [
     experienceCenterDescription: 'Learn the traditional methods of harvesting cinnamon in a scenic setting.',
     location: 'Kandy',
     locationMapLink: 'https://www.openstreetmap.org/#map=15/7.2906/80.6337',
-    totalPrice: 50.0,
+    demoVideoLink: '',
     events: [
       {
         eventId: 1,
@@ -620,7 +620,7 @@ const ExperienceCenterManagement = () => {
       experienceCenterDescription: String(formData.get('experienceCenterDescription')),
       location: String(formData.get('location')),
       locationMapLink: selectedLocation || String(formData.get('locationMapLink')),
-      totalPrice: parseFloat(String(formData.get('totalPrice'))),
+      demoVideoLink: String(formData.get('demoVideoLink')),
       events: currentExperienceCenter ? currentExperienceCenter.events : [],
     };
 
@@ -681,7 +681,6 @@ const ExperienceCenterManagement = () => {
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Code</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Name</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Location</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Price</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Events</TableCell>
               <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Actions</TableCell>
             </TableRow>
@@ -692,7 +691,6 @@ const ExperienceCenterManagement = () => {
                 <TableCell>{ec.experienceCenterCode}</TableCell>
                 <TableCell>{ec.experienceCenterName}</TableCell>
                 <TableCell>{ec.location}</TableCell>
-                <TableCell>${ec.totalPrice.toFixed(2)}</TableCell>
                 <TableCell>
                   <span
                     style={{ cursor: 'pointer', color: '#B45309', display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -789,16 +787,11 @@ const ExperienceCenterManagement = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Total Price"
-                  name="totalPrice"
-                  type="number"
+                  label="Demo Video Link"
+                  name="demoVideoLink"
                   fullWidth
                   margin="normal"
-                  defaultValue={currentExperienceCenter?.totalPrice}
-                  required
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                  }}
+                  defaultValue={currentExperienceCenter?.demoVideoLink || ''}
                 />
               </Grid>
               <Grid item xs={12}>
