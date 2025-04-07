@@ -15,6 +15,6 @@ export interface Event {
     experienceCenterDescription: string;
     location: string;
     locationMapLink: string;
-    totalPrice: number;
+    demoVideoLink: string;
     events: Event[];
   }
