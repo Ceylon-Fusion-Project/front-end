@@ -1,6 +1,6 @@
 // src/components/FeaturedPackages.tsx
 //import React from 'react';
-import Card from "./Card";
+import Card from "../components/BookingComponents/Card";
 import { theme } from "@/styles/theme";
 import { useNavigate } from "react-router-dom";
 import NatureRetreat from "../assets/images/nature-retreat.jpg";
@@ -38,7 +38,7 @@ const FeaturedPackages = () => {
   return (
     <div className="bg-background py-12">
       <div className="container mx-auto px-4">
-        <h2 className="text-primary font-serif text-3xl font-bold text-center mb-8">
+        <h2 className="text-primary font-roboto text-3xl font-bold text-center mb-8">
           Featured Packages
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -60,8 +60,8 @@ const FeaturedPackages = () => {
             className="bg-accent text-white px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 
                        hover:bg-primary hover:scale-105 hover:shadow-lg hover:text-black"
             style={{
-              backgroundColor: "#a68f83",
-              color: theme.colors.textPrimary,
+              backgroundColor: "#19342e",
+              color: "#ffffff",
               //fontFamily: theme.fonts.body,
             }}
             onClick={handleBookingNow}

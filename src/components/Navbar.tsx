@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import api from "../api/axiosInstance"; // Import axios instance
 import NotificationService from "@/utils/NotificationService";
 import userConfirmation from "@/utils/useConfirmation";
-import { ShoppingCart, Heart, LogOut } from "lucide-react";
+import { ShoppingCart, Heart, LogOut, User } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -149,6 +149,9 @@ const Navbar = () => {
                   <Link to="/orders/wishList" title="Wishlist">
                     <Heart className="w-5 h-5 text-gray-800 hover:text-pink-500 cursor-pointer" />
                   </Link>
+                  <Link to="/profile" title="Profile">
+                    <User className="w-5 h-5 text-gray-800 hover:text-green-600 cursor-pointer" />
+                  </Link>
                   <button onClick={handleLogout} title="Logout">
                     <LogOut className="w-5 h-5 text-gray-800 hover:text-red-600 cursor-pointer" />
                   </button>
@@ -221,6 +224,9 @@ const Navbar = () => {
                 </Link>
                 <Link to="/orders/wishList" title="Wishlist">
                   <Heart className="w-5 h-5 text-gray-800 hover:text-pink-500" />
+                </Link>
+                <Link to="/profile" title="Profile">
+                  <User className="w-5 h-5 text-gray-800 hover:text-green-600" />
                 </Link>
                 <button onClick={handleLogout} title="Logout">
                   <LogOut className="w-5 h-5 text-gray-800 hover:text-red-600" />
