@@ -240,7 +240,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>Username</FormLabel>
                         <FormControl>
-                          <Input placeholder="testuser2" {...field} />
+                          <Input placeholder="User Name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -299,7 +299,7 @@ const RegistrationCompletePage: React.FC = () => {
                         <FormLabel>Country</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Sri Lanka"
+                            placeholder="Country"
                             {...field}
                             className="bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-400 transition"
                           />
@@ -343,7 +343,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>Phone Number</FormLabel>
                         <FormControl>
-                          <Input placeholder="0712345678" {...field} />
+                          <Input placeholder="xxxxxxxxxxx" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -358,7 +358,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>Address</FormLabel>
                         <FormControl>
-                          <Input placeholder="123 Main St" {...field} />
+                          <Input placeholder="Address" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -373,7 +373,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>City</FormLabel>
                         <FormControl>
-                          <Input placeholder="Wattala" {...field} />
+                          <Input placeholder="City" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -388,7 +388,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>State/Province</FormLabel>
                         <FormControl>
-                          <Input placeholder="Hendala" {...field} />
+                          <Input placeholder="state/Province" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -403,7 +403,7 @@ const RegistrationCompletePage: React.FC = () => {
                       <FormItem>
                         <FormLabel>Zip/Postal Code</FormLabel>
                         <FormControl>
-                          <Input placeholder="11300" {...field} />
+                          <Input placeholder="xxxxxx" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

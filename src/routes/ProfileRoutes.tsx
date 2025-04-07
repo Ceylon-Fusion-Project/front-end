@@ -4,6 +4,7 @@ import ProfileHome from '@/pages/AccountPages/ProfileHome';
 import SettingsPage from '@/pages/AccountPages/SettingsPage';
 import { Routes, Route } from 'react-router-dom';
 import BookingsPage from '@/pages/AccountPages/BookingsPage';
+import OnboardingPage from '@/pages/AccountPages/onboardingPage';
 // import SettingsPage from '@/pages/AccountPages/SettingsPage';
 // import BuyerDashboard from '@/pages/AccountPages/BuyerDashboard';
 
@@ -55,7 +56,7 @@ export default function ProfileRoutes() {
       /> */}
       
       {/* Onboarding (outside of ProfileLayout) */}
-      {/* <Route path="onboarding" element={<OnboardingPage />} /> */}
+      <Route path="onboarding" element={<OnboardingPage />} />
     </Routes>
   );
 }

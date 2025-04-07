@@ -3,6 +3,7 @@ import CartItem from "./CartItem";
 import CartSummary from "./CartSummary";
 import api from "@/api/axiosInstance";
 import NotificationService from "@/utils/NotificationService";
+import {getUserID} from "@/services/user-service/userService";
 
 interface CartItemType {
   id: number;
@@ -17,6 +18,11 @@ const Cart: React.FC = () => {
 const userId = 3; // ✅ static assignment for testing purposes
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    getUserID();
+  }, []);
+
 
   useEffect(() => {
     const fetchCart = async () => {
