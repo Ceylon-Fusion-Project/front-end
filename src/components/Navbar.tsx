@@ -61,6 +61,21 @@ const Navbar = () => {
     }
   };
 
+  const handleSignup = async () => {
+    try {
+      const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      const response = await api.get(
+        `/auth/signup?redirectTo=${encodeURIComponent(currentPath)}`
+      );
+      if (response.request?.responseURL) {
+        window.location.href = response.request.responseURL;
+      }
+    } catch (error) {
+      console.error("Signup redirect failed:", error);
+      NotificationService.error("Something went wrong. Please try again.");
+    }
+  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
@@ -137,6 +152,7 @@ const Navbar = () => {
                   <a
                     href="https://localhost:3001/api/v1/auth/signup"
                     className="text-gray-800 hover:text-gray-600 px-6 py-2"
+                    onClick={handleSignup}
                   >
                     Sign Up
                   </a>
@@ -211,8 +227,9 @@ const Navbar = () => {
                   Login
                 </a>
                 <a
-                  href="https://localhost:3001/api/v1/auth/signup"
+                  href={`https://localhost:3001/api/v1/auth/signup?redirectTo=${encodeURIComponent(window.location.pathname)}`}
                   className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+                  onClick={handleSignup}
                 >
                   Sign Up
                 </a>
