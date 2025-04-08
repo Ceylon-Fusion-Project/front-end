@@ -247,10 +247,12 @@
 
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, ShoppingCart, Heart, LogOut, User } from "lucide-react";
+import { Menu, X} from "lucide-react";
 import api from "../api/axiosInstance"; // Import axios instance
 import NotificationService from "@/utils/NotificationService";
 import userConfirmation from "@/utils/useConfirmation";
+import { ShoppingCart, Heart, LogOut, User } from "lucide-react";
+import type { CustomAxiosRequestConfig } from "@/api/customAxios";
 import logo from "../assets/images/Ceylon fusion.png"; // ✅ Add your logo file here
 
 const Navbar = () => {
@@ -262,7 +264,10 @@ const Navbar = () => {
   // Function to check authentication status
   const checkAuthStatus = async () => {
     try {
-      const response = await api.get("/auth/check");
+      const config: CustomAxiosRequestConfig = {
+        suppressGlobalError: true,
+      };// Suppress global error
+      const response = await api.get("/auth/check", config);
       setIsLoggedIn(response.data.authenticated);
     } catch (error) {
       setIsLoggedIn(false);
@@ -280,13 +285,18 @@ const Navbar = () => {
       message: "Are you sure you want to logout?",
       onConfirm: async () => {
         try {
-          await api.get("/auth/logout");
+          const config: CustomAxiosRequestConfig = {
+            suppressGlobalError: true,
+          };
+          await api.get("/auth/logout", config); // Suppress global error
           setIsLoggedIn(false);
           NotificationService.success("You have been logged out.");
           navigate("/");
+          window.location.reload();
         } catch (error) {
+          window.location.reload();
           console.error("Logout failed:", error);
-          NotificationService.error("Logout failed. Try again.");
+          //NotificationService.error("Logout failed. Try again.");
         }
       },
       onCancel: () => NotificationService.info("Logout canceled."),
@@ -304,6 +314,21 @@ const Navbar = () => {
       }
     } catch (error) {
       console.error("Login redirect failed:", error);
+      NotificationService.error("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleSignup = async () => {
+    try {
+      const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      const response = await api.get(
+        `/auth/signup?redirectTo=${encodeURIComponent(currentPath)}`
+      );
+      if (response.request?.responseURL) {
+        window.location.href = response.request.responseURL;
+      }
+    } catch (error) {
+      console.error("Signup redirect failed:", error);
       NotificationService.error("Something went wrong. Please try again.");
     }
   };
@@ -387,6 +412,7 @@ const Navbar = () => {
                   <a
                     href="https://localhost:3001/api/v1/auth/signup"
                     className="text-gray-800 hover:text-gray-600 px-6 py-2"
+                    onClick={handleSignup}
                   >
                     Sign Up
                   </a>
@@ -457,8 +483,9 @@ const Navbar = () => {
                   Login
                 </a>
                 <a
-                  href="https://localhost:3001/api/v1/auth/signup"
+                  href={`https://localhost:3001/api/v1/auth/signup?redirectTo=${encodeURIComponent(window.location.pathname)}`}
                   className="block text-gray-800 hover:text-gray-600 px-3 py-2"
+                  onClick={handleSignup}
                 >
                   Sign Up
                 </a>

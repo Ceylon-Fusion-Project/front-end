@@ -3,6 +3,7 @@ import CartItem from "./CartItem";
 import CartSummary from "./CartSummary";
 import api from "@/api/axiosInstance";
 import NotificationService from "@/utils/NotificationService";
+import {getUserID} from "@/services/user-service/userService";
 
 interface CartItemType {
   id: number;
@@ -14,24 +15,58 @@ interface CartItemType {
 }
 
 const Cart: React.FC = () => {
-const userId = 3; // ✅ static assignment for testing purposes
+//const userId = 3; // ✅ static assignment for testing purposes
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [userId, setUserId] = useState<number | null>(null);
+  
   useEffect(() => {
-    const fetchCart = async () => {
+    getUserID();
+  }, []);
+
+
+  // useEffect(() => {
+  //   const fetchCart = async () => {
+  //     try {
+  //       const response = await api.get("/aggregated-cart/merged-cart-details", {
+  //         params: { userId },
+  //       });
+  //       setCart(response.data.cart);
+  //     } catch (error: any) {
+  //       NotificationService.error("Failed to load cart items.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchCart();
+  // }, []);
+  useEffect(() => {
+    const init = async () => {
       try {
-        const response = await api.get("/aggregated-cart/merged-cart-details", {
-          params: { userId },
+        const userResponse = await getUserID();
+        const fetchedUserId = userResponse.data?.userId;
+        console.log("Fetched User ID:", fetchedUserId); // Debugging line
+
+        if (!fetchedUserId) {
+          throw new Error("User ID not found");
+        }
+
+        setUserId(fetchedUserId);
+
+        const cartResponse = await api.get("/aggregated-cart/merged-cart-details", {
+          params: { userId: fetchedUserId },
         });
-        setCart(response.data.cart);
-      } catch (error: any) {
-        NotificationService.error("Failed to load cart items.");
+
+        setCart(cartResponse.data.cart);
+      } catch (error) {
+        console.error(error);
+        NotificationService.error("Failed to load cart.");
       } finally {
         setLoading(false);
       }
     };
-    fetchCart();
+
+    init();
   }, []);
 
   const removeItem = (id: number) => {

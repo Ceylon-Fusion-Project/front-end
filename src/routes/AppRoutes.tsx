@@ -7,10 +7,9 @@ import OrderRoutes from './OrderRoutes';
 import ProfileRoutes from './ProfileRoutes';
 import AboutUs from '@/pages/AboutUs';
 import ContactUs from '@/pages/ContactUs';
+import RegistrationForm from '../components/UserAccount/registrationCompleteForm';
 import SustainabilityPage from '@/pages/SustainabilityPage';
 import PaymentPage from '@/pages/PaymentPages/PaymentPage';
-
-
 
 // import FeatureXRoutes from "./FeatureXRoutes"; // Example: Other feature routes
 // import NotFoundPage from "../pages/NotFoundPage"; // Optional 404 Page
@@ -39,11 +38,9 @@ export default function AppRoutes() {
 
             <Route path="/about" element={<AboutUs/>} />
             <Route path="/contact" element={<ContactUs/>} />
+            <Route path="/registration-complete" element={<RegistrationForm />} />
             <Route path="/sustainability" element={<SustainabilityPage/>} />
-
             <Route path="/payment" element={<PaymentPage />} />
-
-            
         </Routes>
     );
 }

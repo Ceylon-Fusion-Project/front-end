@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { FaHeart, FaShoppingBag } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { getUserID } from "@/services/user-service/userService";
 
 interface Item {
   id: number;
@@ -19,25 +20,56 @@ interface WishlistResponse {
   wishlist: Item[];
 }
 
-const userId = 3; // Replace with dynamic user context later
+//const userId = 3; // Replace with dynamic user context later
 
 const Wishlist: React.FC = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [idempotencyKeyMap] = useState<{ [key: number]: string }>(() => ({}));
+  const [userId, setUserId] = useState<number | null>(null);
 
 
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   const fetchWishlist = async () => {
+  //     try {
+  //       const response = await api.get<WishlistResponse>(
+  //         "/aggregated-wishlist/merged-wishlist",
+  //         {
+  //           params: { userId },
+  //         }
+  //       );
+  //       console.log("Fetched wishlist response:", response.data);
+  //       setItems(response.data.wishlist);
+  //     } catch (error: any) {
+  //       console.error("Error fetching wishlist:", error);
+  //       NotificationService.error("Failed to load wishlist.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchWishlist();
+  // }, []);
   useEffect(() => {
-    const fetchWishlist = async () => {
+    const init = async () => {
       try {
+        const userResponse = await getUserID();
+        const fetchedUserId = userResponse.data?.userId;
+        console.log("Fetched User ID:", fetchedUserId);
+
+        if (!fetchedUserId) throw new Error("User ID not found");
+
+        setUserId(fetchedUserId);
+
         const response = await api.get<WishlistResponse>(
           "/aggregated-wishlist/merged-wishlist",
           {
-            params: { userId },
+            params: { userId: fetchedUserId },
           }
         );
+
         console.log("Fetched wishlist response:", response.data);
         setItems(response.data.wishlist);
       } catch (error: any) {
@@ -48,7 +80,7 @@ const Wishlist: React.FC = () => {
       }
     };
 
-    fetchWishlist();
+    init();
   }, []);
 
   const handleAddToCart = async (productId: number) => {

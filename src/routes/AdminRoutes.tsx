@@ -16,6 +16,7 @@ import AdminSettings from '@/pages/AdminPages/AdminSettings';
 import PackageManagement from '@/components/AdminComponents/BookingComponents/PackageManagement';
 import PackageForm from '@/components/AdminComponents/BookingComponents/PackageForm';
 import PackageDetails from '@/components/AdminComponents/BookingComponents/PackageDetails';
+import SelectionPage from '../pages/AdminPages/SelectionPage';
 
 
 
@@ -163,6 +164,8 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      {/*Route to Selection*/}
+      <Route path="selection" element={<SelectionPage />}/>
     </Routes>
   );
 }

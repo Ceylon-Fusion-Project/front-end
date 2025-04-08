@@ -30,6 +30,13 @@ import {
 } from "@/services/Booking-Service/roomService"; // use real service
 //import { Room, RoomType } from "./RoomManagement";
 import { LocalRoomType } from "@/components/AdminComponents/BookingComponents/RoomForm";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+} from "@mui/material";
 
 export enum RoomType {
   FAMILY = "FAMILY",
@@ -58,7 +65,7 @@ function toFormValues(parentRoom: Room): FormValues {
     roomNumber: parentRoom.roomNumber,
     // Cast parent's RoomType to the local enum:
     roomType:
-    parentRoom.roomType as unknown as (typeof LocalRoomType)[keyof typeof LocalRoomType],
+      parentRoom.roomType as unknown as (typeof LocalRoomType)[keyof typeof LocalRoomType],
     roomImageURLs: parentRoom.roomImageURLs,
     beds: parentRoom.beds,
     pricePerNight: parentRoom.pricePerNight,
@@ -213,6 +220,8 @@ const RoomManagement = () => {
   const [currentFormValues, setCurrentFormValues] = useState<FormValues | null>(
     null
   );
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [roomToDelete, setRoomToDelete] = useState<number | null>(null);
 
   const rowsPerPage = 5;
 
@@ -254,7 +263,10 @@ const RoomManagement = () => {
     const localValues = toFormValues(parentRoom);
     // Optionally attach roomId to form values
     // setCurrentFormValues({ ...localValues, roomId: parentRoom.roomId });
-    setCurrentFormValues({ ...localValues, roomId: parentRoom.roomId } as FormValues & { roomId?: number });
+    setCurrentFormValues({
+      ...localValues,
+      roomId: parentRoom.roomId,
+    } as FormValues & { roomId?: number });
     setShowRoomForm(true);
   };
 
@@ -358,7 +370,7 @@ const RoomManagement = () => {
     const idempotencyKey = uuidv4();
     const payload = {
       ...fromFormValues(data, data.roomId),
-      isAvailable: data.isAvailable ?? true,   // ← here!
+      isAvailable: data.isAvailable ?? true, // ← here!
     };
     try {
       //const parentRoom = fromFormValues(data, data.roomId);
@@ -377,6 +389,26 @@ const RoomManagement = () => {
       setSnackbarMessage("Failed to save room");
       setSnackbarSeverity("error");
     } finally {
+      setSnackbarOpen(true);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (roomToDelete === null) return;
+
+    const idempotencyKey = uuidv4();
+    try {
+      await deleteRoom(roomToDelete, idempotencyKey);
+      setSnackbarMessage("Room deleted successfully!");
+      setSnackbarSeverity("success");
+      fetchRooms();
+    } catch (error) {
+      console.error("Delete error:", error);
+      setSnackbarMessage("Failed to delete room");
+      setSnackbarSeverity("error");
+    } finally {
+      setConfirmDeleteOpen(false);
+      setRoomToDelete(null);
       setSnackbarOpen(true);
     }
   };
@@ -480,9 +512,18 @@ const RoomManagement = () => {
                       >
                         <Edit style={{ color: "#291e10" }} />
                       </IconButton>
-                      <IconButton
+                      {/* <IconButton
                         color="secondary"
                         onClick={() => handleDelete(room.roomId)}
+                      >
+                        <Delete style={{ color: "#EF4444" }} />
+                      </IconButton> */}
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          setRoomToDelete(room.roomId);
+                          setConfirmDeleteOpen(true);
+                        }}
                       >
                         <Delete style={{ color: "#EF4444" }} />
                       </IconButton>
@@ -520,6 +561,26 @@ const RoomManagement = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this room? This action cannot be
+            undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDeleteOpen(false)} color="inherit">
+            Cancel
+          </Button>
+          <Button onClick={confirmDelete} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

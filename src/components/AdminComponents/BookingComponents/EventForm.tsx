@@ -6,42 +6,107 @@ import { ImageUploader } from "../ImageUploader";
 import { EventPreview } from "./EventPreview";
 import { experienceCenters } from "../../../lib/data";
 
-const formSchema = z.object({
-  eventName: z.string().min(2, {
-    message: "Event name must be at least 2 characters.",
-  }),
-  eventDescription: z.string().min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
-  pricePerEvent: z.coerce.number().positive({
-    message: "Price must be a positive number.",
-  }),
-  isAvailable: z.boolean(),
-  startDateTime: z.string().nonempty("Please enter a start date and time."), // Updated to datetime
-  endDateTime: z.string().nonempty("Please enter an end date and time."), // Updated to datetime
-  eventImageURLs: z.array(z.string()).min(1, {
-    message: "At least one event image is required.",
-  }),
-  experienceId: z.coerce.number().min(1, {
-    message: "Please select an experience center.",
-  }),
-});
+// const formSchema = z.object({
+//   eventName: z.string().min(2, {
+//     message: "Event name must be at least 2 characters.",
+//   }),
+//   eventDescription: z.string().min(10, {
+//     message: "Description must be at least 10 characters.",
+//   }),
+//   pricePerEvent: z.coerce.number().positive({
+//     message: "Price must be a positive number.",
+//   }),
+//   isAvailable: z.boolean(),
+//   startDateTime: z.string().nonempty("Please enter a start date and time."), // Updated to datetime
+//   endDateTime: z.string().nonempty("Please enter an end date and time."), // Updated to datetime
+//   eventImageURLs: z.array(z.string()).min(1, {
+//     message: "At least one event image is required.",
+//   }),
+//   experienceId: z.coerce.number().min(1, {
+//     message: "Please select an experience center.",
+//   }),
+// });
+const formSchema = z
+  .object({
+    eventName: z.string().min(2, {
+      message: "Event name must be at least 2 characters.",
+    }),
+    eventDescription: z.string().min(10, {
+      message: "Description must be at least 10 characters.",
+    }),
+    pricePerEvent: z.coerce.number().positive({
+      message: "Price must be a positive number.",
+    }),
+    isAvailable: z.boolean(),
+    startDateTime: z.string().nonempty("Please enter a start date and time."),
+    endDateTime: z.string().nonempty("Please enter an end date and time."),
+    eventImageURLs: z.array(z.string()).min(1, {
+      message: "At least one event image is required.",
+    }),
+    experienceId: z.coerce.number().min(1, {
+      message: "Please select an experience center.",
+    }),
+  })
+  .refine(
+    (data) =>
+      new Date(data.endDateTime).getTime() >
+      new Date(data.startDateTime).getTime(),
+    {
+      message: "End date and time must be after the start date and time.",
+      path: ["endDateTime"],
+    }
+  )
+  .refine(
+    (data) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // remove time part
+      const start = new Date(data.startDateTime);
+      const end = new Date(data.endDateTime);
+      return start >= today && end >= today;
+    },
+    {
+      message: "Dates must be today or in the future.",
+      path: ["startDateTime"], // Apply error to startDateTime, adjust as needed
+    }
+  );
 
 type FormValues = z.infer<typeof formSchema>;
+
+function formatDateTimeLocal(dateStr: string): string {
+  const date = new Date(dateStr);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const yyyy = date.getFullYear();
+  const mm = pad(date.getMonth() + 1);
+  const dd = pad(date.getDate());
+  const hh = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+}
 
 export function EventForm({ event, onSave, onCancel }: { event?: FormValues; onSave: (data: FormValues) => void; onCancel: () => void }) {
   const [showPreview, setShowPreview] = useState(false);
 
+  // const defaultValues: Partial<FormValues> = {
+  //   eventName: event?.eventName || "",
+  //   eventDescription: event?.eventDescription || "",
+  //   pricePerEvent: event?.pricePerEvent || 0,
+  //   isAvailable: event?.isAvailable || true,
+  //   startDateTime: event?.startDateTime || "", // Updated to datetime
+  //   endDateTime: event?.endDateTime || "", // Updated to datetime
+  //   eventImageURLs: event?.eventImageURLs || [],
+  //   experienceId: event?.experienceId || 0,
+  // };
   const defaultValues: Partial<FormValues> = {
     eventName: event?.eventName || "",
     eventDescription: event?.eventDescription || "",
     pricePerEvent: event?.pricePerEvent || 0,
-    isAvailable: event?.isAvailable || true,
-    startDateTime: event?.startDateTime || "", // Updated to datetime
-    endDateTime: event?.endDateTime || "", // Updated to datetime
+    isAvailable: event?.isAvailable ?? true,
+    startDateTime: event?.startDateTime ? formatDateTimeLocal(event.startDateTime) : "",
+    endDateTime: event?.endDateTime ? formatDateTimeLocal(event.endDateTime) : "",
     eventImageURLs: event?.eventImageURLs || [],
     experienceId: event?.experienceId || 0,
-  };
+  };  
+  
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -52,8 +117,13 @@ export function EventForm({ event, onSave, onCancel }: { event?: FormValues; onS
   const formValues = form.watch();
 
   function onSubmit(values: FormValues) {
-    onSave(values); // Call the onSave function passed from the parent
+    const finalData = {
+      ...values,
+      eventId: event?.eventId, //Ensure this is passed back for edit mode
+    };
+    onSave(finalData);
   }
+  
 
   return (
     <div className="p-6 bg-white border rounded-lg shadow-md border-amber-100">
@@ -147,7 +217,7 @@ export function EventForm({ event, onSave, onCancel }: { event?: FormValues; onS
               className="w-full px-3 py-2 border rounded"
               {...form.register("experienceId", { valueAsNumber: true })}
             >
-              <option value={0}>Select experience center</option>
+              <option value={5}>Select experience center</option>
               {experienceCenters.map((exp) => (
                 <option key={exp.id} value={exp.id}>
                   {exp.name}
