@@ -22,7 +22,9 @@ function App() {
        
         </main>
     </Router>
+    
     </>
+    
   );
 }
 
