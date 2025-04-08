@@ -30,12 +30,12 @@ export default function AppRoutes() {
             {/* Order Related Routes */}
             <Route path="/orders/*" element={<OrderRoutes />} />
 
-            {/* UserAccount Realated routes */}
+            {/* UserAccount Related routes */}
             <Route path="/profile/*" element={<ProfileRoutes />} />
 
             <Route path="/about" element={<AboutUs/>} />
             <Route path="/contact" element={<ContactUs/>} />
-            <Route path="/sustainability" element={<SustainabilityPage/>} /> {/* Example: Sustainability page */}
+            <Route path="/sustainability" element={<SustainabilityPage/>} />
             
         </Routes>
     );
