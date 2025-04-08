@@ -10,12 +10,18 @@ interface CardProps {
   longDescription?: string;
   price?: string;
   onClick?: () => void;
-  isFeatured?: boolean; // Controls whether the card is featured or normal
+  isFeatured?: boolean;
   packageID?: number;
+  roomID?: number;
+  eventID?: number;
   packageDetails?: {
-    rooms: any[];
-    events: any[];
+    rooms?: any[];
+    events?: any[];
   };
+  rating?: number;
+  amenities?: string[];
+  availability?: boolean;
+  onViewMoreDetails?: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -25,9 +31,12 @@ const Card: React.FC<CardProps> = ({
   longDescription,
   price,
   onClick,
-  isFeatured = false, // Default to false (normal card)
+  isFeatured = false,
   packageID,
+  roomID,
+  eventID,
   packageDetails,
+  onViewMoreDetails
 }) => {
   const [hovered, setHovered] = useState(false);
   const [isWishlist, setIsWishlist] = useState(false);
@@ -36,12 +45,32 @@ const Card: React.FC<CardProps> = ({
 
   const navigate = useNavigate();
 
-  // Navigate to package details using packageID
+  const isPackageCard = !!packageID;
+  const isAccommodationCard = !!roomID;
+  const isExperienceCard = !!eventID;
+
   const handleViewMoreDetails = () => {
-    if (packageID) {
-      navigate(`/packages/package-details/${packageID}`);
+    console.log("Navigating with:", { packageID, roomID, eventID });
+    if (onViewMoreDetails) {
+      onViewMoreDetails();
+    } else if (eventID) {
+      navigate(`/booking/event/${eventID}`);
+    } else if (roomID) {
+      navigate(`/booking/room/${roomID}`);
+    } else if (packageID) {
+      navigate(`/booking/package/${packageID}`);
+    } else {
+      console.error("No valid ID provided for navigation");
     }
   };
+
+  const cardTypeLabel = isPackageCard
+    ? "Package"
+    : isAccommodationCard
+    ? "Accommodation"
+    : isExperienceCard
+    ? "Experience"
+    : "Unknown";
 
   return (
     <div
@@ -50,15 +79,12 @@ const Card: React.FC<CardProps> = ({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Featured Badge */}
-      {isFeatured && (
-        <span
-          className="absolute px-2 py-1 text-xs font-semibold text-white rounded top-2 left-2"
-          style={{ backgroundColor: "#56ab91" }} // Matches background for subtlety
-        >
-          Featured
-        </span>
-      )}
+      <span
+        className="absolute px-2 py-1 text-xs font-semibold text-white rounded top-2 left-2"
+        style={{ backgroundColor: "#56ab91" }}
+      >
+        {isFeatured ? `Featured ${cardTypeLabel}` : cardTypeLabel}
+      </span>
 
       <div className="relative">
         <img src={image} alt={title} className="object-cover w-full h-48" />
@@ -103,7 +129,7 @@ const Card: React.FC<CardProps> = ({
         <p
           className="mb-4 text-sm text-center"
           style={{
-            color: "#3c7866", // Muted green for description
+            color: "#3c7866",
             fontFamily: theme.fonts.sans[0],
           }}
         >
@@ -121,13 +147,12 @@ const Card: React.FC<CardProps> = ({
           </p>
         )}
 
-        {/* Quick Buy button only for featured cards */}
         {isFeatured && (
           <button
             onClick={onClick}
             className="w-full py-3 transition-all duration-300 rounded-lg hover:bg-[#346757]"
             style={{
-              backgroundColor: "#56ab91", // Bright green for Quick Buy
+              backgroundColor: "#56ab91",
               color: "white",
               fontFamily: theme.fonts.sans[0],
             }}
@@ -176,7 +201,7 @@ const Card: React.FC<CardProps> = ({
             <img
               src={image}
               alt={title}
-              className="object-cover w-full mt-2 rounded h-96"
+              className="object-cover w-full mt-2 rounded h-80"
             />
             <p
               className="mt-6 text-lg leading-relaxed"
@@ -186,10 +211,10 @@ const Card: React.FC<CardProps> = ({
             </p>
 
             {packageDetails && (
-              <div>
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Column 1: Accommodations */}
-                  {packageDetails.rooms && packageDetails.rooms.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                {(isPackageCard || isAccommodationCard) &&
+                  packageDetails.rooms &&
+                  packageDetails.rooms.length > 0 && (
                     <div>
                       <h4
                         className="text-lg font-semibold"
@@ -202,14 +227,17 @@ const Card: React.FC<CardProps> = ({
                       </h4>
                       <ul className="pl-5 list-disc" style={{ color: "#3c7866" }}>
                         {packageDetails.rooms.map((room, index) => (
-                          <li key={index}>{room.name || `${room.roomType} Room ${room.roomNumber}`}</li>
+                          <li key={index}>
+                            {room.name || `${room.roomType} Room ${room.roomNumber}`}
+                          </li>
                         ))}
                       </ul>
                     </div>
                   )}
 
-                  {/* Column 2: Events */}
-                  {packageDetails.events && packageDetails.events.length > 0 && (
+                {(isPackageCard || isExperienceCard) &&
+                  packageDetails.events &&
+                  packageDetails.events.length > 0 && (
                     <div>
                       <h4
                         className="text-lg font-semibold"
@@ -227,7 +255,6 @@ const Card: React.FC<CardProps> = ({
                       </ul>
                     </div>
                   )}
-                </div>
               </div>
             )}
 
@@ -251,7 +278,7 @@ const Card: React.FC<CardProps> = ({
                 }}
                 onClick={handleViewMoreDetails}
               >
-                View more details
+                View More Details
               </button>
             </div>
           </div>

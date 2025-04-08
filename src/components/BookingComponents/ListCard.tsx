@@ -11,6 +11,8 @@ interface CardProps {
   price?: string;
   onClick?: () => void;
   isFeatured?: boolean;
+  roomID?: number; // For Accommodation Card
+  eventID?: number; // For Experience Card
   packageID?: number;
   packageDetails?: {
     rooms: any[];
@@ -26,6 +28,8 @@ const ListCard: React.FC<CardProps> = ({
   price,
   onClick,
   isFeatured = false,
+  roomID,
+  eventID,
   packageID,
   packageDetails,
 }) => {
@@ -36,9 +40,17 @@ const ListCard: React.FC<CardProps> = ({
 
   const navigate = useNavigate();
 
+  // Navigate to appropriate booking page based on card type
   const handleViewMoreDetails = () => {
-    if (packageID) {
-      navigate(`/packages/package-details/${packageID}`);
+    console.log("Navigating with:", { packageID, roomID, eventID });
+    if (eventID) {
+      navigate(`/booking/event/${eventID}`);
+    } else if (roomID) {
+      navigate(`/booking/room/${roomID}`);
+    } else if (packageID) {
+      navigate(`/booking/package/${packageID}`);
+    } else {
+      console.error("No valid ID provided for navigation");
     }
   };
 
@@ -128,7 +140,7 @@ const ListCard: React.FC<CardProps> = ({
           <div className="flex gap-4">
             <button
               onClick={() => setShowPreview(true)}
-              className="px-4 py-2 transition-all duration-300 rounded-lg bg-[#2b5649] text-[#bbddd3] hover:bg-[#3c7866]"
+              className="px-4 py-2 transition-all duration-300 rounded-sm bg-[#2b5649] text-[#bbddd3] hover:bg-[#3c7866]"
               style={{
                 fontFamily: theme.fonts.sans[0],
               }}
