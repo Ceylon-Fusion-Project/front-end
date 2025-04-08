@@ -7,6 +7,7 @@ import OrderRoutes from './OrderRoutes';
 import ProfileRoutes from './ProfileRoutes';
 import AboutUs from '@/pages/AboutUs';
 import ContactUs from '@/pages/ContactUs';
+import SustainabilityPage from '@/pages/SustainabilityPage';
 import PaymentPage from '@/pages/PaymentPages/PaymentPage';
 
 
@@ -33,11 +34,12 @@ export default function AppRoutes() {
             {/* Order Related Routes */}
             <Route path="/orders/*" element={<OrderRoutes />} />
 
-            {/* UserAccount Realated routes */}
+            {/* UserAccount Related routes */}
             <Route path="/profile/*" element={<ProfileRoutes />} />
 
             <Route path="/about" element={<AboutUs/>} />
             <Route path="/contact" element={<ContactUs/>} />
+            <Route path="/sustainability" element={<SustainabilityPage/>} />
 
             <Route path="/payment" element={<PaymentPage />} />
 
