@@ -322,7 +322,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 Analytics & Reports
               </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
-=======
                 <MenuItem onClick={() => navigate('/admin/profile')}>My Profile</MenuItem> 
               <MenuItem onClick={() => navigate('/admin/profilesettings')}>Account Settings</MenuItem>
               <MenuItem onClick={handleMenuClose}>Logout</MenuItem> */}
