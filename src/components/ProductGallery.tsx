@@ -50,7 +50,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
         <img
           src={validImages[currentImage]}
           alt={`Product Image ${currentImage + 1}`}
-          className={`w-full h-full object-cover ${tokens.borderRadius.lg} ${theme.borders.thin}`}
+          className={`w-full h-full object-cover shadow-lg ${tokens.borderRadius.lg} ${theme.borders.thin}`}
         />
 
         {/* Zoom Button */}
@@ -87,7 +87,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
           <button
             key={index}
             onClick={() => setCurrentImage(index)}
-            className={`flex-shrink-0 ${tokens.borders.thin} ${tokens.borderRadius.md} overflow-hidden ${
+            className={`flex-shrink-0 shadow-lg ${tokens.borders.thin} ${tokens.borderRadius.md} overflow-hidden ${
               currentImage === index
                 ? `border-[${theme.colors.primary}]`
                 : "border-transparent"
@@ -96,7 +96,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
             <img
               src={image}
               alt={`Thumbnail ${index + 1}`}
-              className="w-20 h-20 object-cover"
+              className="w-20 h-20 object-cover shadow-lg"
             />
           </button>
         ))}

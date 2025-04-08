@@ -114,6 +114,12 @@ const TestimonialsSection = () => {
             Discover why tourists, travelers ,chef and  wellness enthusiasts worldwide trust our cinnamon and experiences.
           </p>
         </motion.div>
+    <section className="bg-[#FFFFFF] py-12"> 
+      {/* You can change the background color to match your design (#F8EBD4, #EDE2CA, etc.) */}
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+        What Our Customers Say
+      </h2>
+    </section>
 
         <motion.div
           initial={{ opacity: 0 }}

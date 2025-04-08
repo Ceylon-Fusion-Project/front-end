@@ -1,6 +1,17 @@
 import {Routes, Route} from 'react-router-dom';
 import LandingPage from '../pages/LandingPage';
 import ProductRoutes from './ProductRoutes';
+import AdminRoutes from './AdminRoutes';
+import BookingRoutes from './BookingRoutes';
+import OrderRoutes from './OrderRoutes';
+import ProfileRoutes from './ProfileRoutes';
+import AboutUs from '@/pages/AboutUs';
+import ContactUs from '@/pages/ContactUs';
+import SustainabilityPage from '@/pages/SustainabilityPage';
+import PaymentPage from '@/pages/PaymentPages/PaymentPage';
+
+
+
 // import FeatureXRoutes from "./FeatureXRoutes"; // Example: Other feature routes
 // import NotFoundPage from "../pages/NotFoundPage"; // Optional 404 Page
 
@@ -13,6 +24,26 @@ export default function AppRoutes() {
             
             {/* Product Related Routes */}
             <Route path="/products/*" element={<ProductRoutes />} />
+            
+            {/* Admin Related Routes */}
+            <Route path="/admin/*" element={<AdminRoutes />} />
+
+            {/* Booking Related Routes */}
+            <Route path="/booking/*" element={<BookingRoutes />} />
+
+            {/* Order Related Routes */}
+            <Route path="/orders/*" element={<OrderRoutes />} />
+
+            {/* UserAccount Related routes */}
+            <Route path="/profile/*" element={<ProfileRoutes />} />
+
+            <Route path="/about" element={<AboutUs/>} />
+            <Route path="/contact" element={<ContactUs/>} />
+            <Route path="/sustainability" element={<SustainabilityPage/>} />
+
+            <Route path="/payment" element={<PaymentPage />} />
+
+            
         </Routes>
     );
 }

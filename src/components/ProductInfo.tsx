@@ -3,6 +3,9 @@ import { Star, Heart, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { tokens } from "@/styles/tokens";
 import { theme } from "@/styles/theme";
+import api from "../api/axiosInstance";
+import { v4 as uuidv4 } from "uuid"; // Import UUID for idempotency key
+import NotificationService from "@/utils/NotificationService";
 
 interface ProductInfoProps {
   name: string;
@@ -12,6 +15,8 @@ interface ProductInfoProps {
   price: number;
   originalPrice: number;
   description: string;
+  productId: number;
+  //userId: number; // User ID should be passed dynamically
 }
 
 export function ProductInfo({
@@ -22,19 +27,160 @@ export function ProductInfo({
   price,
   originalPrice,
   description,
+  productId,
+  //userId,
 }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [idempotencyKey] = useState<string>(uuidv4()); // Generate only once
+  const [isWishlist, setIsWishlist] = useState(false);
+
+  // Function to handle Add to Cart
+  const handleAddToCart = async () => {
+    if (quantity < 1) {
+      NotificationService.warning("Quantity must be greater than zero");
+      return;
+    }
+
+    setLoading(true);
+
+    // ✅ Construct Request Body Properly
+    const requestBody = {
+      userId: 3, // Dynamically passed user ID
+      cartItem: {
+        productId,
+        cartItemQuantity: quantity,
+        cartItemPrice: price * quantity,
+      },
+    };
+
+    console.log(
+      "🛒 Sending Add to Cart request:",
+      JSON.stringify(requestBody, null, 2)
+    );
+
+    try {
+      const response = await api.post("/cart/add-item-to-cart", requestBody, {
+        headers: {
+          "X-Idempotency-Key": idempotencyKey, // Prevent duplicate requests
+        },
+      });
+
+      console.log("✅ Add to Cart Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success("Item added to cart successfully!");
+      } else {
+        NotificationService.error("Unexpected response from server.");
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("❌ Add to Cart Error:", error);
+
+      if ((error as any).response) {
+        console.error(
+          "❌ Axios Error Response:",
+          (error as any).response?.data
+        );
+        NotificationService.error(
+          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
+      } else {
+        NotificationService.error("Network error. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to handle Add to Wishlist
+  const addToWishList = async () => {
+    if (!productId) {
+      NotificationService.error(
+        "Product Identification Problem. Please try again."
+      );
+      return;
+    }
+
+    setIsWishlist(true);
+
+    const requestBody = {
+      userId: 5, // Change this to dynamic user ID when ready
+      productId: productId,
+    };
+
+    try {
+      const response = await api.post(
+        "/wishlist/add-item-to-wishlist",
+        requestBody
+      );
+      console.log("✅ Add to Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success("Product added to wishlist successfully!");
+      } else {
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist", error);
+      setIsWishlist(false);
+      NotificationService.error("Failed to add item to wishlist.");
+    }
+  };
+
+  // Function to handle Remove from Wishlist
+  const removeFromWishList = async () => {
+    if (!productId) {
+      NotificationService.error(
+        "Product Identification Problem. Please try again."
+      );
+      return;
+    }
+
+    setIsWishlist(false);
+
+    const requestBody = {
+      userId: 5,
+      productId: productId,
+    };
+
+    try {
+      const response = await api.post(
+        "/wishlist/remove-item-from-wishlist",
+        requestBody
+      );
+      console.log("✅ Remove from Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success(
+          "Product removed from wishlist successfully!"
+        );
+      } else {
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+      setIsWishlist(true);
+      NotificationService.error("Failed to remove item from wishlist.");
+    }
+  };
 
   return (
     <div className={`space-y-4 md:space-y-6 ${tokens.fonts.body}`}>
       {/* Product Name and Brand */}
       <div className="space-y-2">
         <h1
-          className={`${tokens.fontSizes["2xl"]} md:${tokens.fontSizes["3xl"]} lg:${tokens.fontSizes["4xl"]} font-bold ${tokens.fonts.heading} text-[${theme.colors.textPrimary}]`}
+          className="text-4xl md:text-4xl lg:text-5xl font-extrabold"
+          style={{ color: theme.colors.textPrimary }}
         >
           {name}
         </h1>
-        <p className={`text-[${theme.colors.textSecondary}]`}>{brand}</p>
+        <p
+          className="text-lg font-semibold"
+          style={{ color: theme.colors.textSecondary }}
+        >
+          {brand}
+        </p>
       </div>
 
       {/* Ratings and Reviews */}
@@ -43,15 +189,14 @@ export function ProductInfo({
           {[1, 2, 3, 4, 5].map((i) => (
             <Star
               key={i}
-              className={`h-5 w-5 ${
-                i <= rating
-                  ? `text-yellow-500 fill-current`
-                  : `text-[${tokens.colors.border}]`
-              }`}
+              className={`h-5 w-5 ${i <= rating ? `text-yellow-500 fill-current` : `text-[#4c381e]`}`}
             />
           ))}
         </div>
-        <span className={`text-sm md:text-base text-[${tokens.colors.textLight}]`}>
+        <span
+          className="text-base "
+          style={{ color: theme.colors.textPrimary }}
+        >
           {rating}/5 - {reviewCount} Reviews
         </span>
       </div>
@@ -73,7 +218,12 @@ export function ProductInfo({
       <p className={`text-green-600 font-semibold`}>In Stock</p>
 
       {/* Product Description */}
-      <p className={`text-sm md:text-base text-[${tokens.colors.text}]`}>{description}</p>
+      <p
+        className="text-lg lg:text-xl"
+        style={{ color: theme.colors.textPrimary }}
+      >
+        {description}
+      </p>
 
       {/* Quantity Selector */}
       <div className="space-y-4 pt-4">
@@ -86,7 +236,7 @@ export function ProductInfo({
           >
             <Minus className={`h-4 w-4 text-gray-700`} />
           </Button>
-          <span className="text-lg md:text-xl font-semibold w-8 text-center text-gray-800">
+          <span className="text-lg md:text-xl font-semibold w-8 text-center text-[#4c381e]">
             {quantity}
           </span>
           <Button
@@ -105,8 +255,10 @@ export function ProductInfo({
           <Button
             size="lg"
             className={`w-full bg-green-600 text-white hover:bg-green-700 transition duration-200 ease-in-out`}
+            onClick={handleAddToCart}
+            disabled={loading}
           >
-            Add to Cart
+            {loading ? "Adding..." : "Add to Cart"}
           </Button>
 
           {/* Buy Now Button */}
@@ -118,13 +270,21 @@ export function ProductInfo({
           </Button>
         </div>
 
-        {/* Wishlist Button */}
-        <Button
-          variant="outline"
-          className={`w-full border-gray-400 text-gray-800 hover:bg-gray-100 transition duration-200 ease-in-out`}
-        >
+        {/* Wishlist Button
+        <Button variant="outline" className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}>
           <Heart className={`h-5 w-5 mr-2 text-red-500`} />
           Add to Wishlist
+        </Button> */}
+        {/* Add to Wishlist Button */}
+        <Button
+          variant="outline"
+          className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}
+          onClick={isWishlist ? removeFromWishList : addToWishList}
+        >
+          <Heart
+            className={`h-5 w-5 mr-2 ${isWishlist ? "text-red-500 fill-current" : "text-gray-400"}`}
+          />
+          {isWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
         </Button>
       </div>
     </div>
