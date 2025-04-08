@@ -1,18 +1,18 @@
 import React from "react";
 import { theme } from "@/styles/theme";
 
-interface ShopNowButtonProps {
+interface BookNowButtonProps {
   scrollToId?: string;
   text?: string;
   navigateTo?: string;
 }
 
-const ShopNowButton: React.FC<ShopNowButtonProps> = ({
+const BookNowButton: React.FC<BookNowButtonProps> = ({
   text = "Book Now",
   
 }) => {
   const handleClick = () => {
-      const element = document.getElementById("BookingArea");
+      const element = document.getElementById("booking-area");
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
@@ -34,4 +34,4 @@ const ShopNowButton: React.FC<ShopNowButtonProps> = ({
   );
 };
 
-export default ShopNowButton;
+export default BookNowButton;

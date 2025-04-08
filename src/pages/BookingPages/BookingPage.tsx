@@ -19,7 +19,7 @@ const BookingPage : React.FC = () => {
         </section>
 
         {/* BookingArea */}
-        <section className="snap-start">
+        <section className="snap-start" id="booking-area">
           <BookingArea />
         </section>
 
