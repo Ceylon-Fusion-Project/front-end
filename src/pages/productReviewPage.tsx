@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Star, Check } from "lucide-react";
 import api from "@/api/axiosInstance";
 import NotificationService from "@/utils/NotificationService";
+import { getUserID } from "@/services/user-service/userService";
 
 interface Product {
   id: number;
@@ -20,7 +21,7 @@ interface ReviewFormData {
 
 export default function ReviewPage() {
   // This would typically come from your app state or API
-  const customerId = 3;
+  //const customerId = 3;
 
   // Mock purchased products - replace with actual API call
   //   const [purchasedProducts, setPurchasedProducts] = useState<Product[]>([
@@ -55,16 +56,48 @@ export default function ReviewPage() {
   const [review, setReview] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [reviewedProducts, setReviewedProducts] = useState<number[]>([]);
+  const [userId, setUserId] = useState<number | null>(null);
 
   // ✅ Fetch purchased products from merged-cart-details endpoint
+  // useEffect(() => {
+  //   const fetchMergedCart = async () => {
+  //     try {
+  //       const res = await api.get("/aggregated-cart/merged-cart-details", {
+  //         params: { userId: customerId },
+  //       });
+
+  //       const cartItems = res.data.cart;
+
+  //       const products = cartItems.map((item: any) => ({
+  //         id: item.productId,
+  //         name: item.name,
+  //         image: item.image || "/placeholder.svg",
+  //         purchaseDate: new Date().toISOString(), // Replace with actual date if available
+  //       }));
+
+  //       setPurchasedProducts(products);
+  //     } catch (error) {
+  //       console.error("Failed to fetch purchased products:", error);
+  //     }
+  //   };
+
+  //   fetchMergedCart();
+  // }, []);
+
   useEffect(() => {
-    const fetchMergedCart = async () => {
+    const fetchUserAndCart = async () => {
       try {
-        const res = await api.get("/aggregated-cart/merged-cart-details", {
-          params: { userId: customerId },
+        const resUser = await getUserID();
+        const fetchedUserId = resUser.data?.userId;
+        if (!fetchedUserId) throw new Error("User ID not found");
+
+        setUserId(fetchedUserId);
+
+        const resCart = await api.get("/aggregated-cart/merged-cart-details", {
+          params: { userId: fetchedUserId },
         });
 
-        const cartItems = res.data.cart;
+        const cartItems = resCart.data.cart;
 
         const products = cartItems.map((item: any) => ({
           id: item.productId,
@@ -74,12 +107,13 @@ export default function ReviewPage() {
         }));
 
         setPurchasedProducts(products);
-      } catch (error) {
-        console.error("Failed to fetch purchased products:", error);
+      } catch (err) {
+        console.error("Failed to fetch user/cart:", err);
+        NotificationService.error("Failed to load user or cart data.");
       }
     };
 
-    fetchMergedCart();
+    fetchUserAndCart();
   }, []);
 
   const handleProductSelect = (product: Product) => {
@@ -130,29 +164,63 @@ export default function ReviewPage() {
   //     }
   //   };
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!selectedProduct) return;
+
+  //   setIsSubmitting(true);
+
+  //   const formData: ReviewFormData = {
+  //     product: selectedProduct.id,
+  //     customer: customerId,
+  //     productRating: rating,
+  //     productReview: review,
+  //   };
+
+  //   try {
+  //     await api.post("/ratings/save-rating", formData);
+
+  //     setReviewedProducts((prev) => [...prev, selectedProduct.id]);
+  //     setSelectedProduct(null);
+  //     setRating(0);
+  //     setReview("");
+
+  //     NotificationService.success("Review submitted successfully!");
+
+  //     if (reviewedProducts.length === purchasedProducts.length - 1) {
+  //       window.location.href = "/";
+  //     }
+  //   } catch (error) {
+  //     NotificationService.error("Error submitting review. Please try again.");
+  //     console.error("Error submitting review:", error);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedProduct) return;
-
+    if (!selectedProduct || userId === null) return;
+  
     setIsSubmitting(true);
-
+  
     const formData: ReviewFormData = {
       product: selectedProduct.id,
-      customer: customerId,
+      customer: userId,
       productRating: rating,
       productReview: review,
     };
-
+  
     try {
       await api.post("/ratings/save-rating", formData);
-
+  
       setReviewedProducts((prev) => [...prev, selectedProduct.id]);
       setSelectedProduct(null);
       setRating(0);
       setReview("");
-        
+  
       NotificationService.success("Review submitted successfully!");
-
+  
       if (reviewedProducts.length === purchasedProducts.length - 1) {
         window.location.href = "/";
       }

@@ -50,7 +50,7 @@ const SlideshowBanner: React.FC = () => {
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
         <h1 className="text-3xl md:text-5xl font-bold mb-4">Find your Product</h1>
         <p className="text-lg md:text-2xl font-medium mb-6">100% pure &amp; Sustainable.</p>
-        <ShopNowButton scrollToId="target-section" />
+        {/* <ShopNowButton scrollToId="target-section" /> */}
       </div>
 
       <style>{`
