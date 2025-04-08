@@ -47,9 +47,12 @@ const BookingOverviewPage: React.FC<BookingOverviewPageProps> = ({ type: propTyp
       </div>
       
       {/* Footer */}
-      <section>
-        <Footer />
+      <section className="snap-start">
+        <div className="[&_.bg-\[\#8d6837\]]:bg-[#346757]">
+          <Footer />
+        </div>
       </section>
+
     </div>
   )
 }
