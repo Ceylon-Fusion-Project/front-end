@@ -131,7 +131,7 @@ const HeroBanner: React.FC = () => {
       </button>
 
       {/* Find Rooms/Events Button */}
-      {selectedType && (
+      {/* {selectedType && (
         <div className="absolute z-30 flex items-center gap-2 mb-8 sm:gap-4 sm:mb-16 bottom-12 sm:bottom-20 right-4 sm:right-12">
           <button
             className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white transition-all bg-[#11221d] shadow-lg rounded-xl hover:bg-[#22443a]"
@@ -161,7 +161,7 @@ const HeroBanner: React.FC = () => {
             )}
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col w-full min-h-screen">
@@ -234,9 +234,9 @@ const HeroBanner: React.FC = () => {
             Your dream stay, just a click away!
           </p>
           <div className="flex flex-col gap-3 mt-2 sm:flex-row sm:gap-4">
-            <BookNowButton 
-              // onClick={scrollToBookingArea} 
-            />
+
+            {/* <BookNowButton scrollToId="booking-section" /> */}
+
           </div>
         </div>
       </div>

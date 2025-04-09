@@ -8,10 +8,10 @@ const ProfileInfo = () => {
   
   // Mock user data - would come from API
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
+    name: 'Osanda Chethul',
+    email: 'osanda@gmail.com',
     phone: '+94 71 234 5678',
-    address: '123 Temple Road, Colombo',
+    address: 'Wattala, Sri Lanka',
   });
   
   const [formData, setFormData] = useState({...userData});
