@@ -48,6 +48,14 @@ const HeroBanner: React.FC = () => {
     { name: "Cinnamon Stick", image: image12, type: 'experience' },
   ];
 
+
+  // const scrollToBookingArea = () => {
+  //   const bookingAreaSection = document.getElementById('booking-area');
+  //   if (bookingAreaSection) {
+  //     bookingAreaSection.scrollIntoView({ behavior: 'smooth' });
+  //   }
+  // };
+
   const allCards = [];
   const maxLength = Math.max(accommodations.length, experiences.length);
   for (let i = 0; i < maxLength; i++) {
@@ -226,7 +234,9 @@ const HeroBanner: React.FC = () => {
             Your dream stay, just a click away!
           </p>
           <div className="flex flex-col gap-3 mt-2 sm:flex-row sm:gap-4">
+
             {/* <BookNowButton scrollToId="booking-section" /> */}
+
           </div>
         </div>
       </div>
