@@ -64,7 +64,7 @@ export const getOriginById = async (originID: number) => {
 };
 
 // Get all origins
-export const getAllOrigins = async (page = 0, size = 10) => {
+export const getAllOrigins = async (page = 0, size = 20) => {
   const response = await api.get("/origin/get-all-origins", {
     params: { page, size },
   });

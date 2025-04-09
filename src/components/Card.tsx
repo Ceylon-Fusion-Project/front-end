@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Heart, ShoppingCart, X } from "lucide-react";
 import { theme } from "@/styles/theme";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance"; // Import axios instance
 //import { v4 as uuidv4 } from "uuid";
 import NotificationService from "@/utils/NotificationService";
+import { getUserID } from "@/services/user-service/userService";
+
 
 interface CardProps {
   image: string;
@@ -36,6 +38,7 @@ const Card: React.FC<CardProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [isBuying, setIsBuying] = useState(false);
   //const [idempotencyKeys, setIdempotencyKeys] = useState<IdempotencyKeys>({});
+   const [userId, setUserId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   // ✅ Function to generate or retrieve idempotency keys for a product
@@ -59,6 +62,25 @@ const Card: React.FC<CardProps> = ({
   
   //   return newKeys; // Return new keys immediately
   // };
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await getUserID();
+        const fetchedUserId = response.data?.userId;
+        if (fetchedUserId) {
+          console.log("ID"+fetchedUserId);
+          setUserId(fetchedUserId);
+        } else {
+          console.warn("User ID not found");
+        }
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+      }
+    };
+  
+    fetchUserId();
+  }, []);
   
 
   //Extract Price from String Price
@@ -91,7 +113,7 @@ const Card: React.FC<CardProps> = ({
 
     //Construct Request Body Properly
     const requestBody = {
-      userId:5, // Dynamically passed user ID
+      userId, // Dynamically passed user ID
       cartItem: {
         productId:productID,
         cartItemQuantity: 1,
@@ -170,7 +192,7 @@ const Card: React.FC<CardProps> = ({
     //console.log("🗑️ Using Remove Idempotency Key:", removeFromCartKey);
 
     const requestBody = {
-      userId:5,
+      userId,
       productId:productID,
     };
 
@@ -219,7 +241,7 @@ const Card: React.FC<CardProps> = ({
     setIsWishlist(true);
 
     const requestBody = {
-      userId:5,
+      userId,
       productId:productID,
     };
 
@@ -259,7 +281,7 @@ const Card: React.FC<CardProps> = ({
     setIsWishlist(false);
 
     const requestBody = {
-      userId:5,
+      userId,
       productId: productID,
     };
      

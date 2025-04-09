@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTrash } from "react-icons/fa"; // Import the trash icon from react-icons
+import { FaTrash, FaShoppingCart } from "react-icons/fa";
 
 interface WishlistItemProps {
   id: number;
@@ -19,39 +19,31 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   onAddToCart,
 }) => {
   return (
-    <div className="flex justify-between items-center p-4 border-b">
-      {/* Image */}
-      <div className="w-1/6">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 group">
+      <div className="relative overflow-hidden">
         <img
           src={image}
           alt={name}
-          className="w-16 h-16 object-cover rounded"
+          className="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-500"
         />
-      </div>
-
-      {/* Name */}
-      <div className="w-2/6">
-        <h3 className="text-lg font-semibold">{name}</h3>
-      </div>
-
-      {/* Price */}
-      <div className="w-1/6">
-        <p className="text-gray-600">${price.toFixed(2)}</p>
-      </div>
-
-      {/* Buttons */}
-      <div className="w-2/6 flex justify-end space-x-2">
-        <button
-          onClick={() => onAddToCart(id)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Add to Cart
-        </button>
         <button
           onClick={() => onRemove(id)}
-          className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-100 transition-colors"
+          className="absolute top-3 right-3 bg-white p-2 rounded-full shadow-md hover:bg-red-50 text-red-500 hover:text-red-600 transition-colors duration-300"
+          title="Remove from wishlist"
         >
-          <FaTrash className="w-5 h-5" /> {/* Trash icon */}
+          <FaTrash className="w-4 h-4" />
+        </button>
+      </div>
+      
+      <div className="p-4">
+        <h3 className="font-medium text-gray-800 mb-1 text-lg truncate">{name}</h3>
+        <p className="font-bold text-xl text-[#b45309] mb-3">${price.toFixed(2)}</p> 
+        <button
+          onClick={() => onAddToCart(id)}
+          className="w-full py-2.5 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all duration-300 font-medium"
+        >
+          <FaShoppingCart className="w-4 h-4" />
+          <span>Add to Cart</span>
         </button>
       </div>
     </div>

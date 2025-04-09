@@ -16,6 +16,8 @@ import AdminSettings from '@/pages/AdminPages/AdminSettings';
 import PackageManagement from '@/components/AdminComponents/BookingComponents/PackageManagement';
 import PackageForm from '@/components/AdminComponents/BookingComponents/PackageForm';
 import PackageDetails from '@/components/AdminComponents/BookingComponents/PackageDetails';
+import SelectionPage from '../pages/AdminPages/SelectionPage';
+import CombinedPackageManagement from '@/components/AdminComponents/BookingComponents/CombinedPackegeManagement';
 
 
 
@@ -74,6 +76,14 @@ export default function AdminRoutes() {
         element={
           <AdminLayout>
             <div><PackageManagement /></div>
+          </AdminLayout>
+        }
+      />
+      <Route
+        path="combined-package-management"
+        element={
+          <AdminLayout>
+            <div><CombinedPackageManagement /></div>
           </AdminLayout>
         }
       />
@@ -163,6 +173,8 @@ export default function AdminRoutes() {
           </AdminLayout>
         }
       />
+      {/*Route to Selection*/}
+      <Route path="selection" element={<SelectionPage />}/>
     </Routes>
   );
 }

@@ -1,0 +1,494 @@
+import React from "react";
+import Card from "./Card"; // Grid view card
+import ListCard from "./ListCard"; // List view card
+import Room10 from "../../assets/rooms/room10.jpg";
+import Room11 from "../../assets/rooms/room11.jpg";
+import Room12 from "../../assets/rooms/room12.jpg";
+import Room13 from "../../assets/rooms/room13.jpg";
+import Room20 from "../../assets/rooms/room20.jpg";
+import Room21 from "../../assets/rooms/room21.jpg";
+import Room22 from "../../assets/rooms/room22.jpg";
+import Room23 from "../../assets/rooms/room23.jpg";
+import Room30 from "../../assets/rooms/room30.jpg";
+import Room31 from "../../assets/rooms/room31.jpg";
+import Room32 from "../../assets/rooms/room32.jpg";
+import Room33 from "../../assets/rooms/room33.jpg";
+import Room40 from "../../assets/rooms/room40.jpg";
+import Room41 from "../../assets/rooms/room41.jpg";
+import Room42 from "../../assets/rooms/room42.jpg";
+import Room43 from "../../assets/rooms/room43.jpg";
+import Room50 from "../../assets/rooms/room50.jpg";
+import Room51 from "../../assets/rooms/room51.jpg";
+import Room52 from "../../assets/rooms/room52.jpg";
+import Room53 from "../../assets/rooms/room53.jpg";
+import Room60 from "../../assets/rooms/room60.jpg";
+import Room61 from "../../assets/rooms/room61.jpg";
+import Room62 from "../../assets/rooms/room62.jpg";
+import Room63 from "../../assets/rooms/room63.jpg";
+import Room70 from "../../assets/rooms/room70.jpg";
+import Room71 from "../../assets/rooms/room71.jpg";
+import Room72 from "../../assets/rooms/room72.jpg";
+import Room73 from "../../assets/rooms/room73.jpg";
+import Room80 from "../../assets/rooms/room80.jpg";
+import Room81 from "../../assets/rooms/room81.jpg";
+import Room82 from "../../assets/rooms/room82.jpg";
+import Room83 from "../../assets/rooms/room83.jpg";
+import Room90 from "../../assets/rooms/room90.jpg";
+import Room91 from "../../assets/rooms/room91.jpg";
+import Room92 from "../../assets/rooms/room92.jpg";
+import Room93 from "../../assets/rooms/room93.jpg";
+import Packge01 from "../../assets/packages/carft_01.jpg";
+import Packge02 from "../../assets/packages/cooking_01.jpg";
+import Packge03 from "../../assets/packages/meditation_01.jpg";
+import Package40 from "../../assets/packages/planting_01.jpg";
+import Package41 from "../../assets/packages/plantation_02.jpg";
+import Package42 from "../../assets/packages/Bed01.jpg";
+import Package43 from "../../assets/packages/Bed02.png";
+import Packge05 from "../../assets/packages/ride_01.jpg";
+import Packge06 from "../../assets/packages/yoga_01.jpeg";
+import Packge07 from "../../assets/packages/tea_01.jpg";
+import Packge08 from "../../assets/packages/spa_01.jpg";
+import Event10 from "../../assets/events/event10.jpg";
+import Event11 from "../../assets/events/event11.jpeg";
+import Event12 from "../../assets/events/event12.jpg";
+import Event20 from "../../assets/events/event20.jpg";
+import Event21 from "../../assets/events/event21.jpeg";
+import Event22 from "../../assets/events/event22.jpeg";
+import Event30 from "../../assets/events/event30.jpg";
+import Event31 from "../../assets/events/event31.jpg";
+import Event32 from "../../assets/events/event32.jpg";
+import Event33 from "../../assets/events/event33.jpg";
+import Event40 from "../../assets/events/event40.jpg";
+import Event41 from "../../assets/events/event41.jpeg";
+import Event42 from "../../assets/events/event42.jpeg";
+import Event50 from "../../assets/events/event50.jpg";
+import Event51 from "../../assets/events/event51.jpeg";
+import Event52 from "../../assets/events/event52.jpeg";
+import Event60 from "../../assets/events/event60.jpg";
+import Event61 from "../../assets/events/event61.jpeg";
+import Event62 from "../../assets/events/event62.jpeg";
+import Event70 from "../../assets/events/event70.jpg";
+import Event71 from "../../assets/events/event71.jpeg";
+import Event72 from "../../assets/events/event72.jpeg";
+import Event80 from "../../assets/events/event80.jpg";
+import Event81 from "../../assets/events/event81.jpeg";
+import Event82 from "../../assets/events/event82.jpeg";
+import Event90 from "../../assets/events/event90.jpg";
+import Event91 from "../../assets/events/event91.jpeg";
+import Event92 from "../../assets/events/event92.jpeg";
+import PackageHeader from "./PackageHeader";
+import AccommodationHeader from "./AccommodationHeader";
+import ExperienceHeader from "./ExperienceHeader";
+import { useNavigate } from "react-router-dom";
+
+// Mock data with fixed image property
+export const mockData = {
+  rooms: [
+    { roomId: 1, roomCode: "CIN101", roomNumber: 101, roomType: "Deluxe", beds: 2, pricePerNight: 125.0, isAvailable: true, createdAt: "2025-01-01T10:00:00", updatedAt: "2025-01-02T12:00:00", image: [Room10, Room11, Room12, Room13], ratingValue: 4.5, amenities: ["WiFi", "Breakfast", "Pool"] },
+    { roomId: 2, roomCode: "CIN102", roomNumber: 102, roomType: "Standard", beds: 1, pricePerNight: 85.0, isAvailable: true, createdAt: "2025-01-01T12:00:00", updatedAt: "2025-01-02T13:00:00", image: [Room20, Room21, Room22, Room23], ratingValue: 4.2, amenities: ["WiFi", "Breakfast"] },
+    { roomId: 3, roomCode: "CIN103", roomNumber: 103, roomType: "Suite", beds: 3, pricePerNight: 160.0, isAvailable: true, createdAt: "2025-01-01T11:00:00", updatedAt: "2025-01-03T14:00:00", image: [Room30, Room31, Room32, Room33], ratingValue: 4.8, amenities: ["WiFi", "Breakfast", "Pool", "Spa"] },
+    { roomId: 4, roomCode: "CIN104", roomNumber: 104, roomType: "Deluxe", beds: 2, pricePerNight: 135.0, isAvailable: true, createdAt: "2025-01-01T14:00:00", updatedAt: "2025-01-02T16:00:00", image: [Room40, Room41, Room42, Room43], ratingValue: 4.6, amenities: ["WiFi", "Breakfast", "Pool"] },
+    { roomId: 5, roomCode: "CIN105", roomNumber: 105, roomType: "Premium Suite", beds: 3, pricePerNight: 180.0, isAvailable: false, createdAt: "2025-01-02T09:00:00", updatedAt: "2025-01-04T17:00:00", image: [Room50, Room51, Room52, Room53], ratingValue: 4.9, amenities: ["WiFi", "Breakfast", "Pool", "Spa", "Airport Transfer"] },
+    { roomId: 6, roomCode: "CIN106", roomNumber: 106, roomType: "Standard", beds: 1, pricePerNight: 90.0, isAvailable: true, createdAt: "2025-01-02T11:00:00", updatedAt: "2025-01-03T15:00:00", image: [Room60, Room61, Room62, Room63], ratingValue: 4.1, amenities: ["WiFi", "Breakfast"] },
+    { roomId: 7, roomCode: "CIN107", roomNumber: 107, roomType: "Deluxe", beds: 2, pricePerNight: 140.0, isAvailable: true, createdAt: "2025-01-03T08:00:00", updatedAt: "2025-01-04T12:00:00", image: [Room70, Room71, Room72, Room73], ratingValue: 4.6, amenities: ["WiFi", "Breakfast", "Pool"] },
+    { roomId: 8, roomCode: "CIN108", roomNumber: 108, roomType: "Suite", beds: 3, pricePerNight: 170.0, isAvailable: false, createdAt: "2025-01-03T10:00:00", updatedAt: "2025-01-05T14:00:00", image: [Room80, Room81, Room82, Room83], ratingValue: 4.8, amenities: ["WiFi", "Breakfast", "Pool", "Spa"] },
+    { roomId: 9, roomCode: "CIN109", roomNumber: 109, roomType: "Standard", beds: 1, pricePerNight: 95.0, isAvailable: true, createdAt: "2025-01-04T07:00:00", updatedAt: "2025-01-06T16:00:00", image: [Room90, Room91, Room92, Room93], ratingValue: 4.3, amenities: ["WiFi", "Breakfast"] },
+  ],
+  events: [
+    { eventId: 1, eventName: "Cinnamon Plantation Tour", eventDescription: "Explore a real cinnamon plantation", pricePerEvent: 55.0, isAvailable: true, startTime: "08:00", endTime: "11:00", createdAt: "2025-01-01T07:00:00", updatedAt: "2025-01-02T09:00:00", image: [Event10, Event11, Event12], ratingValue: 4.7, amenities: ["Guide", "Transportation"] },
+    { eventId: 2, eventName: "Cinnamon Spa Experience", eventDescription: "Relax with cinnamon-infused treatments", pricePerEvent: 70.0, isAvailable: true, startTime: "10:00", endTime: "12:00", createdAt: "2025-01-01T09:00:00", updatedAt: "2025-01-02T10:00:00", image: [Event20, Event21, Event22], ratingValue: 4.9, amenities: ["Spa"] },
+    { eventId: 3, eventName: "Cinnamon Cooking Workshop", eventDescription: "Learn to cook with cinnamon", pricePerEvent: 50.0, isAvailable: true, startTime: "14:00", endTime: "16:00", createdAt: "2025-01-01T13:00:00", updatedAt: "2025-01-02T15:00:00", image: [Event30, Event31, Event32, Event32, Event33], ratingValue: 4.6, amenities: ["Workshop", "Meals Included"] },
+    { eventId: 4, eventName: "Sunset Cinnamon Tea Tasting", eventDescription: "Taste premium cinnamon tea blends", pricePerEvent: 30.0, isAvailable: true, startTime: "17:00", endTime: "18:30", createdAt: "2025-01-02T10:00:00", updatedAt: "2025-01-03T11:00:00", image: [Event40, Event41, Event42], ratingValue: 4.8, amenities: ["Guide", "Meals Included"] },
+    { eventId: 5, eventName: "Cinnamon-Themed Yoga", eventDescription: "Relax with a cinnamon-scented yoga session", pricePerEvent: 40.0, isAvailable: true, startTime: "06:30", endTime: "08:00", createdAt: "2025-01-02T07:00:00", updatedAt: "2025-01-03T08:00:00", image: [Event50, Event51, Event52], ratingValue: 4.5, amenities: ["Workshop"] },
+    { eventId: 6, eventName: "Cinnamon Bark Craft Workshop", eventDescription: "Create handmade crafts using cinnamon bark", pricePerEvent: 45.0, isAvailable: true, startTime: "15:00", endTime: "17:00", createdAt: "2025-01-03T09:00:00", updatedAt: "2025-01-04T10:00:00", image: [Event60, Event61, Event62], ratingValue: 4.4, amenities: ["Workshop", "Kids Club"] },
+    { eventId: 7, eventName: "Cinnamon Plantation Cycling Tour", eventDescription: "Cycle through lush cinnamon fields", pricePerEvent: 50.0, isAvailable: true, startTime: "09:00", endTime: "12:00", createdAt: "2025-01-03T08:00:00", updatedAt: "2025-01-04T09:00:00", image: [Event70, Event71, Event72], ratingValue: 4.7, amenities: ["Guide", "Transportation"] },
+    { eventId: 8, eventName: "Cinnamon Scented Meditation", eventDescription: "Meditate in a cinnamon-scented environment", pricePerEvent: 35.0, isAvailable: true, startTime: "18:00", endTime: "19:30", createdAt: "2025-01-04T10:00:00", updatedAt: "2025-01-05T11:00:00", image: [Event80, Event81, Event82], ratingValue: 4.6, amenities: ["Workshop"] },
+    { eventId: 9, eventName: "Cinnamon Farmers' Market Tour", eventDescription: "Visit a market specializing in cinnamon products", pricePerEvent: 25.0, isAvailable: true, startTime: "07:00", endTime: "09:00", createdAt: "2025-01-05T06:00:00", updatedAt: "2025-01-06T07:00:00", image: [Event90, Event91, Event92], ratingValue: 4.3, amenities: ["Guide", "Transportation"] },
+  ],
+  accommodations: [
+    { accommodationId: 1, accommodationCode: "A1", accommodationName: "Ocean View Hotel", accommodationDescription: "Rooms by the sea", location: "Beach", isAvailable: true },
+    { accommodationId: 2, accommodationCode: "A2", accommodationName: "Mountain Lodge", accommodationDescription: "Cozy stay", location: "Mountains", isAvailable: true },
+    { accommodationId: 3, accommodationCode: "A3", accommodationName: "City Inn", accommodationDescription: "Central location", location: "City", isAvailable: true },
+    { accommodationId: 4, accommodationCode: "A4", accommodationName: "Beach Resort", accommodationDescription: "Luxury stay", location: "Beach", isAvailable: true },
+  ],
+  experiences: [
+    { experienceId: 1, experienceCode: "E1", experienceName: "Surfing Adventure", experienceDescription: "Water sports", location: "Beach", totalPrice: 50.0, isAvailable: true },
+    { experienceId: 2, experienceCode: "E2", experienceName: "Hiking Experience", experienceDescription: "Trail exploration", location: "Mountains", totalPrice: 40.0, isAvailable: true },
+    { experienceId: 3, experienceCode: "E3", experienceName: "Food Tour", experienceDescription: "Culinary delights", location: "City", totalPrice: 60.0, isAvailable: true },
+    { experienceId: 4, experienceCode: "E4", experienceName: "Kayaking Trip", experienceDescription: "Water adventure", location: "River", totalPrice: 45.0, isAvailable: true },
+  ],
+  packages: [
+    {
+      packageId: 1,
+      packageName: "Cinnamon Plantation Retreat",
+      description: "Stay amidst lush cinnamon fields",
+      pricePerDay: 160.0,
+      image: [Package40, Package41, Package42, Package43],
+      isAvailable: true,
+      createdAt: "2025-01-01T10:00:00",
+      ratingValue: 4.6,
+      ratingCount: 120,
+      amenities: ["WiFi", "Breakfast", "Guide", "Transportation"],
+      rooms: [
+        { roomId: 10, roomCode: "CIN101", roomNumber: 101, roomType: "Deluxe", beds: 2, pricePerNight: 125.0, isAvailable: true, createdAt: "2025-01-01T10:00:00", updatedAt: "2025-01-02T12:00:00", amenities: ["WiFi", "Breakfast", "Pool"] },
+      ],
+      events: [
+        { eventId: 10, eventName: "Cinnamon Plantation Tour", eventDescription: "Explore a real cinnamon plantation", pricePerEvent: 55.0, isAvailable: true, startTime: "08:00", endTime: "11:00", createdAt: "2025-01-01T07:00:00", updatedAt: "2025-01-02T09:00:00", amenities: ["Guide", "Transportation"] },
+      ],
+    },
+    {
+      packageId: 2,
+      packageName: "Cinnamon Wellness Escape",
+      description: "A relaxing spa getaway with cinnamon treatments",
+      pricePerDay: 220.0,
+      image: Packge08,
+      isAvailable: true,
+      createdAt: "2025-01-02T10:00:00",
+      ratingValue: 4.8,
+      amenities: ["WiFi", "Breakfast", "Spa", "Pool"],
+      rooms: [
+        { roomId: 11, roomCode: "CIN102", roomNumber: 102, roomType: "Standard", beds: 1, pricePerNight: 85.0, isAvailable: true, createdAt: "2025-01-01T12:00:00", updatedAt: "2025-01-02T13:00:00", amenities: ["WiFi", "Breakfast"] },
+      ],
+      events: [
+        { eventId: 11, eventName: "Cinnamon Spa Experience", eventDescription: "Relax with cinnamon-infused treatments", pricePerEvent: 70.0, isAvailable: true, startTime: "10:00", endTime: "12:00", createdAt: "2025-01-01T09:00:00", updatedAt: "2025-01-02T10:00:00", amenities: ["Spa"] },
+      ],
+    },
+    {
+      packageId: 3,
+      packageName: "Cinnamon Culinary Journey",
+      description: "Learn to cook with fresh cinnamon",
+      pricePerDay: 180.0,
+      image: Packge02,
+      isAvailable: true,
+      createdAt: "2025-01-03T10:00:00",
+      ratingValue: 4.7,
+      amenities: ["WiFi", "Workshop", "Meals Included", "Breakfast"],
+      rooms: [
+        { roomId: 12, roomCode: "CIN103", roomNumber: 103, roomType: "Suite", beds: 3, pricePerNight: 160.0, isAvailable: true, createdAt: "2025-01-01T11:00:00", updatedAt: "2025-01-03T14:00:00", amenities: ["WiFi", "Breakfast", "Pool", "Spa"] },
+      ],
+      events: [
+        { eventId: 12, eventName: "Cinnamon Cooking Workshop", eventDescription: "Learn to cook with cinnamon", pricePerEvent: 50.0, isAvailable: true, startTime: "14:00", endTime: "16:00", createdAt: "2025-01-01T13:00:00", updatedAt: "2025-01-02T15:00:00", amenities: ["Workshop", "Meals Included"] },
+      ],
+    },
+    {
+      packageId: 4,
+      packageName: "Cinnamon Sunset Retreat",
+      description: "Enjoy cinnamon tea while watching the sunset",
+      pricePerDay: 140.0,
+      image: Packge07,
+      isAvailable: true,
+      createdAt: "2025-01-04T10:00:00",
+      ratingValue: 4.5,
+      amenities: ["WiFi", "Breakfast", "Guide", "Meals Included"],
+      rooms: [
+        { roomId: 13, roomCode: "CIN104", roomNumber: 104, roomType: "Deluxe", beds: 2, pricePerNight: 135.0, isAvailable: true, createdAt: "2025-01-01T14:00:00", updatedAt: "2025-01-02T16:00:00", amenities: ["WiFi", "Breakfast", "Pool"] },
+      ],
+      events: [
+        { eventId: 13, eventName: "Sunset Cinnamon Tea Tasting", eventDescription: "Taste premium cinnamon tea blends", pricePerEvent: 30.0, isAvailable: true, startTime: "17:00", endTime: "18:30", createdAt: "2025-01-02T10:00:00", updatedAt: "2025-01-03T11:00:00", amenities: ["Guide", "Meals Included"] },
+      ],
+    },
+    {
+      packageId: 5,
+      packageName: "Cinnamon Serenity Yoga",
+      description: "A peaceful yoga retreat with cinnamon aromatherapy",
+      pricePerDay: 190.0,
+      image: Packge06,
+      isAvailable: false,
+      createdAt: "2025-01-05T10:00:00",
+      ratingValue: 4.9,
+      amenities: ["WiFi", "Breakfast", "Workshop", "Pool", "Spa"],
+      rooms: [
+        { roomId: 14, roomCode: "CIN105", roomNumber: 105, roomType: "Premium Suite", beds: 3, pricePerNight: 180.0, isAvailable: false, createdAt: "2025-01-02T09:00:00", updatedAt: "2025-01-04T17:00:00", amenities: ["WiFi", "Breakfast", "Pool", "Spa", "Airport Transfer"] },
+      ],
+      events: [
+        { eventId: 14, eventName: "Cinnamon-Themed Yoga", eventDescription: "Relax with a cinnamon-scented yoga session", pricePerEvent: 40.0, isAvailable: true, startTime: "06:30", endTime: "08:00", createdAt: "2025-01-02T07:00:00", updatedAt: "2025-01-03T08:00:00", amenities: ["Workshop"] },
+      ],
+    },
+    {
+      packageId: 6,
+      packageName: "Cinnamon Craft & Culture",
+      description: "Create crafts using cinnamon bark",
+      pricePerDay: 170.0,
+      image: Packge01,
+      isAvailable: true,
+      createdAt: "2025-01-06T10:00:00",
+      ratingValue: 4.4,
+      amenities: ["WiFi", "Breakfast", "Workshop", "Kids Club"],
+      rooms: [
+        { roomId: 15, roomCode: "CIN106", roomNumber: 106, roomType: "Standard", beds: 1, pricePerNight: 90.0, isAvailable: true, createdAt: "2025-01-02T11:00:00", updatedAt: "2025-01-03T15:00:00", amenities: ["WiFi", "Breakfast"] },
+      ],
+      events: [
+        { eventId: 15, eventName: "Cinnamon Bark Craft Workshop", eventDescription: "Create handmade crafts using cinnamon bark", pricePerEvent: 45.0, isAvailable: true, startTime: "15:00", endTime: "17:00", createdAt: "2025-01-03T09:00:00", updatedAt: "2025-01-04T10:00:00", amenities: ["Workshop", "Kids Club"] },
+      ],
+    },
+    {
+      packageId: 7,
+      packageName: "Cycling Through Cinnamon Fields",
+      description: "Explore cinnamon plantations on a bike",
+      pricePerDay: 180.0,
+      image: Packge05,
+      isAvailable: true,
+      createdAt: "2025-01-07T10:00:00",
+      ratingValue: 4.7,
+      amenities: ["WiFi", "Breakfast", "Guide", "Transportation"],
+      rooms: [
+        { roomId: 16, roomCode: "CIN107", roomNumber: 107, roomType: "Deluxe", beds: 2, pricePerNight: 140.0, isAvailable: true, createdAt: "2025-01-03T08:00:00", updatedAt: "2025-01-04T12:00:00", amenities: ["WiFi", "Breakfast", "Pool"] },
+      ],
+      events: [
+        { eventId: 16, eventName: "Cinnamon Plantation Cycling Tour", eventDescription: "Cycle through lush cinnamon fields", pricePerEvent: 50.0, isAvailable: true, startTime: "09:00", endTime: "12:00", createdAt: "2025-01-03T08:00:00", updatedAt: "2025-01-04T09:00:00", amenities: ["Guide", "Transportation"] },
+      ],
+    },
+    {
+      packageId: 8,
+      packageName: "Cinnamon Meditation Retreat",
+      description: "Deep meditation with a cinnamon-scented atmosphere",
+      pricePerDay: 130.0,
+      image: Packge03,
+      isAvailable: false,
+      createdAt: "2025-01-08T10:00:00",
+      ratingValue: 4.6,
+      amenities: ["WiFi", "Breakfast", "Workshop"],
+      rooms: [
+        { roomId: 17, roomCode: "CIN108", roomNumber: 108, roomType: "Suite", beds: 3, pricePerNight: 170.0, isAvailable: false, createdAt: "2025-01-03T10:00:00", updatedAt: "2025-01-05T14:00:00", amenities: ["WiFi", "Breakfast", "Pool", "Spa"] },
+      ],
+      events: [
+        { eventId: 17, eventName: "Cinnamon Scented Meditation", eventDescription: "Meditate in a cinnamon-scented environment", pricePerEvent: 35.0, isAvailable: true, startTime: "18:00", endTime: "19:30", createdAt: "2025-01-04T10:00:00", updatedAt: "2025-01-05T11:00:00", amenities: ["Workshop"] },
+      ],
+    },
+  ],
+};
+
+interface BookingListProps {
+  category: "all" | "packages" | "accommodations" | "experiences";
+  viewMode: "grid" | "list";
+  sortOption: string;
+  filters: any;
+  page: number;
+  size: number;
+  setPage: (page: number) => void;
+}
+
+const BookingList: React.FC<BookingListProps> = ({
+  category,
+  viewMode,
+  sortOption,
+  filters,
+  page,
+  size,
+  setPage,
+}) => {
+  const navigate = useNavigate();
+
+  // Filter and sort data
+  const getFilteredData = () => {
+    let packages = mockData.packages.map(pkg => ({ ...pkg, type: "package" as const }));
+    let rooms = mockData.rooms.map(room => ({ ...room, type: "room" as const }));
+    let events = mockData.events.map(event => ({ ...event, type: "event" as const }));
+
+    const applyFilters = (data: any[]) => {
+      let filteredData = [...data];
+
+      if (filters.minPrice !== undefined) {
+        filteredData = filteredData.filter(item => {
+          const price = item.type === "package" ? item.pricePerDay : 
+                        item.type === "room" ? item.pricePerNight : item.pricePerEvent;
+          return price >= filters.minPrice;
+        });
+      }
+
+      if (filters.maxPrice !== undefined) {
+        filteredData = filteredData.filter(item => {
+          const price = item.type === "package" ? item.pricePerDay : 
+                        item.type === "room" ? item.pricePerNight : item.pricePerEvent;
+          return price <= filters.maxPrice;
+        });
+      }
+
+      if (filters.rating !== undefined) {
+        filteredData = filteredData.filter(item => item.ratingValue >= filters.rating);
+      }
+
+      if (filters.featured) {
+        filteredData = filteredData.filter(item => item.isAvailable === true);
+      }
+
+      if (filters.amenities && filters.amenities.length > 0) {
+        filteredData = filteredData.filter(item => {
+          if (!item.amenities || !Array.isArray(item.amenities)) return false;
+          return filters.amenities.some((amenity: string) => item.amenities.includes(amenity));
+        });
+      }
+
+      return filteredData;
+    };
+
+    const applySort = (data: any[]) => {
+      const sortedData = [...data];
+      if (sortOption === "newest") {
+        sortedData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } else if (sortOption === "priceAsc") {
+        sortedData.sort((a, b) => {
+          const priceA = a.type === "package" ? a.pricePerDay : a.type === "room" ? a.pricePerNight : a.pricePerEvent;
+          const priceB = b.type === "package" ? b.pricePerDay : b.type === "room" ? b.pricePerNight : b.pricePerEvent;
+          return priceA - priceB;
+        });
+      } else if (sortOption === "priceDesc") {
+        sortedData.sort((a, b) => {
+          const priceA = a.type === "package" ? a.pricePerDay : a.type === "room" ? a.pricePerNight : a.pricePerEvent;
+          const priceB = b.type === "package" ? b.pricePerDay : b.type === "room" ? b.pricePerNight : b.pricePerEvent;
+          return priceB - priceA;
+        });
+      } else if (sortOption === "rating") {
+        sortedData.sort((a, b) => b.ratingValue - a.ratingValue);
+      }
+      return sortedData;
+    };
+
+    return {
+      packages: applySort(applyFilters(packages)),
+      rooms: applySort(applyFilters(rooms)),
+      events: applySort(applyFilters(events)),
+    };
+  };
+
+  const { packages, rooms, events } = getFilteredData();
+
+  const [packagePage, setPackagePage] = React.useState(0);
+  const [roomPage, setRoomPage] = React.useState(0);
+  const [eventPage, setEventPage] = React.useState(0);
+
+  React.useEffect(() => {
+    setPackagePage(0);
+    setRoomPage(0);
+    setEventPage(0);
+  }, [filters]);
+
+  const paginate = (data: any[], currentPage: number) => {
+    const totalItems = data.length;
+    const totalPages = Math.ceil(totalItems / size) || 1;
+    const paginatedData = data.slice(currentPage * size, (currentPage + 1) * size);
+    return { paginatedData, totalPages, totalItems };
+  };
+
+  const { paginatedData: paginatedPackages, totalPages: packagePages, totalItems: totalPackages } = paginate(packages, packagePage);
+  const { paginatedData: paginatedRooms, totalPages: roomPages, totalItems: totalRooms } = paginate(rooms, roomPage);
+  const { paginatedData: paginatedEvents, totalPages: eventPages, totalItems: totalEvents } = paginate(events, eventPage);
+
+  const renderSection = (title: string, data: any[], currentPage: number, setCurrentPage: (page: number) => void, totalPages: number, totalItems: number, sectionId?: string) => {
+    return (
+      <div className="mt-20 mb-8">
+        {title === "Packages" && <PackageHeader />}
+        {title === "Accommodations" && <AccommodationHeader />}
+        {title === "Experiences" && <ExperienceHeader />}
+        
+        {data.length > 0 ? (
+          <>
+            <div className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`} id={sectionId}>
+              {data.map((item, index) => {
+                const CardComponent = viewMode === "grid" ? Card : ListCard;
+
+                // Normalize the image: use the first image if it's an array, otherwise use the single image
+                const displayImage = Array.isArray(item.image) ? item.image[0] : item.image || "default.jpg";
+
+                // Collect images for the gallery
+                let galleryImages: string[] = [];
+                if (item.type === "package") {
+                  galleryImages = Array.isArray(item.image) ? item.image : [item.image];
+                  if (item.rooms) galleryImages.push(...item.rooms.flatMap((room: any) => Array.isArray(room.image) ? room.image : [room.image]));
+                  if (item.events) galleryImages.push(...item.events.flatMap((event: any) => Array.isArray(event.image) ? event.image : [event.image]));
+                  galleryImages = galleryImages.filter(Boolean);
+                } else if (item.type === "room") {
+                  galleryImages = Array.isArray(item.image) ? item.image : [item.image];
+                } else if (item.type === "event") {
+                  galleryImages = Array.isArray(item.image) ? item.image : [item.image]; // Handle event image arrays correctly
+                }
+
+                return (
+                  <CardComponent
+                    key={`${item.type}-${index}`}
+                    image={displayImage}
+                    title={
+                      item.type === "package" ? item.packageName :
+                      item.type === "room" ? `${item.roomType} Room ${item.roomNumber}` :
+                      item.eventName
+                    }
+                    description={
+                      item.type === "package" ? item.description :
+                      item.type === "room" ? `Beds: ${item.beds}, ${item.isAvailable ? "Available" : "Not Available"}` :
+                      item.eventDescription
+                    }
+                    price={`$${item.type === "package" ? item.pricePerDay : item.type === "room" ? item.pricePerNight : item.pricePerEvent}`}
+                    onClick={() => console.log("Quick Buy:", item)}
+                    isFeatured={false}
+                    packageID={item.type === "package" ? item.packageId : undefined}
+                    roomID={item.type === "room" ? item.roomId : undefined}
+                    eventID={item.type === "event" ? item.eventId : undefined}
+                    packageDetails={
+                      item.type === "package" ? { rooms: item.rooms, events: item.events } : 
+                      item.type === "room" ? { rooms: [item], events: [] } :
+                      item.type === "event" ? { rooms: [], events: [item] } : undefined
+                    }
+                    onViewMoreDetails={() => {
+                      if (item.type === "package" && item.packageId) {
+                        navigate(`/booking/package/${item.packageId}`, { state: { images: galleryImages } });
+                      } else if (item.type === "room" && item.roomId) {
+                        navigate(`/booking/room/${item.roomId}`, { state: { images: galleryImages } });
+                      } else if (item.type === "event" && item.eventId) {
+                        navigate(`/booking/event/${item.eventId}`, { state: { images: galleryImages } });
+                      }
+                    }}
+                  />
+                );
+              })}
+            </div>
+            
+            {totalItems > size && (
+              <div className="flex items-center justify-center gap-4 mt-6">
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 0}
+                  className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
+                >
+                  Previous
+                </button>
+                <span>{currentPage + 1} of {totalPages}</span>
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage >= totalPages - 1}
+                  className="px-4 py-2 text-white bg-black rounded disabled:bg-gray-300 disabled:text-black"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="text-center text-gray-500">No {title.toLowerCase()} match your criteria.</p>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col w-full">
+      {category === "all" ? (
+        <>
+          {renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages, "package-list")}
+          {renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms, "accommodation-list")}
+          {renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents, "experience-list")}
+          {(totalPackages === 0 && totalRooms === 0 && totalEvents === 0) && (
+            <p className="text-center text-gray-500">No items match your criteria.</p>
+          )}
+        </>
+      ) : category === "packages" ? (
+        renderSection("Packages", paginatedPackages, packagePage, setPackagePage, packagePages, totalPackages, "package-list")
+      ) : category === "accommodations" ? (
+        renderSection("Accommodations", paginatedRooms, roomPage, setRoomPage, roomPages, totalRooms, "accommodation-list")
+      ) : category === "experiences" ? (
+        renderSection("Experiences", paginatedEvents, eventPage, setEventPage, eventPages, totalEvents, "experience-list")
+      ) : null}
+    </div>
+  );
+};
+
+export default BookingList;

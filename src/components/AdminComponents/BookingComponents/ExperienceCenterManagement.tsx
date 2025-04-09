@@ -503,7 +503,7 @@
 
 // export default ExperienceCenterManagement;
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense, useRef, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -528,30 +528,47 @@ import {
   Grid,
   Box,
   InputAdornment,
-} from '@mui/material';
-import { Add, Edit, Delete, Visibility, Place, Close } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { ExperienceCenter} from '../../../types/experienceCenterTypes';
+} from "@mui/material";
+import {
+  Add,
+  Edit,
+  Delete,
+  Visibility,
+  Place,
+  Close,
+} from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { ExperienceCenter } from "../../../types/experienceCenterTypes";
+import {
+  saveExperienceCenter,
+  getAllExperienceCenters,
+  updateExperienceCenter,
+  deleteExperienceCenter,
+} from "@/services/Booking-Service/exerienceCenterService";
+import { v4 as uuidv4 } from "uuid";
+import NotificationService from "@/utils/NotificationService";
 
-const MapWithNoSSR = lazy(() => import('../Map'));
+const MapWithNoSSR = lazy(() => import("../Map"));
 
 export const mockData: ExperienceCenter[] = [
   {
     experienceCenterId: 1,
-    experienceCenterCode: 'CIN001',
-    experienceCenterName: 'Cinnamon Harvesting Basics',
-    experienceCenterDescription: 'Learn the traditional methods of harvesting cinnamon in a scenic setting.',
-    location: 'Kandy',
-    locationMapLink: 'https://www.openstreetmap.org/#map=15/7.2906/80.6337',
-    totalPrice: 50.0,
+    experienceCode: "CIN001",
+    experienceName: "Cinnamon Harvesting Basics",
+    experienceDescription:
+      "Learn the traditional methods of harvesting cinnamon in a scenic setting.",
+    location: "Kandy",
+    locationMapLink: "https://www.openstreetmap.org/#map=15/7.2906/80.6337",
+    demoVideoLink: "",
     events: [
       {
         eventId: 1,
-        eventName: 'Morning Harvest Demonstration',
-        eventDescription: 'Hands-on session to learn cinnamon harvesting techniques.',
+        eventName: "Morning Harvest Demonstration",
+        eventDescription:
+          "Hands-on session to learn cinnamon harvesting techniques.",
         pricePerEvent: 25.0,
-        startTime: '2025-03-11T09:00:00Z',
-        endTime: '2025-03-11T11:00:00Z',
+        startTime: "2025-03-11T09:00:00Z",
+        endTime: "2025-03-11T11:00:00Z",
       },
       // ... other events
     ],
@@ -560,40 +577,153 @@ export const mockData: ExperienceCenter[] = [
 ];
 
 const ExperienceCenterManagement = () => {
-  const [experienceCenters, setExperienceCenters] = useState<ExperienceCenter[]>(mockData);
+  const [experienceCenters, setExperienceCenters] = useState<
+    ExperienceCenter[]
+  >([]);
+  const [totalItems, setTotalItems] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentExperienceCenter, setCurrentExperienceCenter] = useState<ExperienceCenter | null>(null);
+  const [currentExperienceCenter, setCurrentExperienceCenter] =
+    useState<ExperienceCenter | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [snackbarMessage, _setSnackbarMessage] = useState("");
+  const [snackbarSeverity, _setSnackbarSeverity] =
+    useState<AlertColor>("success");
+  const [currentPage, setCurrentPage] = useState(0);
   const [mapDialogOpen, setMapDialogOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [_loading, setLoading] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [experienceToDelete, setExperienceToDelete] =
+    useState<ExperienceCenter | null>(null);
+  const idempotencyKeyRef = useRef<string | null>(null);
+  const [demoVideoLink, setDemoVideoLink] = useState("");
   const rowsPerPage = 5;
   const navigate = useNavigate();
 
-  const pageCount = Math.ceil(experienceCenters.length / rowsPerPage);
+  // const pageCount = Math.ceil(experienceCenters.length / rowsPerPage);
+  const pageCount = Math.ceil(totalItems / rowsPerPage);
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const response = await getAllExperienceCenters(currentPage, rowsPerPage);
+
+      console.log("Response:", response);
+
+      const rawCenters =
+        response?.data?.data?.data?.experienceCenterGetResponseDTOS || [];
+      const total = response?.data?.data?.data?.total || 0;
+
+      // 💡 Transform the fields to match your internal state
+      // const centers = rawCenters.map((ec: any) => ({
+      //   experienceCenterId: ec.experienceCenterId || 0,
+      //   experienceCode: ec.experienceCode,
+      //   experienceName: ec.experienceName,
+      //   experienceDescription: ec.experienceDescription,
+      //   location: ec.location,
+      //   locationMapLink: ec.expCenterMapLink, // 🔁 fix field name
+      //   demoVideoLink: ec.expDemoVideoLink || "", // 🔁 ensure this is safe
+      //   events: ec.events || [], // fallback if events not sent
+      // }));
+      const centers = rawCenters.map((ec: any) => ({
+        experienceCenterId: ec.experienceId || 0, // ✅ Fixed key
+        experienceCode: ec.experienceCode,
+        experienceName: ec.experienceName,
+        experienceDescription: ec.experienceDescription,
+        location: ec.location,
+        locationMapLink: ec.expCenterMapLink || "",
+        demoVideoLink: ec.expDemoVideoLink || "",
+        events: ec.events || [],
+      }));      
+
+      console.log("Transformed Centers:", centers);
+
+      setExperienceCenters(centers);
+      setTotalItems(total);
+    } catch (err) {
+      NotificationService.error("Failed to load experience centers");
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (!openDialog) {
+      idempotencyKeyRef.current = null;
+    }
+  }, [openDialog]);
+
+  // const handleAddClick = () => {
+  //   setEditMode(false);
+  //   setCurrentExperienceCenter(null);
+  //   setSelectedLocation("");
+  //   setOpenDialog(true);
+  // };
   const handleAddClick = () => {
     setEditMode(false);
     setCurrentExperienceCenter(null);
-    setSelectedLocation('');
+    setSelectedLocation("");
+    setDemoVideoLink("");
+    idempotencyKeyRef.current = uuidv4();
     setOpenDialog(true);
   };
 
-  const handleEditClick = (experienceCenter: ExperienceCenter) => {
+  // const handleEditClick = (experienceCenter: ExperienceCenter) => {
+  //   setEditMode(true);
+  //   setCurrentExperienceCenter(experienceCenter);
+  //   setSelectedLocation(experienceCenter.locationMapLink);
+  //   setOpenDialog(true);
+  // };
+  const handleEditClick = (ec: ExperienceCenter) => {
     setEditMode(true);
-    setCurrentExperienceCenter(experienceCenter);
-    setSelectedLocation(experienceCenter.locationMapLink);
+    setCurrentExperienceCenter(ec);
+
+    // 👇 SET THESE IMMEDIATELY instead of relying on useEffect
+    setSelectedLocation(ec.locationMapLink || "");
+    setDemoVideoLink(ec.demoVideoLink || "");
+
+    idempotencyKeyRef.current = uuidv4();
     setOpenDialog(true);
   };
 
-  const handleDeleteClick = (id: number) => {
-    setExperienceCenters(experienceCenters.filter((ec) => ec.experienceCenterId !== id));
-    setSnackbarMessage('Experience center deleted successfully!');
-    setSnackbarSeverity('success');
-    setSnackbarOpen(true);
+  // const handleDeleteClick = (id: number) => {
+  //   setExperienceCenters(
+  //     experienceCenters.filter((ec) => ec.experienceCenterId !== id)
+  //   );
+  //   setSnackbarMessage("Experience center deleted successfully!");
+  //   setSnackbarSeverity("success");
+  //   setSnackbarOpen(true);
+  // };
+  const confirmDelete = (ec: ExperienceCenter) => {
+    setExperienceToDelete(ec);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!experienceToDelete) return;
+    setLoading(true);
+    const idempotencyKey = uuidv4();
+
+    try {
+      await deleteExperienceCenter(
+        experienceToDelete.experienceCenterId,
+        idempotencyKey
+      );
+      NotificationService.success("Experience Center deleted successfully!");
+      await fetchData();
+    } catch (err) {
+      NotificationService.error("Delete failed");
+    } finally {
+      setDeleteDialogOpen(false);
+      setExperienceToDelete(null);
+      setLoading(false);
+    }
   };
 
   const handleMapSelection = (lat: number, lng: number) => {
@@ -603,65 +733,122 @@ const ExperienceCenterManagement = () => {
 
   const parseMapLink = (link: string) => {
     if (!link) return undefined;
-    const parts = link.split('/');
+    const parts = link.split("/");
     const lat = parseFloat(parts[parts.length - 2]);
     const lng = parseFloat(parts[parts.length - 1]);
     return { lat, lng };
   };
 
-  const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+  // const handleSave = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const formData = new FormData(event.currentTarget);
+
+  //   const newExperienceCenter: ExperienceCenter = {
+  //     experienceCenterId: currentExperienceCenter
+  //       ? currentExperienceCenter.experienceCenterId
+  //       : experienceCenters.length + 1,
+  //     experienceCenterCode: String(formData.get("experienceCenterCode")),
+  //     experienceCenterName: String(formData.get("experienceCenterName")),
+  //     experienceCenterDescription: String(
+  //       formData.get("experienceCenterDescription")
+  //     ),
+  //     location: String(formData.get("location")),
+  //     locationMapLink:
+  //       selectedLocation || String(formData.get("locationMapLink")),
+  //     demoVideoLink: String(formData.get("demoVideoLink")),
+  //     events: currentExperienceCenter ? currentExperienceCenter.events : [],
+  //   };
+
+  //   if (currentExperienceCenter) {
+  //     setExperienceCenters(
+  //       experienceCenters.map((ec) =>
+  //         ec.experienceCenterId === currentExperienceCenter.experienceCenterId
+  //           ? newExperienceCenter
+  //           : ec
+  //       )
+  //     );
+  //     setSnackbarMessage("Experience center updated successfully!");
+  //   } else {
+  //     setExperienceCenters([...experienceCenters, newExperienceCenter]);
+  //     setSnackbarMessage("Experience center added successfully!");
+  //   }
+
+  //   setSnackbarSeverity("success");
+  //   setSnackbarOpen(true);
+  //   setOpenDialog(false);
+  //   setSelectedLocation("");
+  // };
+  const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     const formData = new FormData(event.currentTarget);
+    const usedKey = idempotencyKeyRef.current ?? uuidv4();
 
     const newExperienceCenter: ExperienceCenter = {
-      experienceCenterId: currentExperienceCenter ? currentExperienceCenter.experienceCenterId : experienceCenters.length + 1,
-      experienceCenterCode: String(formData.get('experienceCenterCode')),
-      experienceCenterName: String(formData.get('experienceCenterName')),
-      experienceCenterDescription: String(formData.get('experienceCenterDescription')),
-      location: String(formData.get('location')),
-      locationMapLink: selectedLocation || String(formData.get('locationMapLink')),
-      totalPrice: parseFloat(String(formData.get('totalPrice'))),
-      events: currentExperienceCenter ? currentExperienceCenter.events : [],
+      experienceCenterId: currentExperienceCenter?.experienceCenterId || 0,
+      experienceCode: String(formData.get("experienceCode")),
+      experienceName: String(formData.get("experienceName")),
+      experienceDescription: String(formData.get("experienceDescription")),
+      location: String(formData.get("location")),
+      locationMapLink: selectedLocation || "", // this maps to expCenterMapLink
+      demoVideoLink: demoVideoLink || "", // this maps to expDemoVideoLink
+      events: currentExperienceCenter?.events || [],
     };
 
-    if (currentExperienceCenter) {
-      setExperienceCenters(
-        experienceCenters.map((ec) =>
-          ec.experienceCenterId === currentExperienceCenter.experienceCenterId ? newExperienceCenter : ec
-        )
-      );
-      setSnackbarMessage('Experience center updated successfully!');
-    } else {
-      setExperienceCenters([...experienceCenters, newExperienceCenter]);
-      setSnackbarMessage('Experience center added successfully!');
-    }
+    try {
+      if (editMode) {
+        await updateExperienceCenter(
+          newExperienceCenter.experienceCenterId,
+          newExperienceCenter,
+          usedKey
+        );
+        NotificationService.success("Experience Center updated successfully!");
+      } else {
+        await saveExperienceCenter(newExperienceCenter, usedKey);
+        NotificationService.success("Experience Center added successfully!");
+      }
 
-    setSnackbarSeverity('success');
-    setSnackbarOpen(true);
-    setOpenDialog(false);
-    setSelectedLocation('');
+      setOpenDialog(false);
+      setSelectedLocation("");
+      idempotencyKeyRef.current = null;
+      await fetchData();
+    } catch (error) {
+      NotificationService.error("Operation failed");
+      console.error("Save error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
+  // const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+  //   setCurrentPage(page);
+  // };
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
-    setCurrentPage(page);
+    setCurrentPage(page - 1);
   };
 
-  const paginatedData = experienceCenters.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
+  // const paginatedData = experienceCenters.slice(
+  //   (currentPage - 1) * rowsPerPage,
+  //   currentPage * rowsPerPage
+  // );
 
   const handleViewEvents = (experienceCenterId: number) => {
-    navigate(`/admin/experience-center-management/events/${experienceCenterId}`);
+    navigate(
+      `/admin/experience-center-management/events/${experienceCenterId}`
+    );
   };
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}
+      >
         Experience Center Management
       </Typography>
       <Button
@@ -669,44 +856,77 @@ const ExperienceCenterManagement = () => {
         color="primary"
         startIcon={<Add />}
         onClick={handleAddClick}
-        style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
+        style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}
       >
         Add Experience Center
       </Button>
 
-      <TableContainer component={Paper} style={{ marginTop: '1.5rem', boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>
+      <TableContainer
+        component={Paper}
+        style={{
+          marginTop: "1.5rem",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <Table>
           <TableHead>
-            <TableRow style={{ backgroundColor: '#F8FAFC' }}>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Code</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Name</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Location</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Price</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Events</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: '#1E293B' }}>Actions</TableCell>
+            <TableRow style={{ backgroundColor: "#F8FAFC" }}>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
+                Code
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
+                Name
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
+                Location
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
+                Events
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", color: "#1E293B" }}>
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedData.map((ec) => (
+            {/* {paginatedData.map((ec) => (
               <TableRow key={ec.experienceCenterId}>
                 <TableCell>{ec.experienceCenterCode}</TableCell>
                 <TableCell>{ec.experienceCenterName}</TableCell>
                 <TableCell>{ec.location}</TableCell>
-                <TableCell>${ec.totalPrice.toFixed(2)}</TableCell>
+                <TableCell> */}
+            {experienceCenters.map((ec) => (
+              <TableRow key={ec.experienceCenterId}>
+                <TableCell>{ec.experienceCode}</TableCell>
+                <TableCell>{ec.experienceName}</TableCell>
+                <TableCell>{ec.location}</TableCell>
+
                 <TableCell>
                   <span
-                    style={{ cursor: 'pointer', color: '#B45309', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{
+                      cursor: "pointer",
+                      color: "#B45309",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
                     onClick={() => handleViewEvents(ec.experienceCenterId)}
                   >
                     <Visibility fontSize="small" /> View Events
                   </span>
                 </TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleEditClick(ec)}>
-                    <Edit style={{ color: '#291e10' }} />
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEditClick(ec)}
+                  >
+                    <Edit style={{ color: "#291e10" }} />
                   </IconButton>
-                  <IconButton color="secondary" onClick={() => handleDeleteClick(ec.experienceCenterId)}>
-                    <Delete style={{ color: '#EF4444' }} />
+                  <IconButton
+                    color="secondary"
+                    onClick={() => confirmDelete(ec)}
+                  >
+                    <Delete style={{ color: "#EF4444" }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -715,15 +935,29 @@ const ExperienceCenterManagement = () => {
         </Table>
       </TableContainer>
 
-      <Pagination
+      {/* <Pagination
         count={pageCount}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"
         sx={{
-          marginTop: '1.5rem',
-          display: 'flex',
-          justifyContent: 'center',
+          marginTop: "1.5rem",
+          display: "flex",
+          justifyContent: "center",
+          "& .MuiPaginationItem-root.Mui-selected": {
+            backgroundColor: "#A0522D",
+            color: "white",
+          },
+        }}
+      /> */}
+      <Pagination
+        count={pageCount}
+        page={currentPage + 1}
+        onChange={handlePageChange}
+        sx={{
+          mt: 3,
+          display: "flex",
+          justifyContent: "center",
           "& .MuiPaginationItem-root.Mui-selected": {
             backgroundColor: "#A0522D",
             color: "white",
@@ -731,11 +965,22 @@ const ExperienceCenterManagement = () => {
         }}
       />
 
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
-        <DialogTitle style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle
+          style={{ fontFamily: "Poppins, sans-serif", color: "#1E293B" }}
+        >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Typography variant="h6">
-              {editMode ? 'Edit Experience Center' : 'Add Experience Center'}
+              {editMode ? "Edit Experience Center" : "Add Experience Center"}
             </Typography>
             <IconButton onClick={() => setOpenDialog(false)}>
               <Close />
@@ -746,32 +991,43 @@ const ExperienceCenterManagement = () => {
           <form id="experience-center-form" onSubmit={handleSave}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
+                {/* <TextField
                   label="Experience Center Code"
-                  name="experienceCenterCode"
+                  name="experienceCode"
                   fullWidth
                   margin="normal"
-                  defaultValue={currentExperienceCenter?.experienceCenterCode}
+                  defaultValue={currentExperienceCenter?.experienceCode}
+                  required
+                /> */}
+                <TextField
+                  label="Experience Center Code"
+                  name="experienceCode"
+                  fullWidth
+                  margin="normal"
+                  defaultValue={currentExperienceCenter?.experienceCode}
+                  InputProps={{
+                    readOnly: editMode, // ✅ Make it read-only only in edit mode
+                  }}
                   required
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Experience Center Name"
-                  name="experienceCenterName"
+                  name="experienceName"
                   fullWidth
                   margin="normal"
-                  defaultValue={currentExperienceCenter?.experienceCenterName}
+                  defaultValue={currentExperienceCenter?.experienceName}
                   required
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   label="Description"
-                  name="experienceCenterDescription"
+                  name="experienceDescription"
                   fullWidth
                   margin="normal"
-                  defaultValue={currentExperienceCenter?.experienceCenterDescription}
+                  defaultValue={currentExperienceCenter?.experienceDescription}
                   required
                   multiline
                   rows={4}
@@ -788,17 +1044,20 @@ const ExperienceCenterManagement = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Total Price"
-                  name="totalPrice"
-                  type="number"
+                {/* <TextField
+                  label="Demo Video Link"
+                  name="demoVideoLink"
                   fullWidth
                   margin="normal"
-                  defaultValue={currentExperienceCenter?.totalPrice}
-                  required
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                  }}
+                  defaultValue={currentExperienceCenter?.demoVideoLink || ""}
+                /> */}
+                <TextField
+                  label="Demo Video Link"
+                  name="demoVideoLink"
+                  fullWidth
+                  margin="normal"
+                  value={demoVideoLink}
+                  onChange={(e) => setDemoVideoLink(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -807,7 +1066,8 @@ const ExperienceCenterManagement = () => {
                   name="locationMapLink"
                   fullWidth
                   margin="normal"
-                  value={selectedLocation || currentExperienceCenter?.locationMapLink || ''}
+                  //defaultValue={currentExperienceCenter?.locationMapLink || ""}
+                  value={selectedLocation}
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   required
                   InputProps={{
@@ -816,7 +1076,7 @@ const ExperienceCenterManagement = () => {
                         <IconButton
                           onClick={() => setMapDialogOpen(true)}
                           edge="end"
-                          sx={{ color: '#B45309' }}
+                          sx={{ color: "#B45309" }}
                         >
                           <Place />
                         </IconButton>
@@ -829,16 +1089,19 @@ const ExperienceCenterManagement = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} style={{ color: '#64748B' }}>
+          <Button
+            onClick={() => setOpenDialog(false)}
+            style={{ color: "#64748B" }}
+          >
             Cancel
           </Button>
           <Button
             type="submit"
             form="experience-center-form"
             variant="contained"
-            style={{ backgroundColor: '#B45309', color: '#FFFFFF' }}
+            style={{ backgroundColor: "#B45309", color: "#FFFFFF" }}
           >
-            {editMode ? 'Update' : 'Save'}
+            {editMode ? "Update" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
@@ -849,19 +1112,21 @@ const ExperienceCenterManagement = () => {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle sx={{ 
-          fontFamily: "Poppins, sans-serif", 
-          color: "#1E293B",
-          paddingBottom: "8px"
-        }}>
+        <DialogTitle
+          sx={{
+            fontFamily: "Poppins, sans-serif",
+            color: "#1E293B",
+            paddingBottom: "8px",
+          }}
+        >
           <Box display="flex" alignItems="center">
-            <Place sx={{ 
-              color: "#B45309",
-              marginRight: "8px"
-            }} />
-            <Typography variant="h6">
-              Experience Center Location
-            </Typography>
+            <Place
+              sx={{
+                color: "#B45309",
+                marginRight: "8px",
+              }}
+            />
+            <Typography variant="h6">Experience Center Location</Typography>
           </Box>
           <Typography variant="body2" color="textSecondary">
             Drag the place marker to select location
@@ -869,14 +1134,21 @@ const ExperienceCenterManagement = () => {
         </DialogTitle>
         <DialogContent>
           <Box sx={{ height: "500px", mt: 1 }}>
-            <Suspense fallback={<div style={{ textAlign: "center", paddingTop: "200px" }}>Loading map...</div>}>
+            <Suspense
+              fallback={
+                <div style={{ textAlign: "center", paddingTop: "200px" }}>
+                  Loading map...
+                </div>
+              }
+            >
               <MapWithNoSSR
                 onLocationSelect={handleMapSelection}
                 initialLocation={
-                  selectedLocation ? 
-                    parseMapLink(selectedLocation) : 
-                    (currentExperienceCenter?.locationMapLink ? 
-                      parseMapLink(currentExperienceCenter.locationMapLink) : undefined)
+                  selectedLocation
+                    ? parseMapLink(selectedLocation)
+                    : currentExperienceCenter?.locationMapLink
+                      ? parseMapLink(currentExperienceCenter.locationMapLink)
+                      : undefined
                 }
                 markerColor="#B45309"
               />
@@ -898,11 +1170,39 @@ const ExperienceCenterManagement = () => {
         </DialogActions>
       </Dialog>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={3000} onClose={handleSnackbarClose}>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete{" "}
+            <strong>{experienceToDelete?.experienceName}</strong>?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

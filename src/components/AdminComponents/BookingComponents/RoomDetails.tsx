@@ -157,7 +157,7 @@ const RoomDetails = () => {
         </Typography>
       </Box>
       <Typography variant="h6" gutterBottom style={{ fontFamily: 'Poppins, sans-serif', color: '#1E293B' }}>
-        {accommodation.description}
+        {accommodation.accommodationDescription}
       </Typography>
       <br />
       <TableContainer component={Paper} style={{ boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)' }}>

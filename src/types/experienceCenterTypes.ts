@@ -1,5 +1,5 @@
 // src/types/experienceCenterTypes.ts
-export interface Event {
+export interface ExperienceEvent {
     eventId: number;
     eventName: string;
     eventDescription: string;
@@ -10,11 +10,11 @@ export interface Event {
   
   export interface ExperienceCenter {
     experienceCenterId: number;
-    experienceCenterCode: string;
-    experienceCenterName: string;
-    experienceCenterDescription: string;
+    experienceCode: string;
+    experienceName: string;
+    experienceDescription: string;
     location: string;
     locationMapLink: string;
-    totalPrice: number;
-    events: Event[];
+    demoVideoLink: string;
+    events: ExperienceEvent[];
   }

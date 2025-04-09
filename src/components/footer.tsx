@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
@@ -22,9 +22,9 @@ const Footer: React.FC = () => {
           <div className="flex flex-col items-center md:items-start">
             <h4 className="font-bold text-3xl  mb-4">Customer Service</h4>
             <ul className="space-y-2 text-center md:text-left">
-              <li><Link to="/help-support" className="text-base text-white hover:text-gray-300">Help & Support</Link></li>
-              <li><Link to="/returns-exchanges" className="text-base text-white hover:text-gray-300">Returns & Exchanges</Link></li>
-              <li><Link to="/track-order" className="text-base text-white hover:text-gray-300">Track Order</Link></li>
+              <li><span className="text-base text-white">Provide Quality Products</span></li>
+              <li><span className="text-base text-white">Good Accommodations</span></li>
+              <li><span className="text-base text-white">Secure Online Payments</span></li>
             </ul>
           </div>
 

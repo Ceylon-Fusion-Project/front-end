@@ -1,150 +1,3 @@
-// import { useState } from "react";
-// import { Star, Heart, Minus, Plus } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { tokens } from "@/styles/tokens";
-// import { theme } from "@/styles/theme";
-
-// interface ProductInfoProps {
-//   name: string;
-//   brand: string;
-//   rating: number;
-//   reviewCount: number;
-//   price: number;
-//   originalPrice: number;
-//   description: string;
-// }
-
-// export function ProductInfo({
-//   name,
-//   brand,
-//   rating,
-//   reviewCount,
-//   price,
-//   originalPrice,
-//   description,
-// }: ProductInfoProps) {
-//   const [quantity, setQuantity] = useState(1);
-
-//   return (
-//     <div className={`space-y-4 md:space-y-6 ${tokens.fonts.body}`}>
-//       {/* Product Name and Brand */}
-//       <div className="space-y-2">
-//         <h1
-//           //className={`${tokens.fontSizes["2xl"]} md:${tokens.fontSizes["3xl"]} lg:${tokens.fontSizes["4xl"]} font-bold ${tokens.fonts.heading}`}
-//           className="text-4xl md:text-4xl lg:text-5xl font-extrabold"
-//           style={{ color: theme.colors.textPrimary }}
-//         >
-//           {name}
-//         </h1>
-//         <p 
-//           className="text-lg font-semibold"
-//           style={{ color: theme.colors.textSecondary }}
-//         >
-//           {brand}
-//         </p>
-//       </div>
-
-//       {/* Ratings and Reviews */}
-//       <div className="flex flex-wrap items-center gap-2 md:gap-4">
-//         <div className="flex">
-//           {[1, 2, 3, 4, 5].map((i) => (
-//             <Star
-//               key={i}
-//               className={`h-5 w-5 ${
-//                 i <= rating
-//                   ? `text-yellow-500 fill-current`
-//                   : `text-[#4c381e]`
-//               }`}
-//             />
-//           ))}
-//         </div>
-//         <span className="text-base "
-//           style={{ color: theme.colors.textPrimary }}
-//         >
-//           {rating}/5 - {reviewCount} Reviews
-//         </span>
-//       </div>
-
-//       {/* Pricing Section */}
-//       <div className="space-y-1 md:space-y-2">
-//         <p className={`text-2xl md:text-3xl font-bold text-green-600`}>
-//           ${price.toFixed(2)}
-//         </p>
-//         <p className={`text-[${tokens.colors.textLight}] line-through`}>
-//           ${originalPrice.toFixed(2)}
-//         </p>
-//         <p className={`text-red-500 font-semibold`}>
-//           -{((1 - price / originalPrice) * 100).toFixed(0)}% Off
-//         </p>
-//       </div>
-
-//       {/* Stock Info */}
-//       <p className={`text-green-600 font-semibold`}>In Stock</p>
-
-//       {/* Product Description */}
-//       <p 
-//         className="text-lg lg:text-xl"
-//         style={{ color: theme.colors.textPrimary }}
-//       >
-//         {description}
-//       </p>
-
-//       {/* Quantity Selector */}
-//       <div className="space-y-4 pt-4">
-//         <div className="flex items-center space-x-4">
-//           <Button
-//             variant="outline"
-//             size="icon"
-//             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-//             className={`h-8 w-8 md:h-10 md:w-10 transition duration-200 ease-in-out`}
-//           >
-//             <Minus className={`h-4 w-4 text-gray-700`} />
-//           </Button>
-//           <span className="text-lg md:text-xl font-semibold w-8 text-center text-[#4c381e]">
-//             {quantity}
-//           </span>
-//           <Button
-//             variant="outline"
-//             size="icon"
-//             onClick={() => setQuantity(quantity + 1)}
-//             className={`h-8 w-8 md:h-10 md:w-10 transition duration-200 ease-in-out`}
-//           >
-//             <Plus className={`h-4 w-4 text-gray-700`} />
-//           </Button>
-//         </div>
-
-//         {/* Action Buttons */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-//           {/* Add to Cart Button */}
-//           <Button
-//             size="lg"
-//             className={`w-full bg-green-600 text-white hover:bg-green-700 transition duration-200 ease-in-out`}
-//           >
-//             Add to Cart
-//           </Button>
-
-//           {/* Buy Now Button */}
-//           <Button
-//             size="lg"
-//             className={`w-full bg-orange-500 text-white hover:bg-orange-600 transition duration-200 ease-in-out`}
-//           >
-//             Buy Now
-//           </Button>
-//         </div>
-
-//         {/* Wishlist Button */}
-//         <Button
-//           variant="outline"
-//           className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}
-//         >
-//           <Heart className={`h-5 w-5 mr-2 text-red-500`} />
-//           Add to Wishlist
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// }
-
 import { useState } from "react";
 import { Star, Heart, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -180,6 +33,7 @@ export function ProductInfo({
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [idempotencyKey] = useState<string>(uuidv4()); // Generate only once
+  const [isWishlist, setIsWishlist] = useState(false);
 
   // Function to handle Add to Cart
   const handleAddToCart = async () => {
@@ -192,7 +46,7 @@ export function ProductInfo({
 
     // ✅ Construct Request Body Properly
     const requestBody = {
-      userId:3, // Dynamically passed user ID
+      userId: 3, // Dynamically passed user ID
       cartItem: {
         productId,
         cartItemQuantity: quantity,
@@ -200,18 +54,17 @@ export function ProductInfo({
       },
     };
 
-    console.log("🛒 Sending Add to Cart request:", JSON.stringify(requestBody, null, 2));
+    console.log(
+      "🛒 Sending Add to Cart request:",
+      JSON.stringify(requestBody, null, 2)
+    );
 
     try {
-      const response = await api.post(
-        "/cart/add-item-to-cart",
-        requestBody,
-        {
-          headers: {
-            "X-Idempotency-Key": idempotencyKey, // Prevent duplicate requests
-          },
-        }
-      );
+      const response = await api.post("/cart/add-item-to-cart", requestBody, {
+        headers: {
+          "X-Idempotency-Key": idempotencyKey, // Prevent duplicate requests
+        },
+      });
 
       console.log("✅ Add to Cart Response:", response);
 
@@ -225,8 +78,13 @@ export function ProductInfo({
       console.error("❌ Add to Cart Error:", error);
 
       if ((error as any).response) {
-        console.error("❌ Axios Error Response:", (error as any).response?.data);
-        NotificationService.error(`Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`);
+        console.error(
+          "❌ Axios Error Response:",
+          (error as any).response?.data
+        );
+        NotificationService.error(
+          `Failed to add item: ${(error as any).response?.data?.message || "Unknown error"}`
+        );
       } else {
         NotificationService.error("Network error. Please try again.");
       }
@@ -235,14 +93,92 @@ export function ProductInfo({
     }
   };
 
+  // Function to handle Add to Wishlist
+  const addToWishList = async () => {
+    if (!productId) {
+      NotificationService.error(
+        "Product Identification Problem. Please try again."
+      );
+      return;
+    }
+
+    setIsWishlist(true);
+
+    const requestBody = {
+      userId: 5, // Change this to dynamic user ID when ready
+      productId: productId,
+    };
+
+    try {
+      const response = await api.post(
+        "/wishlist/add-item-to-wishlist",
+        requestBody
+      );
+      console.log("✅ Add to Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success("Product added to wishlist successfully!");
+      } else {
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("Error adding to wishlist", error);
+      setIsWishlist(false);
+      NotificationService.error("Failed to add item to wishlist.");
+    }
+  };
+
+  // Function to handle Remove from Wishlist
+  const removeFromWishList = async () => {
+    if (!productId) {
+      NotificationService.error(
+        "Product Identification Problem. Please try again."
+      );
+      return;
+    }
+
+    setIsWishlist(false);
+
+    const requestBody = {
+      userId: 5,
+      productId: productId,
+    };
+
+    try {
+      const response = await api.post(
+        "/wishlist/remove-item-from-wishlist",
+        requestBody
+      );
+      console.log("✅ Remove from Wishlist Response:", response);
+
+      if (response?.status === 200 || response?.status === 201) {
+        NotificationService.success(
+          "Product removed from wishlist successfully!"
+        );
+      } else {
+        throw new Error("Unexpected response from server.");
+      }
+    } catch (error) {
+      console.error("Error removing from wishlist:", error);
+      setIsWishlist(true);
+      NotificationService.error("Failed to remove item from wishlist.");
+    }
+  };
+
   return (
     <div className={`space-y-4 md:space-y-6 ${tokens.fonts.body}`}>
       {/* Product Name and Brand */}
       <div className="space-y-2">
-        <h1 className="text-4xl md:text-4xl lg:text-5xl font-extrabold" style={{ color: theme.colors.textPrimary }}>
+        <h1
+          className="text-4xl md:text-4xl lg:text-5xl font-extrabold"
+          style={{ color: theme.colors.textPrimary }}
+        >
           {name}
         </h1>
-        <p className="text-lg font-semibold" style={{ color: theme.colors.textSecondary }}>
+        <p
+          className="text-lg font-semibold"
+          style={{ color: theme.colors.textSecondary }}
+        >
           {brand}
         </p>
       </div>
@@ -251,26 +187,41 @@ export function ProductInfo({
       <div className="flex flex-wrap items-center gap-2 md:gap-4">
         <div className="flex">
           {[1, 2, 3, 4, 5].map((i) => (
-            <Star key={i} className={`h-5 w-5 ${i <= rating ? `text-yellow-500 fill-current` : `text-[#4c381e]`}`} />
+            <Star
+              key={i}
+              className={`h-5 w-5 ${i <= rating ? `text-yellow-500 fill-current` : `text-[#4c381e]`}`}
+            />
           ))}
         </div>
-        <span className="text-base " style={{ color: theme.colors.textPrimary }}>
+        <span
+          className="text-base "
+          style={{ color: theme.colors.textPrimary }}
+        >
           {rating}/5 - {reviewCount} Reviews
         </span>
       </div>
 
       {/* Pricing Section */}
       <div className="space-y-1 md:space-y-2">
-        <p className={`text-2xl md:text-3xl font-bold text-green-600`}>${price.toFixed(2)}</p>
-        <p className={`text-[${tokens.colors.textLight}] line-through`}>${originalPrice.toFixed(2)}</p>
-        <p className={`text-red-500 font-semibold`}>-{((1 - price / originalPrice) * 100).toFixed(0)}% Off</p>
+        <p className={`text-2xl md:text-3xl font-bold text-green-600`}>
+          ${price.toFixed(2)}
+        </p>
+        <p className={`text-[${tokens.colors.textLight}] line-through`}>
+          ${originalPrice.toFixed(2)}
+        </p>
+        <p className={`text-red-500 font-semibold`}>
+          -{((1 - price / originalPrice) * 100).toFixed(0)}% Off
+        </p>
       </div>
 
       {/* Stock Info */}
       <p className={`text-green-600 font-semibold`}>In Stock</p>
 
       {/* Product Description */}
-      <p className="text-lg lg:text-xl" style={{ color: theme.colors.textPrimary }}>
+      <p
+        className="text-lg lg:text-xl"
+        style={{ color: theme.colors.textPrimary }}
+      >
         {description}
       </p>
 
@@ -285,7 +236,9 @@ export function ProductInfo({
           >
             <Minus className={`h-4 w-4 text-gray-700`} />
           </Button>
-          <span className="text-lg md:text-xl font-semibold w-8 text-center text-[#4c381e]">{quantity}</span>
+          <span className="text-lg md:text-xl font-semibold w-8 text-center text-[#4c381e]">
+            {quantity}
+          </span>
           <Button
             variant="outline"
             size="icon"
@@ -309,18 +262,31 @@ export function ProductInfo({
           </Button>
 
           {/* Buy Now Button */}
-          <Button size="lg" className={`w-full bg-orange-500 text-white hover:bg-orange-600 transition duration-200 ease-in-out`}>
+          <Button
+            size="lg"
+            className={`w-full bg-orange-500 text-white hover:bg-orange-600 transition duration-200 ease-in-out`}
+          >
             Buy Now
           </Button>
         </div>
 
-        {/* Wishlist Button */}
+        {/* Wishlist Button
         <Button variant="outline" className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}>
           <Heart className={`h-5 w-5 mr-2 text-red-500`} />
           Add to Wishlist
+        </Button> */}
+        {/* Add to Wishlist Button */}
+        <Button
+          variant="outline"
+          className={`w-full border-[#291e10] text-[#4c381e] hover:bg-[#f0e6d9] transition duration-200 ease-in-out`}
+          onClick={isWishlist ? removeFromWishList : addToWishList}
+        >
+          <Heart
+            className={`h-5 w-5 mr-2 ${isWishlist ? "text-red-500 fill-current" : "text-gray-400"}`}
+          />
+          {isWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
         </Button>
       </div>
     </div>
   );
 }
-

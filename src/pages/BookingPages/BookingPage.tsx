@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '@/components/Navbar'
 import HeroBanner from '../../components/BookingComponents/HeroBanner'
 import Footer from '@/components/footer'
+import BookingArea from '@/components/BookingComponents/BookingArea'
 
 const BookingPage : React.FC = () => {
   return (
@@ -17,9 +18,16 @@ const BookingPage : React.FC = () => {
           <HeroBanner />
         </section>
 
+        {/* BookingArea */}
+        <section className="snap-start" id="booking-area">
+          <BookingArea />
+        </section>
+
         {/* Footer */}
         <section className="snap-start">
+        <div className="[&_.bg-\[\#8d6837\]]:bg-[#346757]">
           <Footer />
+        </div>
         </section>
         
     </div>
