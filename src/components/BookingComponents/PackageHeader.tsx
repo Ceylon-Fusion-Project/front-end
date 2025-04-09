@@ -113,7 +113,7 @@ const PackageHeader = () => {
                 <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" fill="none" />
               </svg>
               <span className="text-[#68a3a3]">
-                <strong>Cinnamon Experience:</strong> Witness the complete journey from bark to spice.
+                <strong>Cultural Evening:</strong> Enjoy traditional Sri Lankan cuisine and performances inspired by cinnamon heritage
               </span>
             </li>
             <li className="flex items-start gap-2">
